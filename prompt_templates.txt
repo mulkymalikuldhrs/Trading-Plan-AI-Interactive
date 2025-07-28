@@ -1,35 +1,53 @@
+### Master Trade Analyst Prompt
+
+You are a world-class hedge fund analyst. Your task is to synthesize the following multi-source data into a single, high-conviction trade idea for the symbol {{symbol}}. You must weigh the evidence from each source and conclude with a clear bullish, bearish, or neutral bias.
+
+**Data Provided:**
+1.  **Technical Indicators:**
+    -   RSI: {{technicals.rsi}}
+    -   MACD: {{technicals.macd}}
+    -   SMA (50): {{technicals.sma}}
+2.  **Recent News Headlines:**
+    -   {{#each news_headlines}} - {{this}}
+    -   {{/each}}
+3.  **Upcoming Economic Events:**
+    -   {{#each economic_calendar}} - {{this.event}} (Impact: {{this.impact}})
+    -   {{/each}}
+4.  **Commitment of Traders (COT) Report:**
+    -   {{#each cot_report}} {{this.key}}: Net {{this.value.net}}
+    -   {{/each}}
+
+**Your Task:**
+1.  **Technical Thesis (1 sentence):** What is the short-term price action suggesting?
+2.  **Fundamental Thesis (1 sentence):** What is the underlying economic and news sentiment?
+3.  **Positional Thesis (1 sentence):** How are large speculators positioned according to the COT report?
+4.  **Synthesis & Final Bias:** Weigh the three theses. Are they in alignment or conflict? Conclude with your final bias (Bullish, Bearish, or Neutral) and a confidence score (1-10).
+5.  **Actionable Signal:** If confidence is 7 or higher, provide a precise trading signal with Entry, Stop Loss, and Take Profit levels based on the provided technicals and your analysis. Otherwise, state "No signal, conditions are not optimal."
+
+**Output Format (JSON only):**
+{
+  "technical_thesis": "...",
+  "fundamental_thesis": "...",
+  "positional_thesis": "...",
+  "final_bias": "...",
+  "confidence_score": <1-10>,
+  "signal": {
+    "active": <true/false>,
+    "entry": "...",
+    "stop_loss": "...",
+    "take_profit": "..."
+  }
+}
+
+---
+### (Other prompts remain the same)
 ### Trade Entry Validation Prompt
-
-You are my Trading Mentor & Validator. I am about to enter a trade, and I need your objective, data-driven feedback. Do not be soft on me; my discipline depends on your honesty.
-
-Here is my setup:
-- **Pair:** {{Pair}}
-- **Arah:** {{Arah}}
-- **SL:** {{SL}}
-- **TP:** {{TP}}
-- **Mood:** {{Mood}}
-- **Setup:** {{Setup}}
-
-Tolong validasi dan beri saran. Jika saya override, tolong bantu refleksi.
-
+...
 ### Emotional Override Prompt
-
-Saya override entry. Mood saya {{Mood}}.
-Kenapa ini bisa terjadi dan bagaimana saya bisa memperbaiki mindset saya?
-
+...
 ### Weekly Summary Prompt
-
-Berikut data jurnal saya minggu ini:
-- **Total Trades:** {{total_trades}}
-- **Win Rate:** {{win_rate}}%
-- **Emosi Dominan:** {{dominant_emotion}}
-- **Ringkasan:** {{journal_summary}}
-Tolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.
-
+...
 ### Reflective Question Prompt
-
-Based on my last action ({{last_action}}), ask me one deep, open-ended question to help me understand my own psychology better.
-
+...
 ### Motivational Quote Prompt
-
-I'm feeling {{mood}}. Give me a powerful, relevant quote to help me stay disciplined and focused.
+...

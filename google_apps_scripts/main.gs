@@ -222,3 +222,50 @@ function createKillzoneReminderTrigger() {
 function sendKillzoneReminder() {
     sendWhatsAppNotification("London Killzone is approaching. Prepare your mind and your charts. Stay disciplined.");
 }
+
+// --- MODULE 5: AUTONOMOUS SIGNAL GENERATION ---
+
+/**
+ * Scans for trading opportunities based on user's trading plan.
+ * This function is designed to be run on a time-based trigger (e.g., every hour).
+ */
+function scanForTradeSignals() {
+  // 1. Get user's trading plan (e.g., preferred symbols) from Settings sheet
+  const tradingPlan = ss.getSheetByName("Trading Plan").getDataRange().getValues();
+  const symbolsToScan = tradingPlan.slice(1).map(row => row[0]); // Assumes symbol is in the first column
+
+  symbolsToScan.forEach(symbol => {
+    // 2. Gather all market data
+    const marketData = getComprehensiveMarketData(symbol);
+
+    // 3. Get analysis from AI
+    const analysis = getGptFeedback({
+      promptType: 'MasterTradeAnalyst',
+      promptData: { ...marketData, symbol: symbol },
+      referenceId: 'SIGNAL-' + symbol + '-' + new Date().getTime()
+    });
+
+    // 4. If a high-confidence signal is generated, send it
+    if (analysis.signal && analysis.signal.active && analysis.signal.confidence_score >= 7) {
+      const signalMessage = `
+        🚀 **New High-Conviction Trade Signal for ${symbol}** 🚀
+        **Bias:** ${analysis.final_bias} (Confidence: ${analysis.confidence_score}/10)
+        **Entry:** ${analysis.signal.entry}
+        **Stop Loss:** ${analysis.signal.stop_loss}
+        **Take Profit:** ${analysis.signal.take_profit}
+
+        *Thesis:*
+        - *Tech:* ${analysis.technical_thesis}
+        - *Funda:* ${analysis.fundamental_thesis}
+        - *COT:* ${analysis.positional_thesis}
+
+        (This is not financial advice. Always do your own research.)
+      `;
+
+      // Send via WhatsApp
+      sendWhatsAppNotification(signalMessage);
+
+      // We would also push this to a 'Signals' table/sheet to be displayed in the app
+    }
+  });
+}
