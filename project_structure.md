@@ -1,4 +1,4 @@
-# MULKY AI TRADING COMPANION OS™ - Project Structure
+# Dhaher Trading Plan AI™ - Project Structure
 
 This document outlines the file and directory structure for the entire system.
 
@@ -26,22 +26,31 @@ This document outlines the file and directory structure for the entire system.
 │   │   │   ├── entry_page.dart
 │   │   │   ├── journal_page.dart
 │   │   │   ├── dashboard_page.dart
-│   │   │   └── chat_page.dart
+│   │   │   ├── chat_page.dart
+│   │   │   └── intel_tab.dart
 │   │   └── widgets/
 │   │       ├── mood_tracker.dart
 │   │       ├── risk_calculator.dart
 │   │       └── chat_bubble.dart
 │   ├── components/
 │   │   ├── entry_form.dart
-│   │   └── chart.dart
+│   │   ├── chart.dart
+│   │   ├── equity_chart.dart
+│   │   ├── winrate_pie_chart.dart
+│   │   ├── setup_performance_barchart.dart
+│   │   ├── trading_view_embed.dart
+│   │   └── consistency_streak_calendar.dart
 │   ├── services/
+│   │   ├── api_service.dart
 │   │   ├── gpt_service.dart
-│   │   ├── sheet_service.dart
-│   │   └── notification_service.dart
+│   │   ├── sheet_api.dart
+│   │   ├── whatsapp_trigger.dart
+│   │   ├── emotional_lockout_service.dart
+│   │   ├── cot_service.dart
+│   │   ├── news_fetcher.dart
+│   │   └── gpt_summarizer.dart
 │   └── models/
 │       ├── trade.dart
-│       ├── journal_entry.dart
-│       └── gpt_response.dart
 ├── pubspec.yaml
 └── web/
     └── index.html
@@ -50,19 +59,15 @@ This document outlines the file and directory structure for the entire system.
 ## ⚙️ `google_apps_scripts/`
 ```
 /google_apps_scripts
-├── sync_entry.gs
-├── risk_calculator.gs
-├── violation_counter.gs
-├── gpt_fetcher.gs
-└── export_logs.gs
+├── main.gs
+└── api_integrations.gs
 ```
 
 ## 💬 `whatsapp_bot/`
 ```
 /whatsapp_bot
-├── index.js
-├── package.json
-└── scheduler.js
+├── main.js
+└── package.json
 ```
 
 ## 📚 `docs/`
@@ -75,5 +80,10 @@ This document outlines the file and directory structure for the entire system.
 ├── weekly_analysis.md
 ├── changelog.md
 ├── trading_plan_ai.md
-└── Mulky_Trading_Sheet_Template.md
+├── Dhaher_Trading_Sheet_Template.md
+├── advanced_ui.md
+├── responsive_design.md
+├── voice_commands.md
+├── gamification.md
+└── market_intel_hub.md
 ```

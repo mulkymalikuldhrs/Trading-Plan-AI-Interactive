@@ -20,7 +20,7 @@ const client = new Client({
 
 client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
 client.on('ready', () => {
-    console.log('WhatsApp client is ready!');
+    console.log('Dhaher Trading Plan AI Bot is ready!');
     clientReady = true;
 });
 
@@ -94,5 +94,5 @@ app.post('/send', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`WhatsApp Bot server listening at http://localhost:${port}`);
+    console.log(`Dhaher Trading Plan AI Bot server listening at http://localhost:${port}`);
 });

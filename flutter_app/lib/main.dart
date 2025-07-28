@@ -6,6 +6,7 @@ import 'ui/pages/entry_page.dart';
 import 'ui/pages/journal_page.dart';
 import 'ui/pages/dashboard_page.dart';
 import 'ui/pages/chat_page.dart';
+import 'ui/pages/intel_tab.dart';
 
 void main() {
   runApp(
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MULKY AI TRADING OS',
+      title: 'Dhaher Trading Plan AI',
       theme: ThemeData.dark(),
       home: MainPage(),
     );
@@ -38,6 +39,7 @@ class _MainPageState extends State<MainPage> {
     EntryPage(),
     JournalPage(),
     DashboardPage(),
+    IntelTab(),
     ChatPage(),
   ];
 
@@ -95,10 +97,11 @@ class _MainPageState extends State<MainPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Entry'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'AI Chat'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_chart), label: 'Entry'),
+          BottomNavigationBarItem(icon: Icon(Icons.book_online), label: 'Journal'),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard_customize), label: 'Dashboard'),
+          BottomNavigationBarItem(icon: Icon(Icons.insights), label: 'Intel'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: 'AI Chat'),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: lockoutService.isLocked ? Colors.grey : Colors.amber[800],

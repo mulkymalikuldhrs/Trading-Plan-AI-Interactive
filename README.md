@@ -1,4 +1,4 @@
-# 🚀 MULKY AI TRADING COMPANION OS™
+# 🚀 Dhaher Trading Plan AI™
 
 Welcome to your new trading partner. This is not just an app; it's a **mindset infrastructure** and a **full-fledged AI trading analyst** designed to help you master both the mental and analytical game of trading.
 

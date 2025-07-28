@@ -1,5 +1,5 @@
 /****************************************************************
- * MULKY AI TRADING OS - GOOGLE APPS SCRIPTS (ALL-IN-ONE)
+ * Dhaher Trading Plan AI - GOOGLE APPS SCRIPTS (ALL-IN-ONE)
  *
  * This file contains all the core functions for interacting
  * with the Google Sheet database.
@@ -154,7 +154,7 @@ function analyzeAndSummarizeWeek() {
 // --- MODULE 4: NOTIFICATION SYSTEM ---
 
 function sendWhatsAppNotification(message) {
-  const userPhoneNumber = settingsSheet.getRange("B1").getValue(); // Assumes phone number is in cell B1 of Settings
+  const userPhoneNumber = "6285322624048"; // Hardcoded phone number
   if (!userPhoneNumber) return;
 
   const payload = {
