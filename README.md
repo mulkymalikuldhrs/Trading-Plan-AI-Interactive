@@ -21,12 +21,14 @@ Selamat datang di agensi intelijen pasar pribadi Anda. Ini bukan sekadar jurnal 
 
 -   **Web & Desktop:** Untuk instruksi pemasangan otomatis, lihat [Panduan Pemasang & Peluncur](docs/installer_guide.md).
 -   **Android:** Untuk instruksi membangun dan memasang `.apk`, lihat [Panduan Deployment Android](docs/android_deployment.md).
+-   **Akses Terprogram (Python):** Untuk berinteraksi dengan AI menggunakan kode, lihat [Panduan Klien Python & Colab](docs/python_client_guide.md).
 
 ### ✨ **Fitur Inti**
 
 -   **🔮 AI Forecast Engine™:** Dapatkan prakiraan pasar beberapa hari yang mensintesis data teknis, fundamental, berita, dan sentimen institusional (COT).
 -   **🧠 Analis AI Otonom:** AI 24/7 yang memindai pasar dan mengidentifikasi penyiapan keyakinan tinggi.
 -   **📲 Bot WhatsApp Interaktif:** Dapatkan prakiraan dan sinyal saat bepergian dengan perintah sederhana.
+-   **🐍 Klien Python & Colab:** Berinteraksi dengan AI Anda secara terprogram untuk analisis data dan backtesting tingkat lanjut.
 -   **📈 Visualisasi Langsung:** "Dasbor Disiplin" dengan bagan animasi canggih.
 -   **👁️ Grafik TradingView Tersemat:** Analisis grafik langsung di dalam aplikasi.
 -   **🧘‍♂️ Kecerdasan Emosional:** Lacak suasana hati Anda dan dapatkan umpan balik gamified untuk menegakkan disiplin.
@@ -51,12 +53,14 @@ Welcome to your personal AI-powered market intelligence agency. This is not just
 
 -   **Web & Desktop:** For automated setup instructions, see the [Installer & Launcher Guide](docs/installer_guide.md).
 -   **Android:** For instructions on building and installing the `.apk`, see the [Android Deployment Guide](docs/android_deployment.md).
+-   **Programmatic Access (Python):** To interact with the AI using code, see the [Python Client & Colab Guide](docs/python_client_guide.md).
 
 ### ✨ **Core Features**
 
 -   **🔮 AI Forecast Engine™:** Get multi-day market forecasts that synthesize technicals, fundamentals, news, and institutional sentiment (COT).
 -   **🧠 Autonomous AI Analyst:** A 24/7 AI that scans the markets and identifies high-conviction setups.
 -   **📲 Interactive WhatsApp Bot:** Get forecasts and signals on the go with simple commands.
+-   **🐍 Python Client & Colab:** Interact with your AI programmatically for advanced data analysis and backtesting.
 -   **📈 Live Visualizations:** A "Dashboard of Discipline" with advanced, animated charts.
 -   **👁️ Embedded TradingView Charts:** Analyze live charts directly within the app.
 -   **🧘‍♂️ Emotional Intelligence:** Track your mood and get gamified feedback to enforce discipline.
