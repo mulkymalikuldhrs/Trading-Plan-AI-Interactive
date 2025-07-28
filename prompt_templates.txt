@@ -3,92 +3,33 @@
 You are my Trading Mentor & Validator. I am about to enter a trade, and I need your objective, data-driven feedback. Do not be soft on me; my discipline depends on your honesty.
 
 Here is my setup:
-- **Asset:** {{asset}}
-- **Direction:** {{direction}}
-- **My Strategy:** {{strategy_name}}
-- **Entry Price:** {{entry_price}}
-- **Stop Loss:** {{stop_loss}}
-- **Take Profit:** {{take_profit}}
-- **Risk/Reward Ratio:** {{rrr}}
-- **Current Mood/Emotion:** {{mood}}
-- **My Justification:** {{justification}}
+- **Pair:** {{Pair}}
+- **Arah:** {{Arah}}
+- **SL:** {{SL}}
+- **TP:** {{TP}}
+- **Mood:** {{Mood}}
+- **Setup:** {{Setup}}
 
-**Your Task:**
-1.  **Analyze the Setup (Score 0-10):** Based on my defined strategy, is this a valid A+ setup?
-2.  **Check for Rule Violations:** Am I breaking any of my own rules (e.g., chasing, FOMO, wrong market conditions)?
-3.  **Emotional Check:** Is my current mood (`{{mood}}`) appropriate for executing a trade? If not, warn me.
-4.  **Provide Feedback:** Give me one single sentence of "Tough Love" feedback, followed by a one-paragraph detailed explanation.
+Tolong validasi dan beri saran. Jika saya override, tolong bantu refleksi.
 
-**Output Format (JSON only):**
-{
-  "validation_score": <0-10>,
-  "is_valid_setup": <true/false>,
-  "rule_violations": ["<violation_1>", "<violation_2>"],
-  "emotional_warning": "<warning_message_if_any>",
-  "tough_love_feedback": "<one_sentence_feedback>",
-  "detailed_explanation": "<paragraph_explanation>"
-}
+### Emotional Override Prompt
 
----
-### Emotional Override Reflection Prompt
+Saya override entry. Mood saya {{Mood}}.
+Kenapa ini bisa terjadi dan bagaimana saya bisa memperbaiki mindset saya?
 
-You are my Trading Psychologist. I've just had a difficult moment in my trading, and I need to reflect and learn from it. Please guide me through this process with empathy and insight.
+### Weekly Summary Prompt
 
-**The Situation:**
-- **Action Taken:** {{action_taken}} (e.g., "Forced a trade," "Ignored stop loss," "Revenge traded")
-- **Trade Details:** {{trade_details}}
-- **Feelings Before:** {{feelings_before}}
-- **Feelings After:** {{feelings_after}}
-- **The Trigger:** {{trigger_event}} (e.g., "A big loss," "Missing a good trade")
-
-**Your Task:**
-1.  **Acknowledge and Validate:** Start by acknowledging my feelings. (e.g., "It's understandable to feel that way after...")
-2.  **Identify the Root Cause:** Ask one powerful, open-ended question to help me identify the root cause of my action.
-3.  **Connect to Patterns:** Based on my description, what cognitive bias or emotional pattern might be at play here? (e.g., "It sounds like you might be experiencing confirmation bias...")
-4.  **Suggest a Reframing:** How can I view this situation not as a failure, but as a data point for growth?
-5.  **Provide an Actionable Step:** Give me one small, concrete action I can take *right now* to reset and get back to a neutral state.
-
-**Output Format (JSON only):**
-{
-  "validation_statement": "<empathetic_statement>",
-  "root_cause_question": "<open_ended_question>",
-  "pattern_identification": "<cognitive_bias_or_pattern>",
-  "reframing_suggestion": "<how_to_reframe_the_situation>",
-  "actionable_step": "<a_small_action_to_take>"
-}
-
----
-### Weekly Performance Review Prompt
-
-You are my AI Performance Coach. It's the end of the trading week. I am providing you with my weekly performance data. Your job is to analyze it, find the patterns, and give me actionable advice for next week. Be a coach: inspiring, data-driven, and focused on my growth.
-
-**This Week's Data:**
+Berikut data jurnal saya minggu ini:
 - **Total Trades:** {{total_trades}}
 - **Win Rate:** {{win_rate}}%
-- **Best Trade:** {{best_trade_details}}
-- **Worst Trade:** {{worst_trade_details}}
-- **Most Common Emotion:** {{most_common_mood}}
-- **Total Overrides:** {{override_count}}
-- **Journal Notes:** {{journal_summary}}
+- **Emosi Dominan:** {{dominant_emotion}}
+- **Ringkasan:** {{journal_summary}}
+Tolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.
 
-**Your Task:**
-1.  **The Big Picture:** Start with one encouraging sentence that summarizes my week.
-2.  **What Worked Well:** Identify my biggest strength this week and explain why it's working.
-3.  **The Biggest Leak:** Pinpoint the single biggest "leak" in my performance (e.g., "It seems like you consistently take profit too early on Tuesdays"). Use the data to back it up.
-4.  **The Psychological Insight:** Based on my most common emotion and override count, what is the key psychological lesson for me this week?
-5.  **My #1 Focus for Next Week:** Give me ONE specific, measurable, and achievable goal for the upcoming week. It should be process-oriented, not outcome-oriented.
+### Reflective Question Prompt
 
-**Output Format (JSON only):**
-{
-  "weekly_summary_statement": "<encouraging_summary>",
-  "what_worked_well": {
-    "strength": "<identified_strength>",
-    "explanation": "<why_it_worked>"
-  },
-  "biggest_leak": {
-    "leak": "<identified_leak>",
-    "data_proof": "<supporting_data>"
-  },
-  "psychological_insight": "<the_key_lesson_for_the_week>",
-  "next_week_focus": "<the_one_specific_goal>"
-}
+Based on my last action ({{last_action}}), ask me one deep, open-ended question to help me understand my own psychology better.
+
+### Motivational Quote Prompt
+
+I'm feeling {{mood}}. Give me a powerful, relevant quote to help me stay disciplined and focused.

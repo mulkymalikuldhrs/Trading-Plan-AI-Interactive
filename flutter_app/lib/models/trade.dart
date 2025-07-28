@@ -29,17 +29,34 @@ class Trade {
     required this.notes,
   });
 
+  factory Trade.fromJson(Map<String, dynamic> json) {
+    return Trade(
+      id: json['TradeID'],
+      timestamp: DateTime.parse(json['Timestamp']),
+      asset: json['Pair'],
+      direction: json['Direction'],
+      entryPrice: (json['EntryPrice'] as num).toDouble(),
+      exitPrice: (json['ExitPrice'] as num).toDouble(),
+      stopLoss: (json['SL'] as num).toDouble(),
+      takeProfit: (json['TP'] as num).toDouble(),
+      status: json['Result'],
+      pnl: (json['PnL'] as num).toDouble(),
+      moodBefore: json['Mood'],
+      moodAfter: json['Emotion_After'],
+      notes: json['GPT_Comment'],
+    );
+  }
+
   Map<String, dynamic> toJson() => {
-        'asset': asset,
+        'pair': asset,
         'direction': direction,
-        'entryPrice': entryPrice,
-        'exitPrice': exitPrice,
-        'stopLoss': stopLoss,
-        'takeProfit': takeProfit,
+        'entry': entryPrice,
+        'sl': stopLoss,
+        'tp': takeProfit,
+        'mood': moodBefore,
         'status': status,
         'pnl': pnl,
-        'moodBefore': moodBefore,
-        'moodAfter': moodAfter,
-        'notes': notes,
+        'emotion_after': moodAfter,
+        'gpt_comment': notes,
       };
 }

@@ -1,40 +1,49 @@
 /****************************************************************
- * MULKY AI TRADING OS - GOOGLE APPS SCRIPTS
+ * MULKY AI TRADING OS - GOOGLE APPS SCRIPTS (ALL-IN-ONE)
  *
  * This file contains all the core functions for interacting
  * with the Google Sheet database.
  ****************************************************************/
 
+// --- SPREADSHEET & API CONFIGURATION ---
 const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID";
-const API_KEY = "YOUR_LLM7_API_KEY";
-const API_URL = "https://api.llm7.io/v1/chat/completions";
+const LLM7_API_KEY = "YOUR_LLM7_API_KEY";
+const LLM7_API_URL = "https://api.llm7.io/v1/chat/completions";
+const WHATSAPP_API_URL = "YOUR_WHATSAPP_WEBJS_SERVER_URL/send"; // URL to your running WhatsApp bot server
 
-const journalSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Journal");
-const aiFeedbackSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("AI Feedback");
-const violationsSheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName("Violations");
+// --- SHEET HANDLERS ---
+const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+const journalSheet = ss.getSheetByName("Journal");
+const aiFeedbackSheet = ss.getSheetByName("AI Feedback");
+const violationsSheet = ss.getSheetByName("Violations");
+const weeklySummarySheet = ss.getSheetByName("Weekly Summary");
+const settingsSheet = ss.getSheetByName("Settings");
+
 
 /**
- * Main function to handle POST requests from the Flutter app.
- * This acts as the central API endpoint.
+ * Central API endpoint for all requests from the Flutter app.
  */
 function doPost(e) {
   const contents = JSON.parse(e.postData.contents);
-  const action = contents.action;
+  const { action, data } = contents;
 
   try {
     let result;
     switch (action) {
       case "logTrade":
-        result = logTrade(contents.data);
+        result = logTrade(data);
         break;
       case "getGptFeedback":
-        result = getGptFeedback(contents.data);
+        result = getGptFeedback(data);
         break;
       case "logViolation":
-        result = logViolation(contents.data);
+        result = logViolation(data);
+        break;
+      case "triggerWeeklyAnalysis":
+        result = analyzeAndSummarizeWeek();
         break;
       case "exportToJson":
-        result = exportSheetToJson(contents.sheetName);
+        result = exportSheetToJson(data.sheetName);
         break;
       default:
         throw new Error("Invalid action specified.");
@@ -42,172 +51,174 @@ function doPost(e) {
     return ContentService.createTextOutput(JSON.stringify({ "status": "success", "data": result }))
       .setMimeType(ContentService.MimeType.JSON);
   } catch (error) {
+    Logger.log(error);
     return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.message }))
       .setMimeType(ContentService.MimeType.JSON);
   }
 }
 
-/****************************************************************
- * 1. AUTO-SYNC ENTRY
- ****************************************************************/
+// --- MODULE 1: JOURNAL & VIOLATION LOGGING ---
 
-/**
- * Logs a new trade to the 'Journal' sheet.
- * @param {object} tradeData - The trade data from the Flutter app.
- * @returns {string} Confirmation message.
- */
-function logTrade(tradeData) {
-  const newRow = [
-    "TRADE-" + new Date().getTime(), // TradeID
-    new Date(), // Timestamp
-    tradeData.asset,
-    tradeData.direction,
-    tradeData.entryPrice,
-    tradeData.exitPrice,
-    tradeData.stopLoss,
-    tradeData.takeProfit,
-    tradeData.status,
-    tradeData.pnl,
-    tradeData.moodBefore,
-    tradeData.moodAfter,
-    tradeData.notes
-  ];
-  journalSheet.appendRow(newRow);
-  return "Trade logged successfully.";
+function logTrade(data) {
+  journalSheet.appendRow([
+    "TRADE-" + new Date().getTime(), new Date(), data.pair, data.direction, data.entry, data.sl, data.tp, data.rrr,
+    data.setup, data.mood, data.ai_status, data.result, data.emotion_after, data.gpt_comment
+  ]);
+  return "Trade logged.";
 }
 
-/****************************************************************
- * 2. GPT FETCHER & FEEDBACK LOGGER
- ****************************************************************/
+function logViolation(data) {
+  violationsSheet.appendRow(["V-" + new Date().getTime(), new Date(), data.tradeId, data.ruleBroken, data.justification]);
 
-/**
- * Fetches feedback from the GPT API and logs it.
- * @param {object} promptData - The data needed to format the prompt.
- * @returns {object} The parsed GPT response.
- */
-function getGptFeedback(promptData) {
-  const { promptType, data } = promptData;
+  // Emotional Lockout Trigger
+  const recentViolations = violationsSheet.getLastRow() > 3 ? violationsSheet.getRange(violationsSheet.getLastRow() - 2, 1, 3, 1).getValues() : [];
+  if (recentViolations.length === 3) {
+    sendWhatsAppNotification("You've had 3 consecutive violations. It's time for a mandatory break. Reflect on your actions.");
+  }
+
+  return "Violation logged.";
+}
+
+// --- MODULE 2: GPT/LLM7 INTEGRATION ---
+
+function getGptFeedback(data) {
+  const { promptType, promptData, referenceId } = data;
   const promptTemplate = getPromptTemplate(promptType);
-  const formattedPrompt = formatPrompt(promptTemplate, data);
+  const formattedPrompt = formatPrompt(promptTemplate, promptData);
 
   const payload = {
-    "model": "gpt-4.5-turbo", // Or your preferred model
-    "messages": [
-      { "role": "system", "content": "You are an AI assistant for a trader." },
-      { "role": "user", "content": formattedPrompt }
-    ],
-    "temperature": 0.7
+    "model": "gpt-4.5-turbo",
+    "messages": [{ "role": "user", "content": formattedPrompt }],
+    "temperature": 0.8,
   };
 
   const options = {
     'method': 'post',
     'contentType': 'application/json',
-    'headers': {
-      'Authorization': 'Bearer ' + API_KEY
-    },
+    'headers': { 'Authorization': 'Bearer ' + LLM7_API_KEY },
     'payload': JSON.stringify(payload)
   };
 
-  const response = UrlFetchApp.fetch(API_URL, options);
+  const response = UrlFetchApp.fetch(LLM7_API_URL, options);
   const gptResponse = JSON.parse(response.getContentText());
   const gptContent = JSON.parse(gptResponse.choices[0].message.content);
 
-  // Log the feedback
-  logAiFeedback(promptData.referenceId, promptType, gptContent);
+  aiFeedbackSheet.appendRow(["AI-F-" + new Date().getTime(), new Date(), referenceId, promptType, JSON.stringify(gptContent)]);
 
   return gptContent;
 }
 
-/**
- * Logs the AI's feedback to the 'AI Feedback' sheet.
- */
-function logAiFeedback(referenceId, promptType, gptResponseJson) {
-  const newRow = [
-    "AI-F-" + new Date().getTime(), // FeedbackID
-    new Date(), // Timestamp
-    referenceId,
-    promptType,
-    JSON.stringify(gptResponseJson)
-  ];
-  aiFeedbackSheet.appendRow(newRow);
-}
+// --- MODULE 3: WEEKLY ANALYZER ---
 
-/****************************************************************
- * 3. VIOLATION COUNTER
- ****************************************************************/
+function analyzeAndSummarizeWeek() {
+  const journalData = journalSheet.getDataRange().getValues();
+  const headers = journalData.shift();
 
-/**
- * Logs a new rule violation to the 'Violations' sheet.
- * @param {object} violationData - The violation data.
- * @returns {string} Confirmation message.
- */
-function logViolation(violationData) {
-  const newRow = [
-    "V-" + new Date().getTime(), // ViolationID
-    new Date(), // Timestamp
-    violationData.tradeId,
-    violationData.ruleBroken,
-    violationData.justification
-  ];
-  violationsSheet.appendRow(newRow);
-  return "Violation logged successfully.";
-}
+  // Simple analysis (can be expanded)
+  let winCount = 0;
+  let tradeCount = journalData.length;
+  let emotions = {};
 
-
-/****************************************************************
- * 4. DATA EXPORTER
- ****************************************************************/
-
-/**
- * Exports a given sheet to a JSON string.
- * @param {string} sheetName - The name of the sheet to export.
- * @returns {string} A JSON string representing the sheet data.
- */
-function exportSheetToJson(sheetName) {
-  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(sheetName);
-  if (!sheet) {
-    throw new Error(`Sheet "${sheetName}" not found.`);
-  }
-  const data = sheet.getDataRange().getValues();
-  const headers = data.shift();
-  const jsonArray = data.map(row => {
-    let obj = {};
-    headers.forEach((header, index) => {
-      obj[header] = row[index];
-    });
-    return obj;
+  journalData.forEach(row => {
+    let trade = headers.reduce((obj, header, i) => ({...obj, [header]: row[i]}), {});
+    if(trade.Result === 'WIN') winCount++;
+    emotions[trade.Mood] = (emotions[trade.Mood] || 0) + 1;
   });
+
+  const dominantEmotion = Object.keys(emotions).reduce((a, b) => emotions[a] > emotions[b] ? a : b, 'None');
+
+  const analysisPromptData = {
+    total_trades: tradeCount,
+    win_rate: ((winCount / tradeCount) * 100).toFixed(2),
+    dominant_emotion: dominantEmotion,
+    journal_summary: "User traded " + tradeCount + " times." // Simple summary
+  };
+
+  const weeklyFeedback = getGptFeedback({
+    promptType: 'WeeklySummary',
+    promptData: analysisPromptData,
+    referenceId: 'WEEKLY-' + new Date().toISOString().slice(0, 10)
+  });
+
+  weeklySummarySheet.appendRow([
+    'W-' + new Date().getTime(), new Date(), new Date(),
+    analysisPromptData.win_rate, analysisPromptData.total_trades, JSON.stringify(weeklyFeedback)
+  ]);
+
+  sendWhatsAppNotification(`🚀 Your weekly summary is ready! Dominant emotion: ${dominantEmotion}. Win Rate: ${analysisPromptData.win_rate}%. Open the app to see the full report.`);
+
+  return weeklyFeedback;
+}
+
+
+// --- MODULE 4: NOTIFICATION SYSTEM ---
+
+function sendWhatsAppNotification(message) {
+  const userPhoneNumber = settingsSheet.getRange("B1").getValue(); // Assumes phone number is in cell B1 of Settings
+  if (!userPhoneNumber) return;
+
+  const payload = {
+    to: userPhoneNumber,
+    message: message
+  };
+
+  const options = {
+    'method': 'post',
+    'contentType': 'application/json',
+    'payload': JSON.stringify(payload)
+  };
+
+  try {
+    UrlFetchApp.fetch(WHATSAPP_API_URL, options);
+  } catch (e) {
+    Logger.log("Could not send WhatsApp message: " + e.message);
+  }
+}
+
+// --- UTILITIES ---
+
+function getPromptTemplate(promptType) {
+    // In a production app, this would fetch from a dedicated "Prompts" sheet.
+    const prompts = {
+        'EntryValidation': `Setup saya:\n- Pair: {{Pair}}\n- Arah: {{Arah}}\n- SL: {{SL}}\n- TP: {{TP}}\n- Mood: {{Mood}}\n- Setup: {{Setup}}\nTolong validasi dan beri saran. Jika saya override, tolong bantu refleksi.`,
+        'EmotionalOverride': `Saya override entry. Mood saya {{Mood}}. Kenapa ini bisa terjadi dan bagaimana saya bisa memperbaiki mindset saya?`,
+        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`
+    };
+    return prompts[promptType] || '';
+}
+
+function formatPrompt(template, data) {
+    return template.replace(/{{(\w+)}}/g, (placeholder, key) => data[key] || placeholder);
+}
+
+function exportSheetToJson(sheetName) {
+  const sheet = ss.getSheetByName(sheetName);
+  if (!sheet) throw new Error(`Sheet "${sheetName}" not found.`);
+  const [headers, ...rows] = sheet.getDataRange().getValues();
+  const jsonArray = rows.map(row =>
+    headers.reduce((obj, header, i) => ({...obj, [header]: row[i]}), {})
+  );
   return JSON.stringify(jsonArray);
 }
 
-/****************************************************************
- * UTILITY FUNCTIONS
- ****************************************************************/
-
-/**
- * Retrieves a prompt template. In a real scenario, this could
- * fetch from another sheet or a dedicated file.
- */
-function getPromptTemplate(promptType) {
-    // In a real app, you'd fetch these from a "Prompts" sheet or file.
-    if (promptType === 'EntryValidation') {
-        return `You are my Trading Mentor... (rest of the prompt)`;
-    }
-    if (promptType === 'EmotionalReflection') {
-        return `You are my Trading Psychologist... (rest of the prompt)`;
-    }
-    // ... etc.
-    return '';
+// --- TRIGGERS ---
+// Manually create time-based triggers in Apps Script UI to run these.
+function createWeeklyAnalysisTrigger() {
+  ScriptApp.newTrigger('analyzeAndSummarizeWeek')
+      .timeBased()
+      .onWeekDay(ScriptApp.WeekDay.FRIDAY)
+      .atHour(18)
+      .create();
 }
 
-/**
- * Simple template formatter.
- */
-function formatPrompt(template, data) {
-    let formatted = template;
-    for (const key in data) {
-        const regex = new RegExp(`{{${key}}}`, 'g');
-        formatted = formatted.replace(regex, data[key]);
-    }
-    return formatted;
+function createKillzoneReminderTrigger() {
+    ScriptApp.newTrigger('sendKillzoneReminder')
+      .timeBased()
+      .everyDays(1)
+      .atHour(8) // e.g., 8 AM for London Killzone
+      .create();
+}
+
+function sendKillzoneReminder() {
+    sendWhatsAppNotification("London Killzone is approaching. Prepare your mind and your charts. Stay disciplined.");
 }

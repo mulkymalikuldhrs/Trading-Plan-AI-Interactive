@@ -1,43 +1,28 @@
-# ✅ TODO List - MULKY AI OS
+# ✅ TODO - MULKY AI TRADING OS™
 
-This list tracks the development roadmap from A to Z.
+## Phase 1: Foundation (Complete)
+- [x] Design Google Sheet Schema
+- [x] Write Master Google Apps Script
+- [x] Generate Full AI Prompt Pack
+- [x] Build Flutter Project Skeleton
+- [x] Create WhatsApp Bot Server
 
-## PHASE A – Planning & Setup
-- [x] Generate `project_structure.md`
-- [x] Generate all Prompt Templates
-- [x] Generate `README.md`, `CHANGELOG.md`, `TODO.md`
+## Phase 2: UI & Feature Implementation
+- [ ] **Entry Form:** Connect UI to GPT validation and Sheet logging.
+- [ ] **Dashboard:** Implement `fl_chart` for live data visualization.
+- [ ] **Journal:** Add ability to edit and add detailed notes to trades.
+- [ ] **Risk Engine:** Build the UI for the risk calculator and soft lock system.
+- [ ] **Animations:** Integrate Lottie/Rive for emotional feedback animations.
+- [ ] **Dark Mode:** Implement a system-wide dark mode toggle.
 
-## PHASE B – Google Sheets
-- [ ] Design `Mulky_Trading_Sheet_Template`
-- [ ] Generate Google Apps Scripts (sync, risk, violations, gpt)
-- [ ] Build script to auto-export logs to JSON
+## Phase 3: Automation & Intelligence
+- [ ] **Weekly Analyzer:** Finalize and test the automated weekly summary trigger.
+- [ ] **WhatsApp Notifications:** Implement all notification triggers (override, emotion, killzone).
+- [ ] **Emotional Lockout:** Implement the 3-strike violation lockout logic.
+- [ ] **Supabase Integration:** Add Supabase as a secondary, more robust data backup.
 
-## PHASE C – GPT Integration
-- [ ] Create reusable POST call handler
-- [ ] Store GPT responses to Sheet
-
-## PHASE D – Flutter Web App
-- [ ] Create Flutter file structure
-- [ ] Build Entry Form page
-- [ ] Build Journal page
-- [ ] Build Dashboard page
-- [ ] Build Risk module
-- [ ] Add Mood Tracker
-- [ ] Add animations
-
-## PHASE E – Chatbot Integration
-- [ ] Embed AI chatbox panel
-- [ ] Build custom chat logic
-
-## PHASE F – WhatsApp Automation
-- [ ] Setup WhatsApp Web.js
-- [ ] Implement notification triggers
-
-## PHASE G – Self-Updating Documentation
-- [ ] Implement logic to auto-update docs
-- [ ] Create `/prompt_templates.txt`
-
-## PHASE H – Hosting & Deployment
-- [ ] Deploy Flutter Web
-- [ ] Setup backup logs to Google Drive
-- [ ] Add login auth (optional)
+## Phase 4: Deployment & Polish
+- [ ] **Deploy:** Host Flutter Web on Vercel/Firebase.
+- [ ] **Host Bot:** Deploy WhatsApp bot to a persistent server (e.g., Render).
+- [ ] **Testing:** Conduct end-to-end testing of all features.
+- [ ] **User Onboarding:** Create a simple onboarding flow for new users.

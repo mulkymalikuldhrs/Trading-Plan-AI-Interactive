@@ -1,16 +1,40 @@
-## API – Entry Validator
+# API Reference
 
-POST to LLM7 API → https://api.llm7.io/v1
-Payload:
+The system uses a Google Apps Script as a simple REST API.
 
+**Endpoint:** `[Your Deployed Google Apps Script URL]`
+
+**Method:** `POST`
+
+**Headers:**
+-   `Content-Type: application/json`
+
+**Body:**
+```json
 {
-  "model": "gpt-3.5-turbo",
-  "messages": [
-    { "role": "system", "content": "You are my trading validator mentor..." },
-    { "role": "user", "content": "[Prompt text]" }
-  ]
+  "action": "[action_name]",
+  "data": { ... }
 }
+```
 
-Returns:
-- validation: true/false
-- feedback: string
+## Actions
+
+### `getGptFeedback`
+-   **Description:** Triggers a call to the LLM7 API with a specified prompt.
+-   **Data:** `{ "promptType": "...", "promptData": { ... }, "referenceId": "..." }`
+
+### `logTrade`
+-   **Description:** Logs a completed trade to the Journal sheet.
+-   **Data:** A JSON representation of the `Trade` object.
+
+### `logViolation`
+-   **Description:** Logs a rule violation.
+-   **Data:** `{ "tradeId": "...", "ruleBroken": "...", "justification": "..." }`
+
+### `triggerWeeklyAnalysis`
+-   **Description:** Manually triggers the weekly analysis script.
+-   **Data:** `{}`
+
+### `exportToJson`
+-   **Description:** Exports an entire sheet to a JSON object.
+-   **Data:** `{ "sheetName": "..." }`

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class DashboardPage extends StatelessWidget {
+class RiskPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("📊 Performance Dashboard"),
+        title: Text("⚖️ Risk Engine"),
         centerTitle: true,
         backgroundColor: Colors.blueGrey[900],
       ),
       body: Center(
-        child: Text("Dashboard Page - Coming Soon!"),
+        child: Text("Risk Page - Coming Soon!"),
       ),
     );
   }
