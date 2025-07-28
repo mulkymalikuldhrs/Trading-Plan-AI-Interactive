@@ -6,6 +6,28 @@ Welcome to your personal AI-powered market intelligence agency. This is not just
 
 ---
 
+## 🚀 The Daily Ritual: A Quick Start Guide
+
+This system is designed to be used in a daily ritual to build discipline and market awareness.
+
+1.  **Pre-Market (Morning):**
+    *   Open the **`🧠 Market Intel`** tab to get your daily briefing.
+    *   Open the **`🔮 Forecast Center`** to see the AI's projection for the day/week.
+    *   Chat with the AI: *"What should be my focus today?"*
+
+2.  **Trade Execution:**
+    *   Use the **`📋 Entry Planner`** to plan your trade.
+    *   **Always** click **`✅ Confirm with AI`** before entering a trade.
+    *   Review the live TradingView chart.
+
+3.  **Post-Trade:**
+    *   Fill out your **`📘 Journal`** with the trade outcome and your emotions.
+    *   Review the AI's feedback on your performance.
+
+**For a complete, A-Z workflow, please see the [Ultimate User Guide & Tutorial](docs/TUTORIAL.md).**
+
+---
+
 ## ✨ Core Features
 
 -   **🔮 AI Forecast Engine™:** Get multi-day market forecasts that synthesize technicals, fundamentals, news, and institutional sentiment (COT) into a single, probabilistic trade thesis.
@@ -25,21 +47,8 @@ The Dhaher Trading Plan AI is built on a single core belief: **true trading mast
 -   **We Gamify Discipline:** The app is designed to make consistency rewarding, using streaks, badges, and feedback loops to build positive habits.
 -   **We Treat Emotion as Data:** Your psychological state is a key input, allowing the AI to provide context-aware feedback and help you understand your own biases.
 
-## ⚙️ Tech Stack
-
--   **Frontend:** Flutter Web
--   **UI/UX:** Rive, `fl_chart`, Fragment Shaders
--   **Backend & Automation:** Google Apps Script
--   **AI Brain:** LLM7 (GPT-4.5+)
--   **Data Sources:** Finnhub.io, NewsAPI.org, CFTC
--   **Notifications:** WhatsApp Web.js
-
 ## 👥 Credits
 
 This project was conceptualized and directed by:
 **Mulky Malikul Dhaher**
 -   **Contact:** mulkymalikuldhr@mail.com
-
----
-
-This is more than an app. **It's your personal intelligence agency.** Let's get to work.
