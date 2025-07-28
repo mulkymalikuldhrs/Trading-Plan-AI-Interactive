@@ -17,17 +17,10 @@
 
 Selamat datang di agensi intelijen pasar pribadi Anda. Ini bukan sekadar jurnal trading; ini adalah co-pilot yang **proaktif, prediktif, dan sadar secara psikologis** yang dirancang untuk membantu Anda menguasai pasar dengan menguasai diri sendiri.
 
-### 🚀 **Pemasangan Mudah (Metode yang Direkomendasikan)**
+### 🚀 **Pemasangan & Penyiapan**
 
-Gunakan skrip penyiapan otomatis kami untuk memulai dalam beberapa menit.
-
-1.  **Jalankan Skrip Penyiapan:**
-    *   **Untuk macOS/Linux:** Buka terminal, jalankan `chmod +x setup.sh`, lalu `./setup.sh`.
-    *   **Untuk Windows:** Cukup klik dua kali file `setup.bat`.
-2.  **Masukkan Kunci Anda:** Skrip akan meminta Anda untuk memasukkan kunci API dan URL Anda.
-3.  **Deploy & Luncurkan:** Ikuti instruksi di layar dan kemudian jalankan skrip `launch.sh` atau `launch.bat` untuk memulai aplikasi.
-
-**Untuk panduan yang lebih detail, lihat [Panduan Pemasang & Peluncur](docs/installer_guide.md).**
+-   **Web & Desktop:** Untuk instruksi pemasangan otomatis, lihat [Panduan Pemasang & Peluncur](docs/installer_guide.md).
+-   **Android:** Untuk instruksi membangun dan memasang `.apk`, lihat [Panduan Deployment Android](docs/android_deployment.md).
 
 ### ✨ **Fitur Inti**
 
@@ -54,17 +47,10 @@ Proyek ini dikonsep dan disutradarai oleh:
 
 Welcome to your personal AI-powered market intelligence agency. This is not just a trading journal; it's a **proactive, predictive, and psychologically-aware** co-pilot designed to help you master the market by mastering yourself.
 
-### 🚀 **Easy Setup (Recommended Method)**
+### 🚀 **Installation & Setup**
 
-Use our automated setup scripts to get started in minutes.
-
-1.  **Run the Setup Script:**
-    *   **For macOS/Linux:** Open a terminal, run `chmod +x setup.sh`, and then `./setup.sh`.
-    *   **For Windows:** Simply double-click the `setup.bat` file.
-2.  **Enter Your Keys:** The script will prompt you to enter your API keys and URLs.
-3.  **Deploy & Launch:** Follow the on-screen instructions and then run the `launch.sh` or `launch.bat` script to start the application.
-
-**For a more detailed guide, see the [Installer & Launcher Guide](docs/installer_guide.md).**
+-   **Web & Desktop:** For automated setup instructions, see the [Installer & Launcher Guide](docs/installer_guide.md).
+-   **Android:** For instructions on building and installing the `.apk`, see the [Android Deployment Guide](docs/android_deployment.md).
 
 ### ✨ **Core Features**
 
