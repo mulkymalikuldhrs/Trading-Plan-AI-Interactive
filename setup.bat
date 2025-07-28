@@ -19,6 +19,12 @@ if %errorlevel% neq 0 (
     exit /b
 )
 
+where /q pip
+if %errorlevel% neq 0 (
+    echo [ERROR] pip is not installed. Please ensure Python and pip are installed.
+    exit /b
+)
+
 echo Dependencies found.
 echo.
 
@@ -36,6 +42,9 @@ echo Installing WhatsApp Bot packages...
 cd whatsapp_bot
 call npm install
 cd ..
+
+echo Installing Python client packages...
+call pip install -r python_client/requirements.txt
 
 echo.
 echo ========================================================

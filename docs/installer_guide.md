@@ -4,7 +4,7 @@ This guide provides instructions on how to use the automated scripts to install 
 
 ## 1. Installation (One-Time Setup)
 
-The setup script will install all necessary dependencies and prompt you to configure your API keys.
+The setup script will check for dependencies, install all necessary packages for Flutter, Node.js, and Python, and prompt you to configure your API keys.
 
 ### For macOS & Linux
 
@@ -18,6 +18,8 @@ The setup script will install all necessary dependencies and prompt you to confi
 1.  Double-click the `setup.bat` file.
 2.  A command prompt window will open.
 3.  Follow the on-screen prompts to enter your API keys and URLs.
+
+The script now handles all package installation automatically.
 
 **Important:** The setup script creates a `properties.env` file in the `google_apps_scripts` directory. You must still **manually copy** these key-value pairs into your Google Apps Script's "Script Properties" section before deploying it.
 

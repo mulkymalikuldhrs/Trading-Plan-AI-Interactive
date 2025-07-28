@@ -7,20 +7,18 @@ echo "--------------------------------------------------------"
 # --- Check for Dependencies ---
 echo "Checking for dependencies..."
 
-# Check for Flutter
-if ! command -v flutter &> /dev/null
-then
-    echo "❌ Flutter could not be found. Please install Flutter before running this script."
-    echo "Visit: https://flutter.dev/docs/get-started/install"
-    exit
+# Check for Flutter, Node.js, and Python/Pip
+if ! command -v flutter &> /dev/null; then
+    echo "❌ Flutter could not be found. Please install Flutter: https://flutter.dev/docs/get-started/install"
+    exit 1
 fi
-
-# Check for Node.js
-if ! command -v node &> /dev/null
-then
-    echo "❌ Node.js could not be found. Please install Node.js before running this script."
-    echo "Visit: https://nodejs.org/"
-    exit
+if ! command -v node &> /dev/null; then
+    echo "❌ Node.js could not be found. Please install Node.js: https://nodejs.org/"
+    exit 1
+fi
+if ! command -v pip &> /dev/null; then
+    echo "❌ pip could not be found. Please ensure Python and pip are installed."
+    exit 1
 fi
 
 echo "✅ All dependencies found."
@@ -34,6 +32,9 @@ echo "Installing Flutter packages..."
 
 echo "Installing WhatsApp Bot packages..."
 (cd whatsapp_bot && npm install)
+
+echo "Installing Python client packages..."
+pip install -r python_client/requirements.txt
 
 echo "✅ Packages installed successfully."
 echo "--------------------------------------------------------"
@@ -52,11 +53,9 @@ read -p "Enter your WhatsApp Bot Server URL (e.g., http://localhost:3000/send): 
 echo "⚙️ Configuring the application..."
 
 # Update Flutter api_service.dart
-sed -i -e "s|https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec|$APPS_SCRIPT_URL|g" "flutter_app/lib/services/api_service.dart"
+sed -i.bak "s|https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec|$APPS_SCRIPT_URL|g" "flutter_app/lib/services/api_service.dart"
 
-# Create .env file for Google Apps Script (to be used with clasp or manual upload)
-# In a real project, you would use `clasp` to manage this.
-# For now, we'll create a file with the properties.
+# Create .env file for Google Apps Script
 echo "Creating Google Apps Script properties file..."
 cat > google_apps_scripts/properties.env << EOL
 LLM7_API_KEY=$LLM7_API_KEY
