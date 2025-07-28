@@ -1,9 +1,13 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v8.0.0 - The All-in-One Installer & Launcher Update
+- **🚀 ONE-CLICK SETUP:** Added `setup.sh` and `setup.bat` scripts to automate the entire installation process, including dependency checks and API key configuration.
+- **🚀 ONE-CLICK LAUNCH:** Added `launch.sh` and `launch.bat` scripts to start both the Flutter web app and the WhatsApp bot server simultaneously.
+- **📚 NEW DOCUMENTATION:** Created a new `installer_guide.md` and updated the main `README.md` to make the new automated setup the primary installation method. This makes the project exceptionally easy to get up and running.
+
 ## v7.0.0 - The Ultimate Documentation & Onboarding Update
 - **🌍 BILINGUAL README:** The `README.md` is now fully bilingual (English & Indonesian) with a toggleable interface.
-- **🛠️ COMPREHENSIVE SETUP GUIDE:** Added detailed, step-by-step instructions for Installation, Building, and Deployment to the main `README.md`.
-- **✅ FINAL POLISH:** This marks the final, feature-complete, and fully-documented version of the Dhaher Trading Plan AI. The project is now ready for public use and deployment.
+- **🛠️ COMPREHENSIVE SETUP GUIDE:** Added detailed, step-by-step instructions for Installation, Building, and Deployment.
 
 ## v6.0.0 - The Ultimate User Guide
 - **📚 ULTIMATE USER GUIDE:** Added a `TUTORIAL.md` file with a comprehensive A-Z guide on the daily user workflow.
