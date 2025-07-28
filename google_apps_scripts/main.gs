@@ -6,7 +6,7 @@
  ****************************************************************/
 
 // --- SPREADSHEET & API CONFIGURATION ---
-const SPREADSHEET_ID = "YOUR_SPREADSHEET_ID";
+const SPREADSHEET_ID = "1I8uVUlquRPwIc_cMKr-toHZ9qHW38uDom4TYdKexaoE";
 const LLM7_API_KEY = "YOUR_LLM7_API_KEY";
 const LLM7_API_URL = "https://api.llm7.io/v1/chat/completions";
 const WHATSAPP_API_URL = "YOUR_WHATSAPP_WEBJS_SERVER_URL/send"; // URL to your running WhatsApp bot server
