@@ -1,0 +1,15 @@
+{
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "TODO.md",
+    "docs/api.md",
+    "docs/usage.md",
+    "docs/ai_prompts.md",
+    "docs/emotion_logic.md",
+    "docs/weekly_analysis.md",
+    "docs/changelog.md",
+    "docs/trading_plan_ai.md",
+    "structure.json"
+  ]
+}
