@@ -1,0 +1,10 @@
+This is a placeholder for the Rive animation file.
+In a real project, this would be a binary file created with the Rive editor.
+
+The animation should have the following states:
+- Neutral (calm, slow breathing)
+- Focused (slight glow, steady pulse)
+- Anxious (erratic, fast movement)
+- FOMO (sharp, spiky movements)
+- Win (bright, celebratory explosion)
+- Loss (dark, imploding animation)

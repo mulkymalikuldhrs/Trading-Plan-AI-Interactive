@@ -6,15 +6,15 @@ Welcome to your new trading partner. This is not just an app; it's a **mindset i
 
 -   **🧠 AI-Powered Validation:** Get instant, unbiased feedback on your trade setups *before* you risk a single dollar.
 -   **🧘‍♂️ Emotional Reflection Engine:** When you override the system or feel strong emotions, the AI will guide you through a reflective process to understand the "why" behind your actions.
--   **- 📊 Interactive Dashboard:** Visualize your progress with charts for your equity curve, win rate, emotional patterns, and more.
+-   **- 🔮 Live Emotional Orb:** An interactive, animated orb on your dashboard that reflects your current trading mindset.
 -   **🛡️ Smart Risk Management:** An integrated risk engine helps you calculate position sizes and warns you when you're taking on too much risk.
--   **💬 24/7 AI Coach:** Chat with your AI assistant anytime to get advice, motivation, or a fresh perspective.
--   **📲 WhatsApp Alerts:** Receive real-time notifications for market killzones, emotional state warnings, and your weekly performance summaries.
+-   **💬 Proactive AI Coach:** Chat with your AI assistant anytime, and it will even reach out to you with context-aware insights and motivation.
+-   **📲 Advanced WhatsApp Alerts:** Receive interactive alerts with quick-reply buttons for a more engaging experience.
 -   **🔄 Fully Automated & Self-Documenting:** Every trade, emotion, and interaction is logged. The system even updates its own documentation as it evolves.
 
 ## ⚙️ Tech Stack
 
--   **Frontend:** Flutter Web
+-   **Frontend:** Flutter Web with Rive for live animations and fragment shaders for dynamic backgrounds.
 -   **Backend & Storage:** Google Sheets API
 -   **AI Brain:** LLM7 (GPT-4.5+)
 -   **Notifications:** WhatsApp Web.js
@@ -26,6 +26,12 @@ Welcome to your new trading partner. This is not just an app; it's a **mindset i
 2.  **Emotion as Data:** We don't suppress emotions; we track them, learn from them, and turn them into an edge.
 3.  **Radical Accountability:** Every action is logged. Every override is a lesson.
 4.  **Human-AI Symbiosis:** This system is designed to augment your intuition and discipline, not replace it.
+
+## 👥 Credits
+
+This project was conceptualized and directed by:
+**Mulky Malikul Dhaher**
+-   **Contact:** mulkymalikuldhr@mail.com
 
 ---
 
