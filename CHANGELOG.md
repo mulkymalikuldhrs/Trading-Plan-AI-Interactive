@@ -1,9 +1,12 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
-## v6.0.0 - The Ultimate User Guide & Final Polish
-- **📚 ULTIMATE USER GUIDE:** Added a new `TUTORIAL.md` file, providing a comprehensive A-Z guide on how to use the entire system as a daily ritual for disciplined trading.
-- **✨ README ENHANCEMENT:** The main `README.md` has been updated to include a quick-start guide and a link to the full tutorial, making it easier for new users to get started.
-- **✅ FINAL REVIEW:** Conducted a full and final review of the entire codebase and all documentation to ensure consistency, quality, and that all features are fully operational with no mock data. The project is now officially feature-complete and ready for deployment.
+## v7.0.0 - The Ultimate Documentation & Onboarding Update
+- **🌍 BILINGUAL README:** The `README.md` is now fully bilingual (English & Indonesian) with a toggleable interface.
+- **🛠️ COMPREHENSIVE SETUP GUIDE:** Added detailed, step-by-step instructions for Installation, Building, and Deployment to the main `README.md`.
+- **✅ FINAL POLISH:** This marks the final, feature-complete, and fully-documented version of the Dhaher Trading Plan AI. The project is now ready for public use and deployment.
+
+## v6.0.0 - The Ultimate User Guide
+- **📚 ULTIMATE USER GUIDE:** Added a `TUTORIAL.md` file with a comprehensive A-Z guide on the daily user workflow.
 
 ## v5.0.0 - Project Rebranding
 - **✨ BRANDING:** Rebranded the entire project to "Dhaher Trading Plan AI".
