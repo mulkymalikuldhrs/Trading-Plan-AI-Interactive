@@ -12,3 +12,12 @@ dependencies:
   http: ^0.13.3
   rive: ^0.9.1
   speech_to_text: ^5.6.0
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.3
+  rive: ^0.9.1
+  speech_to_text: ^5.6.0
+  fl_chart: ^0.55.0

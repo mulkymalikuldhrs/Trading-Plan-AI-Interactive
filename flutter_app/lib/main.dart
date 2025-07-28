@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
+import 'package:provider/provider.dart'; // Add this dependency
+import 'services/emotional_lockout_service.dart';
 import 'ui/pages/entry_page.dart';
 import 'ui/pages/journal_page.dart';
 import 'ui/pages/dashboard_page.dart';
 import 'ui/pages/chat_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => EmotionalLockoutService(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -41,33 +49,63 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final lockoutService = Provider.of<EmotionalLockoutService>(context);
+
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+      body: Stack(
+        children: [
+          Center(
+            child: _widgetOptions.elementAt(_selectedIndex),
+          ),
+          if (lockoutService.isLocked)
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.lock, size: 80, color: Colors.redAccent),
+                      SizedBox(height: 20),
+                      Text(
+                        "Emotional Lockout Activated",
+                        style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white),
+                      ),
+                      Text(
+                        "You've had 3 consecutive negative events. It's time for a break.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white70),
+                      ),
+                       SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          // In a real app, this would be more sophisticated
+                          lockoutService.resetOverrides();
+                          lockoutService.recordWin(); // Reset loss counter
+                        },
+                        child: Text("I Understand, Reset"),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Entry',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Journal',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'AI Chat',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Entry'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'AI Chat'),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
+        selectedItemColor: lockoutService.isLocked ? Colors.grey : Colors.amber[800],
+        unselectedItemColor: Colors.grey,
+        onTap: lockoutService.isLocked ? null : _onItemTapped,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blueGrey[900],
       ),
     );
   }

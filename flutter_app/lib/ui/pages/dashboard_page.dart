@@ -1,62 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:rive/rive.dart';
 import '../responsive.dart';
+import '../../components/equity_chart.dart';
+import '../../components/winrate_pie_chart.dart';
+import '../../components/setup_performance_barchart.dart';
 
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Responsive(
-      mobile: DashboardMobile(),
-      tablet: DashboardMobile(), // For simplicity, tablet will use mobile layout
-      desktop: DashboardDesktop(),
-    );
-  }
-}
-
-// --- Mobile Layout ---
-class DashboardMobile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Dashboard")),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            EmotionalOrb(),
-            SizedBox(height: 20),
-            WinRateCard(),
-            SizedBox(height: 20),
-            EquityCurveCard(),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text("📈 Dashboard of Discipline™"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      backgroundColor: Colors.black,
+      body: Responsive(
+        mobile: DashboardMobileLayout(),
+        tablet: DashboardTabletLayout(),
+        desktop: DashboardDesktopLayout(),
       ),
     );
   }
 }
 
-// --- Desktop Layout ---
-class DashboardDesktop extends StatelessWidget {
+// --- Layouts ---
+
+class DashboardMobileLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("MULKY AI OS - Desktop Dashboard")),
-      body: Row(
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            flex: 2,
-            child: EmotionalOrb(),
-          ),
-          Expanded(
-            flex: 3,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  WinRateCard(),
-                  SizedBox(height: 20),
-                  EquityCurveCard(),
-                ],
-              ),
-            ),
+          Text("Equity Curve", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
+          SizedBox(height: 16),
+          EquityCurveChart(),
+          SizedBox(height: 24),
+          WinRatePieChart(),
+          SizedBox(height: 24),
+          Text("Setup Performance", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
+          SizedBox(height: 16),
+          SetupPerformanceBarChart(),
+        ],
+      ),
+    );
+  }
+}
+
+class DashboardTabletLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(24),
+      child: Column(
+        children: [
+          Text("Equity Curve", style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
+          SizedBox(height: 16),
+          EquityCurveChart(),
+          SizedBox(height: 24),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: WinRatePieChart()),
+              SizedBox(width: 24),
+              Expanded(child: SetupPerformanceBarChart()),
+            ],
           ),
         ],
       ),
@@ -64,48 +73,38 @@ class DashboardDesktop extends StatelessWidget {
   }
 }
 
-
-// --- Reusable Widgets ---
-
-class EmotionalOrb extends StatelessWidget {
+class DashboardDesktopLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Placeholder for the Rive animation
-    return Container(
-      height: 300,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.bubble_chart, size: 150, color: Colors.amber),
-            SizedBox(height: 20),
-            Text("Emotional Orb", style: Theme.of(context).textTheme.headline5),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class WinRateCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        height: 200,
-        child: Center(child: Text("Win Rate Chart")),
-      ),
-    );
-  }
-}
-
-class EquityCurveCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Container(
-        height: 200,
-        child: Center(child: Text("Equity Curve Chart")),
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                Text("Equity Curve", style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
+                SizedBox(height: 16),
+                Expanded(child: EquityCurveChart()),
+              ],
+            ),
+          ),
+          SizedBox(width: 24),
+          Expanded(
+            flex: 2,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  WinRatePieChart(),
+                  SizedBox(height: 24),
+                  SetupPerformanceBarChart(),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
