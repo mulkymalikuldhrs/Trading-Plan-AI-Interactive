@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
+import '../services/gpt_service.dart';
+import '../components/mood_selector.dart';
+import '../components/animated_button.dart';
 
 class EntryForm extends StatefulWidget {
   @override
@@ -8,13 +10,13 @@ class EntryForm extends StatefulWidget {
 
 class _EntryFormState extends State<EntryForm> {
   final _formKey = GlobalKey<FormState>();
-  final _assetController = TextEditingController();
-  final _entryPriceController = TextEditingController();
-  final _stopLossController = TextEditingController();
-  final _takeProfitController = TextEditingController();
-  final _justificationController = TextEditingController();
+  final _assetController = TextEditingController(text: "XAU/USD");
+  final _entryPriceController = TextEditingController(text: "2300.50");
+  final _stopLossController = TextEditingController(text: "2295.50");
+  final _takeProfitController = TextEditingController(text: "2315.50");
+  final _setupController = TextEditingController(text: "FVG + BOS");
 
-  String _direction = 'LONG';
+  String _direction = 'Buy';
   String _mood = 'Focused';
   bool _isLoading = false;
   Map<String, dynamic>? _gptResponse;
@@ -27,26 +29,22 @@ class _EntryFormState extends State<EntryForm> {
       });
 
       final tradeData = {
-        'asset': _assetController.text,
-        'direction': _direction,
-        'strategy_name': 'London Breakout', // Example, this would be dynamic
-        'entry_price': _entryPriceController.text,
-        'stop_loss': _stopLossController.text,
-        'take_profit': _takeProfitController.text,
-        'rrr': '2.5', // Example, this would be calculated
-        'mood': _mood,
-        'justification': _justificationController.text,
+        'Pair': _assetController.text,
+        'Arah': _direction,
+        'SL': _stopLossController.text,
+        'TP': _takeProfitController.text,
+        'Mood': _mood,
+        'Setup': _setupController.text,
       };
 
       try {
-        final response = await ApiService.getGptFeedback('EntryValidation', 'temp-ref', tradeData);
+        final response = await GptService.getValidation(tradeData);
         setState(() {
           _gptResponse = response;
         });
       } catch (e) {
-        // Show error dialog
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
+          SnackBar(backgroundColor: Colors.red, content: Text('Error: ${e.toString()}')),
         );
       } finally {
         setState(() {
@@ -58,49 +56,33 @@ class _EntryFormState extends State<EntryForm> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
+    return Form(
+      key: _formKey,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            TextFormField(
-              controller: _assetController,
-              decoration: InputDecoration(labelText: 'Asset (e.g., EURUSD)'),
-              validator: (value) => value!.isEmpty ? 'Please enter an asset' : null,
-            ),
-            // ... other text form fields for entry, sl, tp, justification
-
+            TextFormField(controller: _assetController, decoration: InputDecoration(labelText: 'Asset/Pair')),
+            TextFormField(controller: _entryPriceController, decoration: InputDecoration(labelText: 'Entry Price'), keyboardType: TextInputType.number),
+            TextFormField(controller: _stopLossController, decoration: InputDecoration(labelText: 'Stop Loss'), keyboardType: TextInputType.number),
+            TextFormField(controller: _takeProfitController, decoration: InputDecoration(labelText: 'Take Profit'), keyboardType: TextInputType.number),
+            TextFormField(controller: _setupController, decoration: InputDecoration(labelText: 'Setup Confluence')),
+            SizedBox(height: 16),
             DropdownButtonFormField<String>(
               value: _direction,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _direction = newValue!;
-                });
-              },
-              items: <String>['LONG', 'SHORT'].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              decoration: InputDecoration(labelText: 'Direction'),
+              onChanged: (v) => setState(() => _direction = v!),
+              items: ['Buy', 'Sell'].map((d) => DropdownMenuItem(value: d, child: Text(d))).toList(),
             ),
-
-            // ... Mood dropdown
-
-            SizedBox(height: 20),
+            SizedBox(height: 16),
+            MoodSelector(onMoodSelected: (mood) => setState(() => _mood = mood)),
+            SizedBox(height: 32),
             if (_isLoading)
               Center(child: CircularProgressIndicator())
             else
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Validate Setup'),
-              ),
-
+              AnimatedButton(text: 'Validate with AI Coach', onPressed: _submitForm),
             if (_gptResponse != null) ...[
-              SizedBox(height: 20),
+              SizedBox(height: 24),
               _buildGptFeedbackCard(_gptResponse!),
             ]
           ],
@@ -112,19 +94,26 @@ class _EntryFormState extends State<EntryForm> {
   Widget _buildGptFeedbackCard(Map<String, dynamic> feedback) {
     bool isValid = feedback['is_valid_setup'] ?? false;
     return Card(
-      color: isValid ? Colors.green.shade100 : Colors.red.shade100,
+      color: isValid ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: isValid ? Colors.green : Colors.red, width: 1),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'AI Mentor Says: ${feedback['tough_love_feedback']}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              '🤖 AI Mentor Says:',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
             ),
             SizedBox(height: 8),
-            Text(feedback['detailed_explanation']),
-            // ... display other feedback parts
+            Text('"${feedback['tough_love_feedback']}"', style: TextStyle(fontStyle: FontStyle.italic, color: Colors.white70)),
+            SizedBox(height: 12),
+            Text(feedback['detailed_explanation'], style: TextStyle(color: Colors.white)),
+            SizedBox(height: 8),
+            Chip(label: Text('Score: ${feedback['validation_score']}/10')),
           ],
         ),
       ),
