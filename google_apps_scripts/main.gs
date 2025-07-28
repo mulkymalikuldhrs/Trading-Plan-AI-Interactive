@@ -269,3 +269,19 @@ function scanForTradeSignals() {
     }
   });
 }
+
+function logForecast(forecastData) {
+  const forecastSheet = ss.getSheetByName("Forecasts");
+  forecastSheet.appendRow([
+    new Date(),
+    forecastData.pair,
+    forecastData.timeframe,
+    forecastData.summary,
+    forecastData.entry,
+    forecastData.sl,
+    forecastData.tp,
+    forecastData.probability,
+    JSON.stringify(forecastData.gptAnalysis)
+  ]);
+  return "Forecast logged successfully.";
+}

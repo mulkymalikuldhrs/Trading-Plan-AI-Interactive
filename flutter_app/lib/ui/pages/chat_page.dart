@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../widgets/chat_bubble.dart';
 import '../../services/gpt_summarizer.dart';
+import '../../services/forecast_service.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class _ChatPageState extends State<ChatPage> {
   bool _isListening = false;
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, dynamic>> _messages = [
-    {'message': 'Welcome to the Intelligence Hub. Ask for a market summary, e.g., "/summary EURUSD"', 'isUser': false},
+    {'message': 'Welcome to the Intelligence Hub. Ask for a market summary or forecast, e.g., "/forecast GOLD"', 'isUser': false},
   ];
 
   @override
@@ -69,11 +70,31 @@ class _ChatPageState extends State<ChatPage> {
           _messages.add({'message': formattedReply, 'isUser': false});
         });
 
+      } else if (userInput.toLowerCase().startsWith('/forecast')) {
+        final parts = userInput.split(' ');
+        final symbol = parts.length > 1 ? parts[1].toUpperCase() : 'EURUSD';
+
+        final forecast = await ForecastService.getForecast(pair: symbol, timeframe: 'H4', days: 7);
+
+        final formattedReply = `
+*🔮 AI Forecast for ${symbol} (7-Day Outlook)*
+*Bias:* ${forecast['bias']}
+*Probability:* ${forecast['probability']}%
+*Entry Zone:* ${forecast['entry_zone']}
+*Confirmation:* ${forecast['confirmation']}
+*SL:* ${forecast['stop_loss']} | *TP:* ${forecast['take_profit']}
+        `;
+
+        setState(() {
+          _messages.removeLast();
+          _messages.add({'message': formattedReply, 'isUser': false});
+        });
+
       } else {
          // Default reflection response for other inputs
          setState(() {
           _messages.removeLast();
-          _messages.add({'message': 'I can currently provide summaries with the /summary command.', 'isUser': false});
+          _messages.add({'message': 'I can currently provide summaries and forecasts with the /summary and /forecast commands.', 'isUser': false});
         });
       }
     } catch (e) {
@@ -117,7 +138,7 @@ class _ChatPageState extends State<ChatPage> {
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: InputDecoration.collapsed(hintText: "e.g., /summary GOLD"),
+              decoration: InputDecoration.collapsed(hintText: "e.g., /forecast GOLD"),
               onSubmitted: (value) => _sendMessage(),
             ),
           ),

@@ -36,6 +36,7 @@ client.on('message', async (msg) => {
         '/cot': handleCot,
         '/outlook': handleOutlook,
         '/setup': handleSetup,
+        '/forecast': handleForecast,
     };
 
     if (commandHandlers[command]) {
@@ -47,7 +48,6 @@ client.initialize();
 
 
 // --- COMMAND HANDLER FUNCTIONS ---
-
 async function handleReflect(msg, args) {
     const reflectionPrompt = new Buttons('I noticed you asked for reflection. What was on your mind after your last trade?', [{body: 'It was a good trade'}, {body: 'It was a bad trade'}, {body: 'I broke my rules'}], 'Reflection Time', 'Let me guide you.');
     client.sendMessage(msg.from, reflectionPrompt);
@@ -59,7 +59,7 @@ async function handleSummary(msg, args) {
 
     try {
         const response = await axios.post(GOOGLE_APPS_SCRIPT_URL, {
-            action: 'getAiMasterSummary', // This should be a new action in your GAS
+            action: 'getAiMasterSummary',
             data: { symbol: symbol }
         });
 
@@ -68,11 +68,9 @@ async function handleSummary(msg, args) {
 *🧠 AI Master Summary for ${symbol}*
 *Bias:* ${summary.final_bias} (Confidence: ${summary.confidence_score}/10)
 *Signal Active:* ${summary.signal.active}
-
 *Entry:* ${summary.signal.entry || 'N/A'}
 *Stop Loss:* ${summary.signal.stop_loss || 'N/A'}
 *Take Profit:* ${summary.signal.take_profit || 'N/A'}
-
 *Read the full analysis in the app!*
         `;
         msg.reply(formattedReply);
@@ -82,7 +80,35 @@ async function handleSummary(msg, args) {
     }
 }
 
-// ... other handlers for /cot, /outlook, /setup would follow a similar pattern ...
+async function handleForecast(msg, args) {
+    const symbol = args[0] ? args[0].toUpperCase() : 'EURUSD';
+    msg.reply(`🔮 On it! Generating a new forecast for **${symbol}**...`);
+
+    try {
+        const response = await axios.post(GOOGLE_APPS_SCRIPT_URL, {
+            action: 'getForecast', // This should be a new action in your GAS
+            data: { pair: symbol, timeframe: 'H4', days: 7 }
+        });
+
+        const forecast = response.data.data;
+        const formattedReply = `
+*🔮 AI Forecast for ${symbol} (7-Day Outlook)*
+*Bias:* ${forecast.bias}
+*Probability:* ${forecast.probability}%
+*Entry Zone:* ${forecast.entry_zone}
+*Confirmation:* ${forecast.confirmation}
+*SL:* ${forecast.stop_loss} | *TP:* ${forecast.take_profit}
+
+*This is an AI-generated probabilistic forecast, not financial advice.*
+        `;
+        msg.reply(formattedReply);
+
+    } catch (error) {
+        msg.reply('I had trouble peering into the future... The forecast engine might be down. Please try again.');
+    }
+}
+
+// ... other handlers ...
 async function handleCot(msg, args) { msg.reply('COT command coming soon!'); }
 async function handleOutlook(msg, args) { msg.reply('Outlook command coming soon!'); }
 async function handleSetup(msg, args) { msg.reply('Setup command coming soon!'); }

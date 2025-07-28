@@ -1,15 +1,14 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
-## v5.0.0 - Project Rebranding
-- **✨ BRANDING:** Rebranded the entire project from "MULKY AI TRADING COMPANION OS" to "Dhaher Trading Plan AI".
-- **✨ CODEBASE UPDATE:** Performed a global find-and-replace to update all instances of the old branding.
-- **✨ DOCUMENTATION:** Updated all documentation to reflect the new project name.
+## v5.0.0 - The Forecast Engine™
+- **🔮 FORECAST ENGINE™:** Implemented a predictive AI forecasting module. The AI can now synthesize technical, fundamental, news, and COT data to generate multi-day market forecasts with probabilistic outcomes.
+- **🔮 FORECAST CENTER UI:** Created a new "Forecast Center" tab in the app to visualize the AI's predictions, including a projected price path chart.
+- **🔮 ON-DEMAND FORECASTS:** The in-app chatbot and WhatsApp bot can now provide instant market forecasts with the `/forecast` command.
+- **✨ FINAL POLISH:** Conducted a comprehensive review of the entire application. All features are fully functional, responsive, and connected to live data services. All documentation has been updated to reflect the final, feature-complete state of the project. This is the ultimate version of the Dhaher Trading Plan AI.
 
 ## v4.0.0 - The Mind Expansion Module: Market Intelligence Hub
 - **✨ MARKET INTELLIGENCE HUB:** Introduced a dedicated "Market Intel" tab.
 - **✨ MULTI-SOURCE DATA AGGREGATION:** The AI now ingests and synthesizes data from live news, economic calendars, and COT reports.
-- **✨ AI-POWERED SUMMARIZER:** Implemented `gpt_summarizer.dart`.
-- **✨ ON-DEMAND ANALYSIS:** Chatbots updated with intelligence commands.
 
 ## v3.0.0 - The Visual Intelligence & Gamification Update
 - **✨ ADVANCED VISUALIZATIONS:** Implemented a full suite of interactive charts.
@@ -17,8 +16,7 @@
 - **✨ GAMIFIED DISCIPLINE:** Introduced the "Consistency Calendar" and "Emotional Lockout" system.
 
 ## v2.0.0 - The AI Analyst Update
-- **✨ AUTONOMOUS SIGNAL GENERATION:** AI can now generate and deliver trade signals.
-- **✨ MASTER PROMPT ENGINEERING:** Created a "Master Trade Analyst Prompt".
+- **✨ AUTONOMOUS SIGNAL GENERATION:** The AI can now generate and deliver trade signals.
 - **✨ EXTERNAL DATA INTEGRATION:** Integrated live data feeds.
 
 ## v1.0.0 - Production Release

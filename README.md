@@ -1,29 +1,38 @@
-# 🚀 Dhaher Trading Plan AI™
+![Dhaher Trading Plan AI Header](https://i.imgur.com/8J5gO6R.png)
 
-Welcome to your new trading partner. This is not just an app; it's a **mindset infrastructure** and a **full-fledged AI trading analyst** designed to help you master both the mental and analytical game of trading.
+# 🔮 Dhaher Trading Plan AI™
+
+Welcome to your personal AI-powered market intelligence agency. This is not just a trading journal; it's a **proactive, predictive, and psychologically-aware** co-pilot designed to help you master the market by mastering yourself.
+
+---
 
 ## ✨ Core Features
 
--   **🧠 Autonomous AI Analyst:** A 24/7 AI analyst that scans the markets, synthesizes technical, fundamental, news, and COT data, and generates high-conviction trade signals based on your trading plan.
--   **📲 Instant Signal Delivery:** Receive autonomous trade ideas directly to your WhatsApp and in-app chat.
--   **🧘‍♂️ Emotional Reflection Engine:** When you override the system or feel strong emotions, the AI will guide you through a reflective process to understand the "why" behind your actions.
--   **🔮 Live Emotional Orb:** An interactive, animated orb on your dashboard that reflects your current trading mindset.
--   **💬 Proactive AI Coach:** Chat with your AI assistant anytime, and it will even reach out to you with context-aware insights and motivation.
+-   **🔮 AI Forecast Engine™:** Get multi-day market forecasts that synthesize technicals, fundamentals, news, and institutional sentiment (COT) into a single, probabilistic trade thesis.
+-   **🧠 Autonomous AI Analyst:** A 24/7 AI that scans the markets, identifies high-conviction setups based on *your* trading plan, and sends them directly to you.
+-   **📲 Interactive WhatsApp Bot:** Get forecasts, summaries, and trade signals on the go. Use simple commands like `/forecast GOLD` to get instant, AI-driven insights.
+-   **📈 Live Visualizations:** A "Dashboard of Discipline" with advanced, animated charts for your equity curve, win rate, setup performance, and more.
+-   **👁️ Embedded TradingView Charts:** Analyze live charts directly within the app when planning or reviewing trades.
+-   **🧘‍♂️ Emotional Intelligence:** The system tracks your mood, identifies emotional patterns, and provides gamified feedback and "cooldown" periods to enforce discipline.
+-   **🎤 Voice-Enabled Chat:** Interact with your AI coach hands-free using natural voice commands.
+-   **📱 Fully Responsive UI:** A seamless experience across desktop, tablet, and mobile.
+
+## 📜 The Philosophy: Building a "Mindset Machine"
+
+The Dhaher Trading Plan AI is built on a single core belief: **true trading mastery comes from a fusion of data-driven analysis and unwavering psychological discipline.**
+
+-   **We Automate Analysis, Not Decisions:** The AI does the heavy lifting of data aggregation and analysis, freeing you to focus on decision-making and execution.
+-   **We Gamify Discipline:** The app is designed to make consistency rewarding, using streaks, badges, and feedback loops to build positive habits.
+-   **We Treat Emotion as Data:** Your psychological state is a key input, allowing the AI to provide context-aware feedback and help you understand your own biases.
 
 ## ⚙️ Tech Stack
 
--   **Frontend:** Flutter Web with Rive and Shaders
+-   **Frontend:** Flutter Web
+-   **UI/UX:** Rive, `fl_chart`, Fragment Shaders
 -   **Backend & Automation:** Google Apps Script
 -   **AI Brain:** LLM7 (GPT-4.5+)
--   **Data Sources:** Finnhub.io, NewsAPI.org, and others.
+-   **Data Sources:** Finnhub.io, NewsAPI.org, CFTC
 -   **Notifications:** WhatsApp Web.js
--   **Hosting:** Vercel / Firebase
-
-## 📜 System Philosophy
-
-1.  **Human-AI Symbiosis:** The AI handles the heavy data analysis, freeing you up to focus on execution and psychology.
-2.  **Consistency Over Profit:** Our primary goal is to build disciplined habits. Profit is the byproduct.
-3.  **Emotion as Data:** We don't suppress emotions; we track them, learn from them, and turn them into an edge.
 
 ## 👥 Credits
 
@@ -33,4 +42,4 @@ This project was conceptualized and directed by:
 
 ---
 
-This is more than just code. **This is your path to trading mastery.** Let's begin.
+This is more than an app. **It's your personal intelligence agency.** Let's get to work.
