@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   // IMPORTANT: REPLACE WITH YOUR ACTUAL DEPLOYED GOOGLE APPS SCRIPT URL
-  static const String _googleAppsScriptUrl = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
+  static const String _googleAppsScriptUrl = "AQ.Ab8RN6Lpynl-lou0SdHQmWWIMuSXzHZmHzZ0Gfvx8snhJsehUA";
 
   // Reusable POST call handler
   static Future<Map<String, dynamic>> post(String action, Map<String, dynamic> data) async {
