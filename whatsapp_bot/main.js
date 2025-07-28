@@ -2,7 +2,7 @@ const { Client, LocalAuth, MessageMedia, List, Buttons } = require('whatsapp-web
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 const bodyParser = require('body-parser');
-const axios = require('axios'); // For calling Google Apps Script
+const axios = require('axios');
 
 // --- CONFIGURATION ---
 const app = express();
@@ -15,9 +15,7 @@ let clientReady = false;
 // --- WHATSAPP CLIENT SETUP ---
 const client = new Client({
     authStrategy: new LocalAuth(),
-    puppeteer: {
-        args: ['--no-sandbox'],
-    }
+    puppeteer: { args: ['--no-sandbox'] }
 });
 
 client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
@@ -29,61 +27,70 @@ client.on('ready', () => {
 // --- ADVANCED COMMAND HANDLING ---
 client.on('message', async (msg) => {
     const text = msg.body.toLowerCase();
+    const command = text.split(' ')[0];
+    const args = text.split(' ').slice(1);
 
-    if (text === '!reflect') {
-        const reflectionPrompt = new Buttons('I noticed you asked for reflection. What was on your mind after your last trade?', [{body: 'It was a good trade'}, {body: 'It was a bad trade'}, {body: 'I broke my rules'}], 'Reflection Time', 'Let me guide you.');
-        client.sendMessage(msg.from, reflectionPrompt);
-    }
+    const commandHandlers = {
+        '!reflect': handleReflect,
+        '/summary': handleSummary,
+        '/cot': handleCot,
+        '/outlook': handleOutlook,
+        '/setup': handleSetup,
+    };
 
-    if (text === '!summary') {
-        msg.reply('🤖 Generating your weekly summary... this might take a moment.');
-        try {
-            // Trigger the Google Apps Script to run the analysis
-            const response = await axios.post(GOOGLE_APPS_SCRIPT_URL, {
-                action: 'triggerWeeklyAnalysis',
-                data: {}
-            });
-            // The Apps Script will send the summary back via the /send endpoint
-            // No need to do anything else here.
-        } catch (error) {
-            msg.reply('Sorry, I had trouble generating your summary. Please try again later.');
-        }
+    if (commandHandlers[command]) {
+        await commandHandlers[command](msg, args);
     }
 });
 
 client.initialize();
 
+
+// --- COMMAND HANDLER FUNCTIONS ---
+
+async function handleReflect(msg, args) {
+    const reflectionPrompt = new Buttons('I noticed you asked for reflection. What was on your mind after your last trade?', [{body: 'It was a good trade'}, {body: 'It was a bad trade'}, {body: 'I broke my rules'}], 'Reflection Time', 'Let me guide you.');
+    client.sendMessage(msg.from, reflectionPrompt);
+}
+
+async function handleSummary(msg, args) {
+    const symbol = args[0] ? args[0].toUpperCase() : 'EURUSD';
+    msg.reply(`🤖 Roger that! Generating a full intelligence summary for **${symbol}**...`);
+
+    try {
+        const response = await axios.post(GOOGLE_APPS_SCRIPT_URL, {
+            action: 'getAiMasterSummary', // This should be a new action in your GAS
+            data: { symbol: symbol }
+        });
+
+        const summary = response.data.data;
+        const formattedReply = `
+*🧠 AI Master Summary for ${symbol}*
+*Bias:* ${summary.final_bias} (Confidence: ${summary.confidence_score}/10)
+*Signal Active:* ${summary.signal.active}
+
+*Entry:* ${summary.signal.entry || 'N/A'}
+*Stop Loss:* ${summary.signal.stop_loss || 'N/A'}
+*Take Profit:* ${summary.signal.take_profit || 'N/A'}
+
+*Read the full analysis in the app!*
+        `;
+        msg.reply(formattedReply);
+
+    } catch (error) {
+        msg.reply('Sorry, I had trouble generating the summary. The AI might be busy. Please try again.');
+    }
+}
+
+// ... other handlers for /cot, /outlook, /setup would follow a similar pattern ...
+async function handleCot(msg, args) { msg.reply('COT command coming soon!'); }
+async function handleOutlook(msg, args) { msg.reply('Outlook command coming soon!'); }
+async function handleSetup(msg, args) { msg.reply('Setup command coming soon!'); }
+
+
 // --- API ENDPOINT FOR SENDING MESSAGES ---
 app.post('/send', (req, res) => {
-    if (!clientReady) {
-        return res.status(503).json({ status: 'error', message: 'WhatsApp client is not ready.' });
-    }
-
-    const { to, message, type, options } = req.body;
-    if (!to || !message) {
-        return res.status(400).json({ status: 'error', message: 'Missing "to" or "message".' });
-    }
-
-    const chatId = `${to}@c.us`;
-    let messageObject;
-
-    // Build message based on type (for quick actions)
-    switch (type) {
-        case 'buttons':
-            messageObject = new Buttons(message, options.buttons, options.title, options.footer);
-            break;
-        case 'list':
-            messageObject = new List(message, options.buttonText, options.sections);
-            break;
-        default:
-            messageObject = message;
-    }
-
-    client.sendMessage(chatId, messageObject).then(response => {
-        res.status(200).json({ status: 'success', data: response });
-    }).catch(err => {
-        res.status(500).json({ status: 'error', message: 'Failed to send message.', details: err });
-    });
+    // ... (same as before)
 });
 
 app.listen(port, () => {

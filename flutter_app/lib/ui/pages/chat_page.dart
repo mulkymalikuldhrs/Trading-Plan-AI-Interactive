@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../widgets/chat_bubble.dart';
+import '../../services/gpt_summarizer.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -10,10 +11,9 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
-  String _text = '';
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, dynamic>> _messages = [
-    {'message': 'Hello! How can I help you today? Press the mic to talk.', 'isUser': false},
+    {'message': 'Welcome to the Intelligence Hub. Ask for a market summary, e.g., "/summary EURUSD"', 'isUser': false},
   ];
 
   @override
@@ -24,16 +24,12 @@ class _ChatPageState extends State<ChatPage> {
 
   void _listen() async {
     if (!_isListening) {
-      bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: $val'),
-        onError: (val) => print('onError: $val'),
-      );
+      bool available = await _speech.initialize();
       if (available) {
         setState(() => _isListening = true);
         _speech.listen(
           onResult: (val) => setState(() {
-            _text = val.recognizedWords;
-            _controller.text = _text;
+            _controller.text = val.recognizedWords;
           }),
         );
       }
@@ -43,71 +39,91 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  void _sendMessage() {
-      if (_controller.text.isNotEmpty) {
+  void _sendMessage() async {
+    if (_controller.text.isEmpty) return;
+
+    final userInput = _controller.text;
+    setState(() {
+      _messages.add({'message': userInput, 'isUser': true});
+       _messages.add({'message': '🤖 Thinking...', 'isUser': false});
+    });
+    _controller.clear();
+
+    try {
+      // Command parsing
+      if (userInput.toLowerCase().startsWith('/summary')) {
+        final parts = userInput.split(' ');
+        final symbol = parts.length > 1 ? parts[1].toUpperCase() : 'EURUSD';
+
+        final summary = await GptSummarizer.getAiMasterSummary(symbol);
+
+        final formattedReply = `
+*🧠 AI Master Summary for ${symbol}*
+*Bias:* ${summary['final_bias']} (Confidence: ${summary['confidence_score']}/10)
+*Signal:* ${summary['signal']['active'] ? 'ACTIVE' : 'INACTIVE'}
+*Entry:* ${summary['signal']['entry'] ?? 'N/A'}
+        `;
+
         setState(() {
-          _messages.add({'message': _controller.text, 'isUser': true});
-          _messages.add({'message': 'Thinking...', 'isUser': false});
+          _messages.removeLast();
+          _messages.add({'message': formattedReply, 'isUser': false});
         });
-        _controller.clear();
-        // Simulate AI response
-        Future.delayed(Duration(seconds: 1), () {
-          setState(() {
-            _messages.removeLast();
-            _messages.add({'message': 'This is a placeholder AI response.', 'isUser': false});
-          });
+
+      } else {
+         // Default reflection response for other inputs
+         setState(() {
+          _messages.removeLast();
+          _messages.add({'message': 'I can currently provide summaries with the /summary command.', 'isUser': false});
         });
       }
+    } catch (e) {
+       setState(() {
+          _messages.removeLast();
+          _messages.add({'message': 'Sorry, there was an error processing your request.', 'isUser': false});
+        });
     }
-
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("🤖 AI Coach"),
-        centerTitle: true,
-        backgroundColor: Colors.blueGrey[900],
+      appBar: AppBar(title: Text("🤖 AI Coach & Analyst")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _listen,
+        child: Icon(_isListening ? Icons.mic : Icons.mic_none),
       ),
       body: Column(
         children: <Widget>[
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(8.0),
               itemCount: _messages.length,
-              itemBuilder: (context, index) {
-                return ChatBubble(
-                  message: _messages[index]['message'],
-                  isUser: _messages[index]['isUser'],
-                );
-              },
+              itemBuilder: (context, index) => ChatBubble(
+                message: _messages[index]['message'],
+                isUser: _messages[index]['isUser'],
+              ),
             ),
           ),
           _buildTextComposer(),
         ],
-      ),
-       floatingActionButton: FloatingActionButton(
-        onPressed: _listen,
-        child: Icon(_isListening ? Icons.mic : Icons.mic_none),
       ),
     );
   }
 
   Widget _buildTextComposer() {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         children: <Widget>[
-          Flexible(
+          Expanded(
             child: TextField(
               controller: _controller,
-              onSubmitted: (text) => _sendMessage(),
-              decoration: InputDecoration.collapsed(hintText: "Send a message or use the mic"),
+              decoration: InputDecoration.collapsed(hintText: "e.g., /summary GOLD"),
+              onSubmitted: (value) => _sendMessage(),
             ),
           ),
           IconButton(
             icon: Icon(Icons.send),
-            onPressed: () => _sendMessage(),
+            onPressed: _sendMessage,
           ),
         ],
       ),
