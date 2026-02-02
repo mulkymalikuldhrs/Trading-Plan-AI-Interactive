@@ -1,0 +1,30 @@
+# Node.js
+node_modules/
+.wwebjs_auth/
+.wwebjs_cache/
+npm-debug.log
+yarn-error.log
+
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+
+# Android
+local.properties
+GeneratedPluginRegistrant.java
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# OS
+.DS_Store
+Thumbs.db
