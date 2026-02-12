@@ -5,76 +5,87 @@
  * financial and news APIs.
  ****************************************************************/
 
-// --- API KEYS (Store securely in Script Properties) ---
-const FINNHUB_API_KEY = PropertiesService.getScriptProperties().getProperty('FINNHUB_API_KEY');
-const NEWS_API_KEY = PropertiesService.getScriptProperties().getProperty('NEWS_API_KEY');
+const props = PropertiesService.getScriptProperties();
+const FINNHUB_API_KEY = props.getProperty('FINNHUB_API_KEY');
 
 /**
  * Fetches technical indicators for a given symbol.
- * @param {string} symbol - The trading symbol (e.g., 'AAPL', 'EUR/USD').
- * @returns {object} An object containing key technical indicators.
  */
 function getTechnicalIndicators(symbol) {
-  // For demonstration, we'll use Finnhub.io
-  const url = `https://finnhub.io/api/v1/indicator?symbol=${symbol}&indicator=rsi,macd,sma&token=${FINNHUB_API_KEY}`;
-  const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
-  const data = JSON.parse(response.getContentText());
+  if (!FINNHUB_API_KEY) return { rsi: 50, macd: 0, sma: 0, error: "API Key missing" };
 
-  // We would parse and return the most recent values here.
-  return {
-    rsi: data.rsi[data.rsi.length - 1],
-    macd: data.macd[data.macd.length - 1],
-    sma: data.sma[data.sma.length - 1]
-  };
+  // Note: Finnhub symbol format might vary (e.g., EUR_USD vs EURUSD)
+  const cleanSymbol = symbol.replace('/', '_').replace('FX:', '');
+  const url = `https://finnhub.io/api/v1/indicator?symbol=${cleanSymbol}&resolution=D&indicator=rsi&token=${FINNHUB_API_KEY}`;
+
+  try {
+    const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
+    const data = JSON.parse(response.getContentText());
+
+    if (data.s === 'ok') {
+      return {
+        rsi: data.rsi[data.rsi.length - 1],
+        status: "success"
+      };
+    }
+  } catch (e) {
+    Logger.log("Finnhub Error: " + e.message);
+  }
+  return { rsi: 50, status: "fallback" };
 }
 
 /**
- * Fetches the latest financial news for a given query.
- * @param {string} query - The search query (e.g., 'forex', 'inflation').
- * @returns {Array<string>} A list of news headlines.
+ * Fetches the latest financial news.
  */
-function getLatestNews(query) {
-  // Using NewsAPI.org for this example
-  const url = `https://newsapi.org/v2/everything?q=${query}&sortBy=publishedAt&pageSize=5&apiKey=${NEWS_API_KEY}`;
-  const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
-  const data = JSON.parse(response.getContentText());
+function getLatestNews(symbol) {
+  if (!FINNHUB_API_KEY) return ["News API Key missing"];
 
-  return data.articles.map(article => article.title);
+  const cleanSymbol = symbol.replace('/', '').replace('FX:', '');
+  const today = new Date().toISOString().split('T')[0];
+  const url = `https://finnhub.io/api/v1/company-news?symbol=${cleanSymbol}&from=${today}&to=${today}&token=${FINNHUB_API_KEY}`;
+
+  try {
+    const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
+    const data = JSON.parse(response.getContentText());
+    if (Array.isArray(data)) {
+      return data.slice(0, 5).map(article => article.headline);
+    }
+  } catch (e) {
+    Logger.log("News Error: " + e.message);
+  }
+  return ["Could not fetch latest news. Check market sentiment manually."];
 }
 
 /**
  * Fetches upcoming events from an economic calendar.
- * @returns {Array<object>} A list of upcoming economic events.
  */
 function getEconomicCalendar() {
-  // Placeholder for an economic calendar API like Econdb or Financial Modeling Prep
+  // Realistic high-impact events (Dynamic placeholders)
   return [
-    { event: "US CPI (MoM)", time: "Tomorrow 8:30 AM EST", impact: "High" },
-    { event: "FOMC Meeting Minutes", time: "Wednesday 2:00 PM EST", impact: "High" }
+    { event: "US Non-Farm Payrolls", impact: "High", timeframe: "First Friday of Month" },
+    { event: "CPI Inflation Data", impact: "High", timeframe: "Monthly" },
+    { event: "FOMC Interest Rate Decision", impact: "Critical", timeframe: "Every 6 Weeks" }
   ];
 }
 
 /**
  * Fetches the latest Commitment of Traders data.
- * @returns {object} Parsed COT data for major currencies.
  */
 function getCotData() {
-  // Placeholder for a COT data API
+  // In a production app, you'd scrape the CFTC website or use a paid API.
   return {
-    "EUR": { "long": 70000, "short": 50000, "net": 20000 },
-    "JPY": { "long": 30000, "short": 80000, "net": -50000 },
-    "GBP": { "long": 60000, "short": 40000, "net": 20000 }
+    "EUR": { "bias": "Net Long", "institutional_strength": "Increasing" },
+    "USD": { "bias": "Net Short", "institutional_strength": "Decreasing" },
+    "GBP": { "bias": "Neutral", "institutional_strength": "Stable" }
   };
 }
 
 /**
  * A master function to gather all market data for analysis.
- * @param {string} symbol - The trading symbol.
- * @returns {object} A comprehensive object of all market data.
  */
 function getComprehensiveMarketData(symbol) {
     const technicals = getTechnicalIndicators(symbol);
-    const news = getLatestNews(symbol); // Or a broader query like 'forex'
+    const news = getLatestNews(symbol);
     const calendar = getEconomicCalendar();
     const cot = getCotData();
 
