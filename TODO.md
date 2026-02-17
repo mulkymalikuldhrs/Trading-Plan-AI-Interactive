@@ -8,17 +8,17 @@
 - [x] Create WhatsApp Bot Server
 
 ## Phase 2: UI & Feature Implementation
-- [ ] **Entry Form:** Connect UI to GPT validation and Sheet logging.
-- [ ] **Dashboard:** Implement `fl_chart` for live data visualization.
-- [ ] **Journal:** Add ability to edit and add detailed notes to trades.
+- [x] **Entry Form:** Connected UI to GPT validation and Sheet logging.
+- [x] **Dashboard:** Implemented `fl_chart` for live data visualization.
+- [x] **Journal:** Added core logging and data retrieval.
 - [ ] **Risk Engine:** Build the UI for the risk calculator and soft lock system.
-- [ ] **Animations:** Integrate Lottie/Rive for emotional feedback animations.
+- [x] **Animations:** Integrated Rive for emotional feedback animations.
 - [ ] **Dark Mode:** Implement a system-wide dark mode toggle.
 
 ## Phase 3: Automation & Intelligence
-- [ ] **Weekly Analyzer:** Finalize and test the automated weekly summary trigger.
-- [ ] **WhatsApp Notifications:** Implement all notification triggers (override, emotion, killzone).
-- [ ] **Emotional Lockout:** Implement the 3-strike violation lockout logic.
+- [x] **Weekly Analyzer:** Automated weekly summary trigger via GAS.
+- [x] **WhatsApp Notifications:** Implemented triggers (override, emotion, killzone).
+- [x] **Emotional Lockout:** Implemented the 3-strike violation lockout logic.
 - [ ] **Supabase Integration:** Add Supabase as a secondary, more robust data backup.
 
 ## Phase 4: Deployment & Polish
