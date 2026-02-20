@@ -2,26 +2,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  // IMPORTANT: REPLACE WITH YOUR ACTUAL DEPLOYED GOOGLE APPS SCRIPT URL
-  static const String _googleAppsScriptUrl = "AQ.Ab8RN6Lpynl-lou0SdHQmWWIMuSXzHZmHzZ0Gfvx8snhJsehUA";
+  // Use --dart-define=GAS_URL=https://... to set this at build/run time
+  static const String _googleAppsScriptUrl = String.fromEnvironment(
+    'GAS_URL',
+    defaultValue: 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL',
+  );
 
-  // Reusable POST call handler
   static Future<Map<String, dynamic>> post(String action, Map<String, dynamic> data) async {
-    if (_googleAppsScriptUrl.contains("YOUR_DEPLOYMENT_ID")) {
-      // This is a dummy response for when the URL is not set.
-      // In a real app, this would be a proper error.
-      print("DUMMY MODE: Google Apps Script URL not set.");
-      if (action == 'getGptFeedback') {
-        return {
-          "validation_score": 5,
-          "is_valid_setup": false,
-          "rule_violations": ["Dummy violation"],
-          "emotional_warning": "This is a dummy warning.",
-          "tough_love_feedback": "This is dummy feedback.",
-          "detailed_explanation": "This is a dummy explanation because the API URL is not set."
-        };
-      }
-      return {'status': 'success', 'data': 'Dummy response'};
+    if (_googleAppsScriptUrl == 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+      throw Exception('GAS_URL is not configured. Please use --dart-define=GAS_URL=your_url');
     }
 
     try {
@@ -31,7 +20,7 @@ class ApiService {
         body: jsonEncode({ 'action': action, 'data': data }),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 302) { // 302 is a common redirect status from GAS
+      if (response.statusCode == 200 || response.statusCode == 302) {
         final responseBody = jsonDecode(response.body);
         if (responseBody['status'] == 'success') {
           return responseBody['data'];
@@ -43,7 +32,16 @@ class ApiService {
       }
     } catch (e) {
       print('ApiService Error: $e');
-      throw Exception('An error occurred while communicating with the server.');
+      rethrow;
     }
+  }
+
+  // Helper for fetching journal data (used in multiple places)
+  static Future<List<dynamic>> fetchJournalData() async {
+    final response = await post('exportToJson', {'sheetName': 'Journal'});
+    if (response is String) {
+        return jsonDecode(response);
+    }
+    return response as List<dynamic>;
   }
 }
