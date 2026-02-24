@@ -14,12 +14,26 @@ class TradingViewEmbed extends StatefulWidget {
 }
 
 class _TradingViewEmbedState extends State<TradingViewEmbed> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!kIsWeb) {
+      _controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(
+            'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
       // Use IFrame for web
       final iframeElement = html.IFrameElement()
-        ..src = 'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark'
+        ..src =
+            'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark'
         ..style.border = 'none'
         ..width = '100%'
         ..height = '100%';
@@ -35,10 +49,7 @@ class _TradingViewEmbedState extends State<TradingViewEmbed> {
       );
     } else {
       // Use WebView for mobile (Android/iOS)
-      return WebView(
-        initialUrl: 'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark',
-        javascriptMode: JavascriptMode.unrestricted,
-      );
+      return WebViewWidget(controller: _controller);
     }
   }
 }
