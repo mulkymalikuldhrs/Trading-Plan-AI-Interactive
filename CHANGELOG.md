@@ -1,5 +1,19 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v10.1.0 - Post-Consolidation Upgrade
+- **🆙 LATEST DEPENDENCIES:** Upgraded WhatsApp Bot dependencies to their absolute latest versions (Express 5.2.1+, WhatsApp-web.js 1.34.6+, etc.) for maximum stability and security.
+- **✅ VERIFICATION:** Verified project integrity across all components (Flutter, Bot, Python, GAS) after the major v10 merger.
+
+## v10.0.0 - Production Readiness Consolidation & Dependency Upgrade
+- **🚀 CONSOLIDATION:** Successfully consolidated multiple development branches into the primary `main` branch, ensuring a unified and production-ready codebase.
+- **🛡️ SECURITY & CONFIG:** Updated `DEPLOYMENT.md` and `SETUP.md` to emphasize environment-variable-driven configuration (via `--dart-define` for Flutter and `.env` for WhatsApp bot), adhering to the new `AGENTS.md` guidelines.
+- **🆙 DEPENDENCY UPGRADES:**
+  - **Flutter:** Upgraded to SDK `>=3.0.0 <4.0.0` with updated core dependencies.
+  - **WhatsApp Bot:** Updated Node.js dependencies and consolidated entry points to `index.js`.
+  - **Python Client:** Bumped `requests>=2.32.5` and `pandas>=3.0.1` for improved performance and security.
+- **🧩 ARCHITECTURE:** Standardized Google Apps Script modules (`main.gs` and `api_integrations.gs`) with advanced symbol normalization and comprehensive market data aggregation.
+- **📚 DOCUMENTATION:** Refined `AGENTS.md`, `README.md`, and `DEPLOYMENT.md` for better developer onboarding and production deployment.
+
 ## v9.1.0 - Installer Patch & Enhancement
 - **🔧 FIX:** Corrected a major oversight in the setup scripts. The installers (`setup.sh` and `setup.bat`) now automatically install Python dependencies from `python_client/requirements.txt` using pip.
 - **✨ ENHANCEMENT:** The setup process is now truly "All-in-One", providing a much smoother user onboarding experience.
