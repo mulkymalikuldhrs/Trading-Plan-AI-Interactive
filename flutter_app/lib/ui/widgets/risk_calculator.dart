@@ -8,7 +8,7 @@ class RiskCalculator extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text("Risk Calculator", style: Theme.of(context).textTheme.headline6),
+            Text("Risk Calculator", style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 10),
             Text("Coming Soon!"),
           ],
