@@ -28,7 +28,7 @@ class ConsistencyStreakCalendar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Consistency Calendar", style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text("Consistency Calendar", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 16),
             // This is a simplified representation of the grid
             Wrap(

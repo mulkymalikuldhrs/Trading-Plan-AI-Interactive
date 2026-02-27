@@ -31,14 +31,20 @@ class ForecastChartWidget extends StatelessWidget {
     return LineChartData(
       lineTouchData: LineTouchData(enabled: true),
       gridData: FlGridData(show: true, drawHorizontalLine: true, drawVerticalLine: true),
-      titlesData: FlTitlesData(show: true, bottomTitles: SideTitles(showTitles: true), leftTitles: SideTitles(showTitles: true, reservedSize: 40)),
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: const AxisTitles(sideTitles: SideTitles(showTitles: true)),
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 40)),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      ),
       borderData: FlBorderData(show: true, border: Border.all(color: Colors.white24, width: 1)),
       lineBarsData: [
         // Historical Data
         LineChartBarData(
           spots: historicalSpots,
           isCurved: true,
-          colors: [Colors.white],
+          color: Colors.white,
           barWidth: 3,
           dotData: FlDotData(show: false),
         ),
@@ -46,7 +52,7 @@ class ForecastChartWidget extends StatelessWidget {
         LineChartBarData(
           spots: forecastSpots,
           isCurved: true,
-          colors: [Colors.cyan.withOpacity(0.5)],
+          color: Colors.cyan.withOpacity(0.5),
           barWidth: 3,
           dotData: FlDotData(show: false),
           dashArray: [5, 5], // Dashed line for forecast
