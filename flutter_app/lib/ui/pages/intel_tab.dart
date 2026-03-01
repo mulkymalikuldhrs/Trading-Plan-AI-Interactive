@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../services/gpt_summarizer.dart';
-import '../../services/news_fetcher.dart';
-import '../../services/cot_service.dart';
 
 class IntelTab extends StatefulWidget {
   @override
@@ -24,16 +22,27 @@ class _IntelTabState extends State<IntelTab> {
   Future<void> _fetchMarketIntel() async {
     setState(() => _isLoading = true);
     try {
-      final summary = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
-      final news = await NewsFetcher.getTopHeadlines(_selectedSymbol);
-      final cot = await CotService.getCotSummary(_selectedSymbol);
+      final response = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
+
+      final analysis = response['analysis'] as Map<String, dynamic>;
+      final rawData = response['rawData'] as Map<String, dynamic>;
+
+      // Map rawData news to expected format
+      final newsList = (rawData['news_headlines'] as List).map((n) => {
+        'title': n.toString(),
+        'source': 'Finnhub News'
+      }).toList();
+
       setState(() {
-        _aiSummary = summary;
-        _news = news;
-        _cotSummary = cot;
+        _aiSummary = analysis;
+        _news = newsList;
+        _cotSummary = {
+          'bias': rawData['cot_report']['bias'],
+          'netPosition': rawData['cot_report']['signal'] ?? 'N/A'
+        };
       });
     } catch (e) {
-      // Handle error
+      print('Error fetching Intel: $e');
     } finally {
       setState(() => _isLoading = false);
     }
@@ -120,14 +129,14 @@ class _IntelTabState extends State<IntelTab> {
   Widget _buildIntelCard({required String title, required Widget child}) {
     return Card(
       elevation: 2,
-      color: Colors.blueGrey[900]?.withOpacity(0.5),
+      color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 12),
             child,
           ],
