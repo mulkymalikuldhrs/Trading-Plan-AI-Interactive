@@ -22,13 +22,13 @@ class ConsistencyStreakCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blueGrey[900]?.withOpacity(0.5),
+      color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Consistency Calendar", style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text("Consistency Calendar", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 16),
             // This is a simplified representation of the grid
             Wrap(
