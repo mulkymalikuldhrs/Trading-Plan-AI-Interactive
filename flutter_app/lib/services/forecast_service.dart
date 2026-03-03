@@ -1,6 +1,4 @@
 import './api_service.dart';
-import './cot_service.dart';
-import './news_fetcher.dart';
 // Other services...
 
 class ForecastService {
@@ -11,8 +9,8 @@ class ForecastService {
     required int days,
   }) async {
     // 1. Gather all external data
-    final cotData = await CotService.getCotSummary(pair);
-    final newsData = await NewsFetcher.getTopHeadlines(pair);
+    // final cotData = await CotService.getCotSummary(pair);
+    // final newsData = await NewsFetcher.getTopHeadlines(pair);
     // In a real app, we'd also get technical and fundamental data here.
 
     // 2. Construct the master prompt
