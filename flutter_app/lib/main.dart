@@ -7,6 +7,7 @@ import 'ui/pages/journal_page.dart';
 import 'ui/pages/dashboard_page.dart';
 import 'ui/pages/chat_page.dart';
 import 'ui/pages/intel_tab.dart';
+import 'ui/pages/risk_page.dart';
 
 void main() {
   runApp(
@@ -40,6 +41,7 @@ class _MainPageState extends State<MainPage> {
     JournalPage(),
     DashboardPage(),
     IntelTab(),
+    RiskPage(),
     ChatPage(),
   ];
 
@@ -63,7 +65,7 @@ class _MainPageState extends State<MainPage> {
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +74,7 @@ class _MainPageState extends State<MainPage> {
                       SizedBox(height: 20),
                       Text(
                         "Emotional Lockout Activated",
-                        style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),
                       ),
                       Text(
                         "You've had 3 consecutive negative events. It's time for a break.",
@@ -101,6 +103,7 @@ class _MainPageState extends State<MainPage> {
           BottomNavigationBarItem(icon: Icon(Icons.book_online), label: 'Journal'),
           BottomNavigationBarItem(icon: Icon(Icons.dashboard_customize), label: 'Dashboard'),
           BottomNavigationBarItem(icon: Icon(Icons.insights), label: 'Intel'),
+          BottomNavigationBarItem(icon: Icon(Icons.scale), label: 'Risk'),
           BottomNavigationBarItem(icon: Icon(Icons.chat_bubble), label: 'AI Chat'),
         ],
         currentIndex: _selectedIndex,
