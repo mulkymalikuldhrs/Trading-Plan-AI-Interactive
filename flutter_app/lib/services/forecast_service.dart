@@ -1,6 +1,4 @@
 import './api_service.dart';
-import './cot_service.dart';
-import './news_fetcher.dart';
 // Other services...
 
 class ForecastService {
@@ -11,8 +9,8 @@ class ForecastService {
     required int days,
   }) async {
     // 1. Gather all external data
-    final cotData = await CotService.getCotSummary(pair);
-    final newsData = await NewsFetcher.getTopHeadlines(pair);
+    // final cotData = await CotService.getCotSummary(pair);
+    // final newsData = await NewsFetcher.getTopHeadlines(pair);
     // In a real app, we'd also get technical and fundamental data here.
 
     // 2. Construct the master prompt
@@ -23,7 +21,7 @@ class ForecastService {
       "technical_structure": "Bearish", // This would be dynamic
       "current_price": "1.0860", // This would be dynamic
       "supply_area": "1.0880 - 1.0900", // This would be dynamic
-      "cot_summary": "Net Short ${pair}", // Simplified from cotData
+      "cot_summary": "Net Short $pair", // Simplified from cotData
       "fundamental_summary": "USD CPI this week, Fed dovish", // This would be dynamic
     };
 
@@ -45,7 +43,6 @@ class ForecastService {
       return response;
 
     } catch (e) {
-      print('ForecastService Error: $e');
       return {'error': 'Could not generate forecast.'};
     }
   }

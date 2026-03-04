@@ -1,29 +1,84 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 
-class EquityCurveChart extends StatelessWidget {
-  // Dummy data - in a real app, this would come from the Google Sheet
-  final List<FlSpot> spots = const [
-    FlSpot(0, 10000),
-    FlSpot(1, 10100),
-    FlSpot(2, 10050),
-    FlSpot(3, 10250),
-    FlSpot(4, 10350),
-    FlSpot(5, 10300),
-    FlSpot(6, 10450),
-    FlSpot(7, 10600),
-  ];
+class EquityCurveChart extends StatefulWidget {
+  const EquityCurveChart({super.key});
 
-  final List<int> winningTradesIndices = [1, 3, 4, 6, 7];
+  @override
+  State<EquityCurveChart> createState() => _EquityCurveChartState();
+}
+
+class _EquityCurveChartState extends State<EquityCurveChart> {
+  List<FlSpot> spots = [];
+  List<int> winningTradesIndices = [];
+  bool isLoading = true;
+  double minY = 9800;
+  double maxY = 10200;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  void _loadData() async {
+    try {
+      final data = await ApiService.fetchJournalData();
+      double currentEquity = 10000; // Starting balance
+      List<FlSpot> newSpots = [FlSpot(0, currentEquity)];
+      List<int> wins = [];
+
+      for (int i = 0; i < data.length; i++) {
+        final trade = data[i];
+        double pnl = 0.0;
+
+        if (trade['PnL'] != null && trade['PnL'] is num && trade['PnL'] != 0) {
+          pnl = (trade['PnL'] as num).toDouble();
+        } else {
+          // Fallback to simplified profit/loss if PnL is not recorded
+          if (trade['Result'] == 'WIN') {
+            pnl = 200.0;
+          } else if (trade['Result'] == 'LOSS') {
+            pnl = -100.0;
+          }
+        }
+
+        currentEquity += pnl;
+        if (trade['Result'] == 'WIN') {
+          wins.add(i + 1);
+        }
+        newSpots.add(FlSpot((i + 1).toDouble(), currentEquity));
+      }
+
+      setState(() {
+        spots = newSpots;
+        winningTradesIndices = wins;
+        isLoading = false;
+
+        if (spots.isNotEmpty) {
+           double min = spots.map((s) => s.y).reduce((a, b) => a < b ? a : b);
+           double max = spots.map((s) => s.y).reduce((a, b) => a > b ? a : b);
+           minY = min - 200;
+           maxY = max + 200;
+        }
+      });
+    } catch (e) {
+      if (mounted) setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) return Center(child: CircularProgressIndicator());
+    if (spots.isEmpty) return Center(child: Text("No trade data available", style: TextStyle(color: Colors.white)));
+
     return AspectRatio(
       aspectRatio: 1.7,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: Colors.blueGrey[900]?.withOpacity(0.5),
+        color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: LineChart(
@@ -39,48 +94,54 @@ class EquityCurveChart extends StatelessWidget {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
-        getDrawingHorizontalLine: (value) {
-          return FlLine(color: Colors.white10, strokeWidth: 1);
-        },
-        getDrawingVerticalLine: (value) {
-          return FlLine(color: Colors.white10, strokeWidth: 1);
-        },
+        getDrawingHorizontalLine: (value) => FlLine(color: Colors.white10, strokeWidth: 1),
+        getDrawingVerticalLine: (value) => FlLine(color: Colors.white10, strokeWidth: 1),
       ),
       titlesData: FlTitlesData(
           show: true,
-          rightTitles: SideTitles(showTitles: false),
-          topTitles: SideTitles(showTitles: false),
-          bottomTitles: SideTitles(showTitles: true, reservedSize: 22, getTextStyles: (c,v) => const TextStyle(color: Colors.white70, fontSize: 12), getTitles: (value) => 'Day ${value.toInt() + 1}'),
-          leftTitles: SideTitles(showTitles: true, reservedSize: 40, getTextStyles: (c,v) => const TextStyle(color: Colors.white70, fontSize: 12))
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 22,
+              getTitlesWidget: (value, meta) => Text(value % 1 == 0 ? 'T${value.toInt()}' : '', style: const TextStyle(color: Colors.white70, fontSize: 10)),
+            ),
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: const TextStyle(color: Colors.white70, fontSize: 10)),
+            ),
+          )
       ),
       borderData: FlBorderData(show: true, border: Border.all(color: Colors.white10)),
       minX: 0,
       maxX: spots.length.toDouble() - 1,
-      minY: 9800, // Should be calculated dynamically
-      maxY: 10800, // Should be calculated dynamically
+      minY: minY,
+      maxY: maxY,
       lineBarsData: [
         LineChartBarData(
           spots: spots,
           isCurved: true,
-          colors: [Colors.cyan, Colors.blueAccent],
+          color: Colors.cyan,
           barWidth: 4,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: true,
             getDotPainter: (spot, percent, barData, index) {
-              // Glowing dots logic
+              if (index == 0) return FlDotCirclePainter(radius: 0);
               if (winningTradesIndices.contains(index)) {
-                return FlDotCirclePainter(radius: 6, color: Colors.greenAccent, strokeWidth: 2, strokeColor: Colors.white);
+                return FlDotCirclePainter(radius: 4, color: Colors.greenAccent, strokeWidth: 1, strokeColor: Colors.white);
               } else {
-                return FlDotCirclePainter(radius: 6, color: Colors.redAccent, strokeWidth: 2, strokeColor: Colors.white);
+                return FlDotCirclePainter(radius: 4, color: Colors.redAccent, strokeWidth: 1, strokeColor: Colors.white);
               }
             },
           ),
           belowBarData: BarAreaData(
             show: true,
-            colors: [Colors.cyan.withOpacity(0.3), Colors.blueAccent.withOpacity(0.1)],
-            gradientFrom: const Offset(0.5, 0),
-            gradientTo: const Offset(0.5, 1),
+            color: Colors.cyan.withValues(alpha: 0.3),
           ),
         ),
       ],
