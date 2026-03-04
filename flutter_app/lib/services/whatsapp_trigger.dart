@@ -1,5 +1,3 @@
-import 'api_service.dart';
-
 class WhatsAppTrigger {
   static Future<void> sendReminder(String message) {
     // This is a conceptual example.
