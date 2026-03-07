@@ -1,8 +1,8 @@
 <div align="center">
   <img src="https://i.imgur.com/8J5gO6R.png" alt="Dhaher Trading Plan AI Header">
-  <h1>🔮 Dhaher Trading Plan AI™</h1>
+  <h1>🔮 Dhaher Trading Plan AI™ v10.2.3</h1>
   <p>
-    <b>Your personal AI-powered market intelligence agency.</b>
+    <b>Your personal AI-powered market intelligence agency. [Production Ready]</b>
     <br />
     This is not just a trading journal; it's a proactive, predictive, and psychologically-aware co-pilot designed to help you master the market by mastering yourself.
   </p>
@@ -33,6 +33,7 @@ Selamat datang di agensi intelijen pasar pribadi Anda. Ini bukan sekadar jurnal 
 -   **👁️ Grafik TradingView Tersemat:** Analisis grafik langsung di dalam aplikasi.
 -   **🧘‍♂️ Kecerdasan Emosional:** Lacak suasana hati Anda dan dapatkan umpan balik gamified untuk menegakkan disiplin.
 -   **🎤 Obrolan Berkemampuan Suara:** Berinteraksi dengan pelatih AI Anda secara hands-free.
+-   **⚙️ Otomatisasi Otonom:** Pemicu cerdas untuk pemindaian pasar dan pengingat killzone.
 
 ### 👥 **Kredit**
 
@@ -65,6 +66,7 @@ Welcome to your personal AI-powered market intelligence agency. This is not just
 -   **👁️ Embedded TradingView Charts:** Analyze live charts directly within the app.
 -   **🧘‍♂️ Emotional Intelligence:** Track your mood and get gamified feedback to enforce discipline.
 -   **🎤 Voice-Enabled Chat:** Interact with your AI coach hands-free.
+-   **⚙️ Autonomous Automation:** Smart triggers for market scanning and killzone reminders.
 
 ### 👥 **Credits**
 
