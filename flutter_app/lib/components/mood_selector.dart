@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class MoodSelector extends StatefulWidget {
   final Function(String) onMoodSelected;
 
-  MoodSelector({required this.onMoodSelected});
+  const MoodSelector({super.key, required this.onMoodSelected});
 
   @override
-  _MoodSelectorState createState() => _MoodSelectorState();
+  State<MoodSelector> createState() => _MoodSelectorState();
 }
 
 class _MoodSelectorState extends State<MoodSelector> {
