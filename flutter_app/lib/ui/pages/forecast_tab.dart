@@ -3,14 +3,16 @@ import '../../services/forecast_service.dart';
 import '../../components/forecast_chart.dart';
 
 class ForecastTab extends StatefulWidget {
+  const ForecastTab({super.key});
+
   @override
-  _ForecastTabState createState() => _ForecastTabState();
+  State<ForecastTab> createState() => _ForecastTabState();
 }
 
 class _ForecastTabState extends State<ForecastTab> {
-  String _selectedPair = 'EURUSD';
-  String _selectedTf = 'H4';
-  int _selectedDays = 7;
+  final String _selectedPair = 'EURUSD';
+  final String _selectedTf = 'H4';
+  final int _selectedDays = 7;
   Map<String, dynamic>? _forecastData;
   bool _isLoading = false;
 
@@ -87,7 +89,7 @@ class _ForecastTabState extends State<ForecastTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("AI Forecast Summary", style: Theme.of(context).textTheme.headline6),
+            Text("AI Forecast Summary", style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 8),
             Text("Bias: ${forecast['bias']}"),
             Text("Entry Zone: ${forecast['entry_zone']}"),
