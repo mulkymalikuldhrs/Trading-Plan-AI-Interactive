@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../components/entry_form.dart';
 
 class EntryPage extends StatelessWidget {
+  const EntryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
