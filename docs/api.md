@@ -38,3 +38,11 @@ The system uses a Google Apps Script as a simple REST API.
 ### `exportToJson`
 -   **Description:** Exports an entire sheet to a JSON object.
 -   **Data:** `{ "sheetName": "..." }`
+
+### `getAiMasterSummary`
+-   **Description:** Gathers comprehensive market data and generates a unified AI analysis.
+-   **Data:** `{ "symbol": "EURUSD" }`
+
+### `getForecast`
+-   **Description:** Generates a multi-day forecast for a given pair and timeframe.
+-   **Data:** `{ "pair": "EURUSD", "timeframe": "H4", "days": 7 }`
