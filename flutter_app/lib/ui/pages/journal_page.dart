@@ -3,8 +3,10 @@ import '../../services/api_service.dart';
 import '../../models/trade.dart';
 
 class JournalPage extends StatefulWidget {
+  const JournalPage({super.key});
+
   @override
-  _JournalPageState createState() => _JournalPageState();
+  State<JournalPage> createState() => _JournalPageState();
 }
 
 class _JournalPageState extends State<JournalPage> {
@@ -17,7 +19,7 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<List<Trade>> _fetchTrades() async {
-    final List<dynamic> tradeData = await ApiService.exportSheet('Journal');
+    final List<dynamic> tradeData = await ApiService.fetchJournalData();
     return tradeData.map((json) => Trade.fromJson(json)).toList();
   }
 

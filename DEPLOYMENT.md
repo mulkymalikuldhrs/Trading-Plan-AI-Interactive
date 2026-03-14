@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide - MULKY AI OS
+# 🚀 Deployment Guide - Dhaher Trading Plan AI™
 
 This guide provides the steps to deploy the various components of the system.
 
@@ -6,44 +6,44 @@ This guide provides the steps to deploy the various components of the system.
 
 ## 1. Google Apps Script
 
-1.  **Open Google Sheets:** Create a new Sheet and paste the `main.gs` code into the Script Editor.
-2.  **Set Script Properties:** Go to `File > Project properties > Script properties` and add your `LLM7_API_KEY` and `SPREADSHEET_ID`.
+1.  **Open Google Sheets:** Create a new Sheet and paste the `main.gs` and `api_integrations.gs` code into the Script Editor.
+2.  **Set Script Properties:** Go to **Project Settings > Script Properties** and add the following keys:
+    *   `SPREADSHEET_ID`: Your Google Sheet ID.
+    *   `LLM7_API_KEY`: Your LLM7.io API Key.
+    *   `LLM7_API_URL`: `https://api.llm7.io/v1/chat/completions` (Default)
+    *   `WHATSAPP_API_URL`: URL of your deployed WhatsApp bot (e.g., `https://your-bot.render.com/send`).
+    *   `BOT_API_KEY`: A secret key shared between GAS and the Bot.
+    *   `USER_PHONE_NUMBER`: Your phone number in international format (e.g., `62812345678`).
+    *   `FINNHUB_API_KEY`: Your Finnhub.io API Key for market data.
 3.  **Deploy as Web App:**
-    *   Click `Deploy > New deployment`.
-    *   Select `Web app` as the type.
-    *   Configure with:
-        *   **Execute as:** `Me (your Google account)`
-        *   **Who has access:** `Anyone, even anonymous` (if you want the Flutter app to access it publicly) or restrict it as needed.
-    *   Copy the generated Web App URL. This is your API endpoint.
+    *   Click **Deploy > New deployment**.
+    *   Select **Web app** as the type.
+    *   Set **Execute as** to `Me` and **Who has access** to `Anyone`.
+    *   Copy the **Web App URL**.
 
 ---
 
-## 2. Flutter Web App
+## 2. Flutter Web/Mobile App
 
-1.  **Update API URL:** In `flutter_app/lib/services/api_service.dart`, replace `YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL` with the URL you copied from the Apps Script deployment.
-2.  **Choose a Hosting Provider:**
-    *   **Firebase Hosting:**
-        *   Follow the Firebase CLI setup instructions.
-        *   Run `firebase init hosting`.
-        *   Run `flutter build web`.
-        *   Run `firebase deploy`.
-    *   **Vercel:**
-        *   Install the Vercel CLI.
-        *   Run `vercel`. The CLI will guide you through the process.
+1.  **Build with Environment Variable:** The app expects the `GAS_URL` to be defined at build time.
+    *   **Run:** `flutter run --dart-define=GAS_URL=YOUR_GAS_WEB_APP_URL`
+    *   **Build Web:** `flutter build web --dart-define=GAS_URL=YOUR_GAS_WEB_APP_URL`
+    *   **Build Android:** `flutter build apk --dart-define=GAS_URL=YOUR_GAS_WEB_APP_URL`
 
 ---
 
-## 3. WhatsApp Bot
+## 3. WhatsApp Bot (Node.js)
 
-1.  **Install Dependencies:**
-    *   `npm install whatsapp-web.js qrcode-terminal`
-2.  **Run the Bot:**
-    *   `node whatsapp_bot/index.js`
-    *   Scan the QR code that appears in your terminal with your phone's WhatsApp app.
-3.  **Hosting:** For persistent uptime, deploy this Node.js app to a service like Heroku, Render, or a VPS.
-
----
-
-## 4. Backup Logs
-
-1.  **Google Drive:** The `exportSheetToJson` function in the Apps Script can be triggered on a schedule (e.g., daily) to save a JSON backup of your sheets to a specific Google Drive folder. You would add a new function that calls `exportSheetToJson` and saves the result using `DriveApp.createFile()`.
+1.  **Environment Variables:** Create a `.env` file in the `whatsapp_bot` directory:
+    ```env
+    PORT=3000
+    GAS_URL=YOUR_GAS_WEB_APP_URL
+    API_KEY=YOUR_SHARED_BOT_API_KEY
+    ```
+2.  **Install & Run:**
+    ```bash
+    cd whatsapp_bot
+    npm install
+    node index.js
+    ```
+3.  **Authentication:** Scan the QR code in the terminal to link your WhatsApp account.
