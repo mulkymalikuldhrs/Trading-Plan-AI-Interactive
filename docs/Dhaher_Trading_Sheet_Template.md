@@ -19,9 +19,9 @@ This document outlines the structure of the Google Sheet that will serve as the 
 
 **Purpose:** To log every single trade taken, including the context and psychological state.
 
-| A | B | C | D | E | F | G | H | I | J | K | L | M |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **TradeID** | **Timestamp** | **Asset** | **Direction** | **EntryPrice** | **ExitPrice** | **StopLoss** | **TakeProfit** | **Status** | **PnL** | **MoodBefore** | **MoodAfter** | **Notes** |
+| A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **TradeID** | **Timestamp** | **Pair** | **Direction** | **EntryPrice** | **ExitPrice** | **SL** | **TP** | **Result** | **PnL** | **Mood** | **Emotion_After** | **GPT_Comment** | **Setup** | **AI_Status** | **RRR** |
 | TRADE-001 | 2025-07-28..| EURUSD | LONG | 1.0750 | 1.0800 | 1.0725 | 1.0800 | WIN | +50.00 | Focused | Elated | "Perfect execution" |
 
 ---
