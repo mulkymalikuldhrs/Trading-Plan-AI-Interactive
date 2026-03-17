@@ -1,32 +1,89 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 
-class WinRatePieChart extends StatelessWidget {
-  // Dummy data
-  final int wins = 65;
-  final int losses = 35;
+class WinRatePieChart extends StatefulWidget {
+  const WinRatePieChart({super.key});
+
+  @override
+  State<WinRatePieChart> createState() => _WinRatePieChartState();
+}
+
+class _WinRatePieChartState extends State<WinRatePieChart> {
+  int wins = 0;
+  int losses = 0;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  void _loadData() async {
+    try {
+      final data = await ApiService.fetchJournalData();
+      int w = 0;
+      int l = 0;
+      for (var trade in data) {
+        if (trade['Result'] == 'WIN') {
+          w++;
+        } else if (trade['Result'] == 'LOSS') {
+          l++;
+        }
+      }
+      setState(() {
+        wins = w;
+        losses = l;
+        isLoading = false;
+      });
+    } catch (e) {
+      debugPrint("Error loading winrate data: $e");
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) return Center(child: CircularProgressIndicator());
+    int total = wins + losses;
+    if (total == 0) return Center(child: Text("No trade data", style: TextStyle(color: Colors.white70)));
+
+    double winPct = (wins / total) * 100;
+    double lossPct = (losses / total) * 100;
+
     return AspectRatio(
       aspectRatio: 1.3,
       child: Card(
-        color: Colors.blueGrey[900]?.withOpacity(0.5),
+        color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
         child: Column(
           children: <Widget>[
             const SizedBox(height: 18),
+            Text("Win/Loss Distribution", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             Expanded(
               child: AspectRatio(
                 aspectRatio: 1,
                 child: PieChart(
                   PieChartData(
-                    pieTouchData: PieTouchData(touchCallback: (event, pieTouchResponse) {
-                      // Add interaction logic here
-                    }),
                     borderData: FlBorderData(show: false),
                     sectionsSpace: 0,
                     centerSpaceRadius: 40,
-                    sections: showingSections(),
+                    sections: [
+                      PieChartSectionData(
+                        color: Colors.greenAccent,
+                        value: wins.toDouble(),
+                        title: '${winPct.toStringAsFixed(1)}%',
+                        radius: 50,
+                        titleStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      PieChartSectionData(
+                        color: Colors.redAccent,
+                        value: losses.toDouble(),
+                        title: '${lossPct.toStringAsFixed(1)}%',
+                        radius: 50,
+                        titleStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -36,45 +93,17 @@ class WinRatePieChart extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Indicator(color: Colors.greenAccent, text: 'Wins', isSquare: true),
-                  SizedBox(width: 4),
-                  Indicator(color: Colors.redAccent, text: 'Losses', isSquare: true),
+                  Indicator(color: Colors.greenAccent, text: 'Wins ($wins)', isSquare: true),
+                  SizedBox(width: 12),
+                  Indicator(color: Colors.redAccent, text: 'Losses ($losses)', isSquare: true),
                 ],
               ),
             ),
-            const SizedBox(width: 28),
+            const SizedBox(height: 8),
           ],
         ),
       ),
     );
-  }
-
-  List<PieChartSectionData> showingSections() {
-    return List.generate(2, (i) {
-      final isTouching = false; // Add touch interaction later
-      final fontSize = isTouching ? 25.0 : 16.0;
-      final radius = isTouching ? 60.0 : 50.0;
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: Colors.greenAccent,
-            value: wins.toDouble(),
-            title: '${wins}%',
-            radius: radius,
-            titleStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: Colors.redAccent,
-            value: losses.toDouble(),
-            title: '${losses}%',
-            radius: radius,
-            titleStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
-          );
-        default:
-          throw Error();
-      }
-    });
   }
 }
 
@@ -83,16 +112,14 @@ class Indicator extends StatelessWidget {
   final String text;
   final bool isSquare;
   final double size;
-  final Color textColor;
 
   const Indicator({
-    Key? key,
+    super.key,
     required this.color,
     required this.text,
     this.isSquare = true,
-    this.size = 16,
-    this.textColor = const Color(0xff505050),
-  }) : super(key: key);
+    this.size = 12,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +136,7 @@ class Indicator extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white70),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white70),
         )
       ],
     );
