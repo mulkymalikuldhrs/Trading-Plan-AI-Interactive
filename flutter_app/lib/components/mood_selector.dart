@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class MoodSelector extends StatefulWidget {
   final Function(String) onMoodSelected;
 
-  MoodSelector({required this.onMoodSelected});
+  const MoodSelector({super.key, required this.onMoodSelected});
 
   @override
-  _MoodSelectorState createState() => _MoodSelectorState();
+  State<MoodSelector> createState() => _MoodSelectorState();
 }
 
 class _MoodSelectorState extends State<MoodSelector> {
@@ -24,7 +24,7 @@ class _MoodSelectorState extends State<MoodSelector> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: _selectedMood,
+      initialValue: _selectedMood,
       onChanged: (String? newValue) {
         setState(() {
           _selectedMood = newValue!;
