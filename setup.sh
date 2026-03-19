@@ -43,28 +43,31 @@ echo "--------------------------------------------------------"
 echo "🔑 Now, let's configure your API keys and URLs."
 echo "You can find these in your service provider dashboards."
 
-read -p "Enter your Google Apps Script Web App URL: " APPS_SCRIPT_URL
+read -p "Enter your Google Apps Script Web App URL: " GAS_URL
 read -p "Enter your LLM7 API Key: " LLM7_API_KEY
 read -p "Enter your NewsAPI.org Key: " NEWS_API_KEY
 read -p "Enter your Finnhub.io Key: " FINNHUB_API_KEY
-read -p "Enter your WhatsApp Bot Server URL (e.g., http://localhost:3000/send): " WA_BOT_URL
+read -p "Enter your WhatsApp Bot API Key (Secret): " BOT_API_KEY
+read -p "Enter your User Phone Number (e.g., 628123456789): " USER_PHONE_NUMBER
+read -p "Enter your WhatsApp Bot Server URL (e.g., http://localhost:3000/send): " WHATSAPP_API_URL
 
-# --- Update Files ---
-echo "⚙️ Configuring the application..."
+# --- Create .env file ---
+echo "⚙️ Creating central configuration file (.env)..."
 
-# Update Flutter api_service.dart
-sed -i.bak "s|https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec|$APPS_SCRIPT_URL|g" "flutter_app/lib/services/api_service.dart"
-
-# Create .env file for Google Apps Script
-echo "Creating Google Apps Script properties file..."
-cat > google_apps_scripts/properties.env << EOL
+cat > .env << EOL
+GAS_URL=$GAS_URL
 LLM7_API_KEY=$LLM7_API_KEY
 NEWS_API_KEY=$NEWS_API_KEY
 FINNHUB_API_KEY=$FINNHUB_API_KEY
-WHATSAPP_API_URL=$WA_BOT_URL
+BOT_API_KEY=$BOT_API_KEY
+USER_PHONE_NUMBER=$USER_PHONE_NUMBER
+WHATSAPP_API_URL=$WHATSAPP_API_URL
 EOL
+
+# Also sync to whatsapp_bot/.env
+cp .env whatsapp_bot/.env
 
 echo "✅ Configuration complete!"
 echo "--------------------------------------------------------"
 echo "🎉 Setup is finished! You can now run the application using the launch.sh script."
-echo "Before you do, make sure to deploy your Google Apps Script with the new properties."
+echo "Before you do, make sure to deploy your Google Apps Script and set these properties in Script Properties."
