@@ -29,8 +29,7 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.dhaher_trading_plan_ai"
+        applicationId "com.mulky.dhaher_trading_plan_ai"
         minSdkVersion 21
         targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
@@ -39,8 +38,7 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Signing configuration should be added here for production releases.
             signingConfig signingConfigs.debug
         }
     }
