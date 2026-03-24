@@ -5,8 +5,10 @@ import '../../services/gpt_summarizer.dart';
 import '../../services/forecast_service.dart';
 
 class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
+
   @override
-  _ChatPageState createState() => _ChatPageState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
@@ -58,12 +60,18 @@ class _ChatPageState extends State<ChatPage> {
 
         final summary = await GptSummarizer.getAiMasterSummary(symbol);
 
-        final formattedReply = `
-*🧠 AI Master Summary for ${symbol}*
-*Bias:* ${summary['final_bias']} (Confidence: ${summary['confidence_score']}/10)
-*Signal:* ${summary['signal']['active'] ? 'ACTIVE' : 'INACTIVE'}
-*Entry:* ${summary['signal']['entry'] ?? 'N/A'}
-        `;
+        final finalBias = summary['final_bias'] ?? 'Neutral';
+        final confidence = summary['confidence_score'] ?? 'N/A';
+        final signal = summary['signal'] ?? {};
+        final isActive = signal['active'] == true;
+        final entry = signal['entry'] ?? 'N/A';
+
+        final formattedReply = '''
+*🧠 AI Master Summary for $symbol*
+*Bias:* $finalBias (Confidence: $confidence/10)
+*Signal:* ${isActive ? 'ACTIVE' : 'INACTIVE'}
+*Entry:* $entry
+        ''';
 
         setState(() {
           _messages.removeLast();
@@ -76,14 +84,14 @@ class _ChatPageState extends State<ChatPage> {
 
         final forecast = await ForecastService.getForecast(pair: symbol, timeframe: 'H4', days: 7);
 
-        final formattedReply = `
-*🔮 AI Forecast for ${symbol} (7-Day Outlook)*
+        final formattedReply = '''
+*🔮 AI Forecast for $symbol (7-Day Outlook)*
 *Bias:* ${forecast['bias']}
 *Probability:* ${forecast['probability']}%
 *Entry Zone:* ${forecast['entry_zone']}
 *Confirmation:* ${forecast['confirmation']}
 *SL:* ${forecast['stop_loss']} | *TP:* ${forecast['take_profit']}
-        `;
+        ''';
 
         setState(() {
           _messages.removeLast();
