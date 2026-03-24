@@ -10,40 +10,21 @@ class ForecastService {
     required String timeframe,
     required int days,
   }) async {
-    // 1. Gather all external data
-    final cotData = await CotService.getCotSummary(pair);
-    final newsData = await NewsFetcher.getTopHeadlines(pair);
-    // In a real app, we'd also get technical and fundamental data here.
-
-    // 2. Construct the master prompt
-    final promptData = {
-      "pair": pair,
-      "timeframe": timeframe,
-      "days": days,
-      "technical_structure": "Bearish", // This would be dynamic
-      "current_price": "1.0860", // This would be dynamic
-      "supply_area": "1.0880 - 1.0900", // This would be dynamic
-      "cot_summary": "Net Short ${pair}", // Simplified from cotData
-      "fundamental_summary": "USD CPI this week, Fed dovish", // This would be dynamic
-    };
-
-    final prompt = _buildForecastPrompt(promptData);
-
-    // 3. Call the GPT service
+    // The GAS backend now gathers all market data (Technicals, News, COT, Economic Calendar)
+    // and calls the LLM for a unified forecast.
     try {
       final response = await ApiService.post('getGptFeedback', {
-        'promptType': 'Forecast', // A new prompt type
+        'promptType': 'Forecast',
         'promptData': {
-          "full_prompt": prompt // Sending the fully constructed prompt
+          "pair": pair,
+          "timeframe": timeframe,
+          "days": days,
+          "full_prompt": "Analyze market context for $pair on $timeframe for $days-day outlook."
         },
-        'referenceId': 'FORECAST_${pair}'
+        'referenceId': 'FORECAST_${pair}_${DateTime.now().millisecondsSinceEpoch}'
       });
 
-      // 4. In a real app, we would log this forecast to a 'Forecasts' sheet.
-      // SheetApi.logForecast(response);
-
       return response;
-
     } catch (e) {
       print('ForecastService Error: $e');
       return {'error': 'Could not generate forecast.'};

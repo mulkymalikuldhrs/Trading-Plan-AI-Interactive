@@ -2,20 +2,18 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class ForecastChartWidget extends StatelessWidget {
-  // Dummy data for demonstration
-  final List<FlSpot> historicalSpots = const [
-    FlSpot(0, 1.0850), FlSpot(1, 1.0865), FlSpot(2, 1.0855),
-    FlSpot(3, 1.0870), FlSpot(4, 1.0880),
-  ];
+  final List<FlSpot> historicalSpots;
+  final List<FlSpot> forecastSpots;
+  final double stopLoss;
+  final double takeProfit;
 
-  final List<FlSpot> forecastSpots = const [
-    FlSpot(4, 1.0880), // Start from last historical point
-    FlSpot(5, 1.0875), FlSpot(6, 1.0860), FlSpot(7, 1.0840),
-    FlSpot(8, 1.0820), FlSpot(9, 1.0800),
-  ];
-
-  final double stopLoss = 1.0905;
-  final double takeProfit = 1.0780;
+  const ForecastChartWidget({
+    super.key,
+    required this.historicalSpots,
+    required this.forecastSpots,
+    required this.stopLoss,
+    required this.takeProfit,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -25,15 +25,17 @@ class _IntelTabState extends State<IntelTab> {
     setState(() => _isLoading = true);
     try {
       final summary = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
-      final news = await NewsFetcher.getTopHeadlines(_selectedSymbol);
-      final cot = await CotService.getCotSummary(_selectedSymbol);
       setState(() {
         _aiSummary = summary;
-        _news = news;
-        _cotSummary = cot;
+        // In this version, news and COT data are aggregated by the AI
+        // and presented in the Master Summary for a more cohesive experience.
+        _news = null;
+        _cotSummary = null;
       });
     } catch (e) {
-      // Handle error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error fetching intelligence: $e")),
+      );
     } finally {
       setState(() => _isLoading = false);
     }
@@ -43,53 +45,28 @@ class _IntelTabState extends State<IntelTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("🧠 Market Intel Hub"),
+        title: const Text("🧠 Market Intel Hub"),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh),
             onPressed: _fetchMarketIntel,
           )
         ],
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               children: [
-                _buildNewsSection(),
-                SizedBox(height: 24),
-                _buildCotSummary(),
-                SizedBox(height: 24),
                 _buildAiMasterSummary(),
+                const SizedBox(height: 24),
+                if (_news != null) _buildNewsSection(),
+                if (_cotSummary != null) ...[
+                  const SizedBox(height: 24),
+                  _buildCotSummary(),
+                ],
               ],
             ),
-    );
-  }
-
-  Widget _buildNewsSection() {
-    return _buildIntelCard(
-      title: "🌐 Top News",
-      child: Column(
-        children: _news?.map((item) => ListTile(
-          title: Text(item['title']!),
-          subtitle: Text(item['source']!),
-          dense: true,
-        )).toList() ?? [Text("No news found.")],
-      ),
-    );
-  }
-
-  Widget _buildCotSummary() {
-    return _buildIntelCard(
-      title: "🧠 COT Summary",
-      child: ListTile(
-        title: Text("Institutional Bias: ${_cotSummary?['bias']}"),
-        subtitle: Text("Net Position: ${_cotSummary?['netPosition']}"),
-        trailing: Icon(
-          _cotSummary?['bias'] == 'Bullish' ? Icons.arrow_upward : Icons.arrow_downward,
-          color: _cotSummary?['bias'] == 'Bullish' ? Colors.green : Colors.red,
-        ),
-      ),
     );
   }
 

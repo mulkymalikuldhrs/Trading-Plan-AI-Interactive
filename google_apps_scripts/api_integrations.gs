@@ -47,10 +47,16 @@ function getLatestNews(query) {
  * @returns {Array<object>} A list of upcoming economic events.
  */
 function getEconomicCalendar() {
-  // Placeholder for an economic calendar API like Econdb or Financial Modeling Prep
+  const calSheet = ss.getSheetByName("Economic Calendar");
+  if (calSheet) {
+    const data = calSheet.getDataRange().getValues();
+    const headers = data.shift();
+    return data.map(row => headers.reduce((obj, h, i) => ({...obj, [h.toLowerCase()]: row[i]}), {}));
+  }
+
+  // Robust Fallback if sheet is missing
   return [
-    { event: "US CPI (MoM)", time: "Tomorrow 8:30 AM EST", impact: "High" },
-    { event: "FOMC Meeting Minutes", time: "Wednesday 2:00 PM EST", impact: "High" }
+    { event: "High Impact News Check", time: "Check ForexFactory", impact: "High" }
   ];
 }
 
@@ -59,11 +65,21 @@ function getEconomicCalendar() {
  * @returns {object} Parsed COT data for major currencies.
  */
 function getCotData() {
-  // Placeholder for a COT data API
+  const cotSheet = ss.getSheetByName("COT Data");
+  if (cotSheet) {
+    const data = cotSheet.getDataRange().getValues();
+    const headers = data.shift();
+    const cotObj = {};
+    data.forEach(row => {
+      const symbol = row[0];
+      cotObj[symbol] = headers.reduce((obj, h, i) => ({...obj, [h.toLowerCase()]: row[i]}), {});
+    });
+    return cotObj;
+  }
+
+  // Robust Fallback if sheet is missing
   return {
-    "EUR": { "long": 70000, "short": 50000, "net": 20000 },
-    "JPY": { "long": 30000, "short": 80000, "net": -50000 },
-    "GBP": { "long": 60000, "short": 40000, "net": 20000 }
+    "GENERAL": { "bias": "Neutral", "comment": "Update COT Data Sheet" }
   };
 }
 

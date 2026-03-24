@@ -68,10 +68,24 @@ class _ForecastTabState extends State<ForecastTab> {
   }
 
   Widget _buildForecastDisplay() {
+    final forecast = _forecastData!;
+    // Use fallback data if spots are not provided by API
+    final historical = (forecast['historical_spots'] as List?)?.map((e) => FlSpot(e[0].toDouble(), e[1].toDouble())).toList() ?? [
+      FlSpot(0, 1.0), FlSpot(1, 1.1)
+    ];
+    final predicted = (forecast['forecast_spots'] as List?)?.map((e) => FlSpot(e[0].toDouble(), e[1].toDouble())).toList() ?? [
+      FlSpot(1, 1.1), FlSpot(2, 1.2)
+    ];
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          ForecastChartWidget(), // This would take real data
+          ForecastChartWidget(
+            historicalSpots: historical,
+            forecastSpots: predicted,
+            stopLoss: double.tryParse(forecast['stop_loss'].toString()) ?? 0.0,
+            takeProfit: double.tryParse(forecast['take_profit'].toString()) ?? 0.0,
+          ),
           SizedBox(height: 24),
           _buildSummaryCard(),
         ],
