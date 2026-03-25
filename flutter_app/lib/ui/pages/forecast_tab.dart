@@ -68,10 +68,37 @@ class _ForecastTabState extends State<ForecastTab> {
   }
 
   Widget _buildForecastDisplay() {
+    final forecast = _forecastData!;
+
+    final historicalSpots = forecast['historical_spots'] as List?;
+    final forecastSpots = forecast['forecast_spots'] as List?;
+
+    if (historicalSpots == null || forecastSpots == null) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.error_outline, size: 48, color: Colors.orange),
+              SizedBox(height: 16),
+              Text("Real-time chart data unavailable."),
+              Text("Please check your API connections in GAS.", style: TextStyle(fontSize: 12, color: Colors.grey)),
+            ],
+          ),
+        );
+    }
+
+    final historical = historicalSpots.map((e) => FlSpot(e[0].toDouble(), e[1].toDouble())).toList();
+    final predicted = forecastSpots.map((e) => FlSpot(e[0].toDouble(), e[1].toDouble())).toList();
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          ForecastChartWidget(), // This would take real data
+          ForecastChartWidget(
+            historicalSpots: historical,
+            forecastSpots: predicted,
+            stopLoss: double.tryParse(forecast['stop_loss'].toString()) ?? 0.0,
+            takeProfit: double.tryParse(forecast['take_profit'].toString()) ?? 0.0,
+          ),
           SizedBox(height: 24),
           _buildSummaryCard(),
         ],

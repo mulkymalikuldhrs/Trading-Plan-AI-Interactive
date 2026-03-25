@@ -5,13 +5,18 @@
  * with the Google Sheet database.
  ****************************************************************/
 
-// --- SPREADSHEET & API CONFIGURATION ---
-const SPREADSHEET_ID = "1I8uVUlquRPwIc_cMKr-toHZ9qHW38uDom4TYdKexaoE";
-const LLM7_API_KEY = "YOUR_LLM7_API_KEY";
-const LLM7_API_URL = "https://api.llm7.io/v1/chat/completions";
-const WHATSAPP_API_URL = "YOUR_WHATSAPP_WEBJS_SERVER_URL/send"; // URL to your running WhatsApp bot server
+// --- SPREADSHEET & API CONFIGURATION (Using Script Properties) ---
+const props = PropertiesService.getScriptProperties();
+const SPREADSHEET_ID = props.getProperty('SPREADSHEET_ID');
+const LLM7_API_KEY = props.getProperty('LLM7_API_KEY');
+const LLM7_API_URL = props.getProperty('LLM7_API_URL') || "https://api.llm7.io/v1/chat/completions";
+const WHATSAPP_API_URL = props.getProperty('WHATSAPP_API_URL');
+const BOT_API_KEY = props.getProperty('BOT_API_KEY'); // For securing GAS -> Bot and Client -> GAS
 
 // --- SHEET HANDLERS ---
+if (!SPREADSHEET_ID) {
+  throw new Error("SPREADSHEET_ID not found in Script Properties.");
+}
 const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
 const journalSheet = ss.getSheetByName("Journal");
 const aiFeedbackSheet = ss.getSheetByName("AI Feedback");
@@ -25,7 +30,18 @@ const settingsSheet = ss.getSheetByName("Settings");
  */
 function doPost(e) {
   const contents = JSON.parse(e.postData.contents);
-  const { action, data } = contents;
+  const { action, data, api_key } = contents;
+
+  // --- API KEY VALIDATION ---
+  if (!BOT_API_KEY) {
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": "Server Error: BOT_API_KEY not configured in Script Properties" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  if (api_key !== BOT_API_KEY) {
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": "Unauthorized: Invalid API Key" }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 
   try {
     let result;
@@ -87,21 +103,36 @@ function getGptFeedback(data) {
   const formattedPrompt = formatPrompt(promptTemplate, promptData);
 
   const payload = {
-    "model": "gpt-4.5-turbo",
-    "messages": [{ "role": "user", "content": formattedPrompt }],
-    "temperature": 0.8,
+    "model": "gpt-4o", // Using a more standard model name for compatibility
+    "messages": [
+      { "role": "system", "content": "You are a professional trading analyst. Always respond in valid JSON format." },
+      { "role": "user", "content": formattedPrompt }
+    ],
+    "temperature": 0.7,
+    "response_format": { "type": "json_object" }
   };
 
   const options = {
     'method': 'post',
     'contentType': 'application/json',
     'headers': { 'Authorization': 'Bearer ' + LLM7_API_KEY },
-    'payload': JSON.stringify(payload)
+    'payload': JSON.stringify(payload),
+    'muteHttpExceptions': true
   };
 
   const response = UrlFetchApp.fetch(LLM7_API_URL, options);
+  if (response.getResponseCode() !== 200) {
+    throw new Error("AI API Error: " + response.getContentText());
+  }
+
   const gptResponse = JSON.parse(response.getContentText());
-  const gptContent = JSON.parse(gptResponse.choices[0].message.content);
+  let gptContent;
+  try {
+    gptContent = JSON.parse(gptResponse.choices[0].message.content);
+  } catch (e) {
+    // If not JSON, return as a summary object
+    gptContent = { "summary": gptResponse.choices[0].message.content };
+  }
 
   aiFeedbackSheet.appendRow(["AI-F-" + new Date().getTime(), new Date(), referenceId, promptType, JSON.stringify(gptContent)]);
 
@@ -154,18 +185,20 @@ function analyzeAndSummarizeWeek() {
 // --- MODULE 4: NOTIFICATION SYSTEM ---
 
 function sendWhatsAppNotification(message) {
-  const userPhoneNumber = "6285322624048"; // Hardcoded phone number
-  if (!userPhoneNumber) return;
+  const userPhoneNumber = props.getProperty('USER_PHONE_NUMBER');
+  if (!userPhoneNumber || !WHATSAPP_API_URL) return;
 
   const payload = {
     to: userPhoneNumber,
-    message: message
+    message: message,
+    api_key: BOT_API_KEY
   };
 
   const options = {
     'method': 'post',
     'contentType': 'application/json',
-    'payload': JSON.stringify(payload)
+    'payload': JSON.stringify(payload),
+    'muteHttpExceptions': true
   };
 
   try {
@@ -182,7 +215,9 @@ function getPromptTemplate(promptType) {
     const prompts = {
         'EntryValidation': `Setup saya:\n- Pair: {{Pair}}\n- Arah: {{Arah}}\n- SL: {{SL}}\n- TP: {{TP}}\n- Mood: {{Mood}}\n- Setup: {{Setup}}\nTolong validasi dan beri saran. Jika saya override, tolong bantu refleksi.`,
         'EmotionalOverride': `Saya override entry. Mood saya {{Mood}}. Kenapa ini bisa terjadi dan bagaimana saya bisa memperbaiki mindset saya?`,
-        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`
+        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`,
+        'MasterTradeAnalyst': `Analisa pasar lengkap untuk {{symbol}}:\nTechnical: {{technicals}}\nNews: {{news_headlines}}\nCalendar: {{economic_calendar}}\nCOT: {{cot_report}}\n\nTolong berikan:\n1. Final bias (Bullish/Bearish/Neutral)\n2. Confidence score (1-10)\n3. Technical thesis\n4. Fundamental thesis\n5. Positional (COT) thesis\n6. Signal (active: true/false, entry, stop_loss, take_profit)\n\nFormat sebagai JSON.`,
+        'Forecast': `Generate a detailed multi-day forecast for {{pair}} (Timeframe: {{timeframe}}, Horizon: {{days}} days). Use context: {{full_prompt}}. Format output as JSON with keys: bias, entry_zone, confirmation, stop_loss, take_profit, probability, is_tradeable.`
     };
     return prompts[promptType] || '';
 }

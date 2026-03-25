@@ -47,11 +47,16 @@ function getLatestNews(query) {
  * @returns {Array<object>} A list of upcoming economic events.
  */
 function getEconomicCalendar() {
-  // Placeholder for an economic calendar API like Econdb or Financial Modeling Prep
-  return [
-    { event: "US CPI (MoM)", time: "Tomorrow 8:30 AM EST", impact: "High" },
-    { event: "FOMC Meeting Minutes", time: "Wednesday 2:00 PM EST", impact: "High" }
-  ];
+  const calSheet = ss.getSheetByName("Economic Calendar");
+  if (!calSheet) {
+    throw new Error("Economic Calendar sheet is missing. Please ensure it exists in your spreadsheet.");
+  }
+
+  const data = calSheet.getDataRange().getValues();
+  if (data.length <= 1) return []; // Only headers or empty
+
+  const headers = data.shift();
+  return data.map(row => headers.reduce((obj, h, i) => ({...obj, [h.toLowerCase()]: row[i]}), {}));
 }
 
 /**
@@ -59,12 +64,21 @@ function getEconomicCalendar() {
  * @returns {object} Parsed COT data for major currencies.
  */
 function getCotData() {
-  // Placeholder for a COT data API
-  return {
-    "EUR": { "long": 70000, "short": 50000, "net": 20000 },
-    "JPY": { "long": 30000, "short": 80000, "net": -50000 },
-    "GBP": { "long": 60000, "short": 40000, "net": 20000 }
-  };
+  const cotSheet = ss.getSheetByName("COT Data");
+  if (!cotSheet) {
+    throw new Error("COT Data sheet is missing. Please ensure it exists in your spreadsheet.");
+  }
+
+  const data = cotSheet.getDataRange().getValues();
+  if (data.length <= 1) return {};
+
+  const headers = data.shift();
+  const cotObj = {};
+  data.forEach(row => {
+    const symbol = row[0];
+    cotObj[symbol] = headers.reduce((obj, h, i) => ({...obj, [h.toLowerCase()]: row[i]}), {});
+  });
+  return cotObj;
 }
 
 /**

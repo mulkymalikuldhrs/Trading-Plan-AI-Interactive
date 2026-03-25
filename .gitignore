@@ -1,0 +1,22 @@
+# Root .gitignore
+node_modules/
+.dart_tool/
+build/
+venv/
+.env
+*.log
+
+# Flutter/Dart
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+android/local.properties
+android/key.properties
+GeneratedPluginRegistrant.java
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class

@@ -1,27 +1,9 @@
+name: dhaher_trading_plan_ai
+description: A new Flutter project.
+version: 10.2.8
 
-dependencies:
-  flutter:
-    sdk: flutter
-  http: ^0.13.3
-  rive: ^0.9.1
-
-
-dependencies:
-  flutter:
-    sdk: flutter
-  http: ^0.13.3
-  rive: ^0.9.1
-  speech_to_text: ^5.6.0
-
-
-dependencies:
-  flutter:
-    sdk: flutter
-  http: ^0.13.3
-  rive: ^0.9.1
-  speech_to_text: ^5.6.0
-  fl_chart: ^0.55.0
-
+environment:
+  sdk: ">=3.5.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -31,3 +13,14 @@ dependencies:
   speech_to_text: ^5.6.0
   fl_chart: ^0.55.0
   webview_flutter: ^3.0.4
+  provider: ^6.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/rive/
