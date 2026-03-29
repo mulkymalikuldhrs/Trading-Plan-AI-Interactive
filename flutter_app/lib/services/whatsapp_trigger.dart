@@ -1,12 +1,18 @@
-import 'api_service.dart';
+import "package:flutter/foundation.dart";
+import './api_service.dart';
 
 class WhatsAppTrigger {
-  static Future<void> sendReminder(String message) {
-    // This is a conceptual example.
-    // In a real app, this might be a call to your own server
-    // which then communicates with the WhatsApp bot.
-    // For now, we'll imagine it's a direct API, though this is not how whatsapp-web.js works.
-    print("Sending WhatsApp Reminder: $message");
-    return Future.value();
+  /// Sends a notification message to the user via the WhatsApp bot.
+  /// This utilizes the Google Apps Script backend to route the message securely.
+  static Future<void> sendReminder(String message) async {
+    try {
+      // We don't specify 'to' here, the GAS backend uses USER_PHONE_NUMBER from Script Properties
+      await ApiService.post('sendWhatsAppNotification', {
+        'message': message,
+      });
+      debugPrint("WhatsApp notification sent via GAS backend.");
+    } catch (e) {
+      debugPrint("WhatsAppTrigger Error: $e");
+    }
   }
 }
