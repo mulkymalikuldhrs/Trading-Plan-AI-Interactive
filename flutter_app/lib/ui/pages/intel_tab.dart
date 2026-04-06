@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../services/gpt_summarizer.dart';
-import '../../services/news_fetcher.dart';
-import '../../services/cot_service.dart';
 
 class IntelTab extends StatefulWidget {
+  const IntelTab({super.key});
+
   @override
-  _IntelTabState createState() => _IntelTabState();
+  State<IntelTab> createState() => _IntelTabState();
 }
 
 class _IntelTabState extends State<IntelTab> {
-  String _selectedSymbol = "EURUSD";
+  final String _selectedSymbol = "EURUSD";
   Map<String, dynamic>? _aiSummary;
   List<Map<String, String>>? _news;
   Map<String, dynamic>? _cotSummary;
@@ -25,15 +25,24 @@ class _IntelTabState extends State<IntelTab> {
     setState(() => _isLoading = true);
     try {
       final summary = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
-      final news = await NewsFetcher.getTopHeadlines(_selectedSymbol);
-      final cot = await CotService.getCotSummary(_selectedSymbol);
+
+      // The backend 'getAiMasterSummary' in GAS now returns both the analysis
+      // AND the rawData (technicals, news, COT) used for that analysis.
+      // We map this for UI backward compatibility if needed, or update the UI.
       setState(() {
         _aiSummary = summary;
-        _news = news;
-        _cotSummary = cot;
+        // Map raw data from summary if present, otherwise handle gracefully
+        if (summary.containsKey('rawData')) {
+          final raw = summary['rawData'];
+          _news = (raw['news_headlines'] as List?)?.map((h) => {'title': h.toString(), 'source': 'Finnhub'}).toList();
+          _cotSummary = {
+            'bias': raw['cot_report']?['bias'] ?? 'Neutral',
+            'netPosition': raw['cot_report']?['signal'] ?? 'N/A'
+          };
+        }
       });
     } catch (e) {
-      // Handle error
+      debugPrint("Error fetching intel: $e");
     } finally {
       setState(() => _isLoading = false);
     }
@@ -127,7 +136,7 @@ class _IntelTabState extends State<IntelTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 12),
             child,
           ],
