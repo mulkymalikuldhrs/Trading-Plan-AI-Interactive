@@ -3,8 +3,10 @@ import '../ui/widgets/chat_bubble.dart';
 import '../services/api_service.dart';
 
 class AiChatbox extends StatefulWidget {
+  const AiChatbox({super.key});
+
   @override
-  _AiChatboxState createState() => _AiChatboxState();
+  State<AiChatbox> createState() => _AiChatboxState();
 }
 
 class _AiChatboxState extends State<AiChatbox> {
