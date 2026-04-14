@@ -5,6 +5,8 @@ import '../../components/winrate_pie_chart.dart';
 import '../../components/setup_performance_barchart.dart';
 
 class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +28,8 @@ class DashboardPage extends StatelessWidget {
 // --- Layouts ---
 
 class DashboardMobileLayout extends StatelessWidget {
+  const DashboardMobileLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -33,13 +37,13 @@ class DashboardMobileLayout extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text("Equity Curve", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
+          Text("Equity Curve", style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
           SizedBox(height: 16),
           EquityCurveChart(),
           SizedBox(height: 24),
           WinRatePieChart(),
           SizedBox(height: 24),
-          Text("Setup Performance", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
+          Text("Setup Performance", style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
           SizedBox(height: 16),
           SetupPerformanceBarChart(),
         ],
@@ -49,13 +53,15 @@ class DashboardMobileLayout extends StatelessWidget {
 }
 
 class DashboardTabletLayout extends StatelessWidget {
+  const DashboardTabletLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(24),
       child: Column(
         children: [
-          Text("Equity Curve", style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
+          Text("Equity Curve", style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white)),
           SizedBox(height: 16),
           EquityCurveChart(),
           SizedBox(height: 24),
@@ -74,6 +80,8 @@ class DashboardTabletLayout extends StatelessWidget {
 }
 
 class DashboardDesktopLayout extends StatelessWidget {
+  const DashboardDesktopLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -85,7 +93,7 @@ class DashboardDesktopLayout extends StatelessWidget {
             flex: 3,
             child: Column(
               children: [
-                Text("Equity Curve", style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
+                Text("Equity Curve", style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white)),
                 SizedBox(height: 16),
                 Expanded(child: EquityCurveChart()),
               ],

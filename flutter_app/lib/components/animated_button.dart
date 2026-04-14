@@ -4,10 +4,10 @@ class AnimatedButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
 
-  AnimatedButton({required this.text, required this.onPressed});
+  const AnimatedButton({super.key, required this.text, required this.onPressed});
 
   @override
-  _AnimatedButtonState createState() => _AnimatedButtonState();
+  State<AnimatedButton> createState() => _AnimatedButtonState();
 }
 
 class _AnimatedButtonState extends State<AnimatedButton> {
