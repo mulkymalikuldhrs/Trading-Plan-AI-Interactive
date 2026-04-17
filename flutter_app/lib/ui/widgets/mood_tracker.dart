@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MoodTracker extends StatelessWidget {
+  const MoodTracker({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -8,7 +10,7 @@ class MoodTracker extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text("Mood Tracker", style: Theme.of(context).textTheme.headline6),
+            Text("Mood Tracker", style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
