@@ -1,0 +1,21 @@
+{
+  "name": "dhaher-trading-plan-ai-bot",
+  "version": "1.2.0-hardened",
+  "description": "WhatsApp bot for Dhaher Trading Plan AI",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.15.0",
+    "body-parser": "^2.2.2",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.34.6"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
