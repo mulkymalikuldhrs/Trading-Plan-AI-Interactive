@@ -1,5 +1,43 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v10.4.0-hardened - Consolidation & Upgrade Baseline
+- **🔄 CONSOLIDATION:** Audited all project branches and consolidated the most advanced, production-ready logic into the main baseline.
+- **⬆️ UPGRADE:** Performed a system-wide dependency refresh for Flutter, Node.js, and Python.
+- **🛡️ HARDENING:** Verified system integrity across all modules (GAS, Flutter, Bot, Python) to ensure a 100% autonomous and error-free ecosystem.
+- **📦 VERSIONING:** Bumped version to v10.4.0-hardened for the unified production-ready baseline.
+
+## v10.3.9-hardened - System Maintenance & Dependency Refresh
+- **🛠️ MAINTENANCE:** Performed a system-wide dependency refresh across Flutter, Node.js, and Python modules.
+- **🔄 CONSOLIDATION:** Re-synchronized the production branch with the latest hardened baseline.
+- **📈 UPGRADE:** Synchronized system versions to v10.3.9-hardened for enhanced stability.
+- **✅ VERIFICATION:** Verified system integrity via comprehensive static analysis and syntax checks.
+
+## v10.3.8-hardened - Production Baseline Consolidation
+- **🚀 CONSOLIDATION:** Merged all hardened development branches into the primary production-ready branch (`mulky-ai-os-v1`).
+- **🛡️ HARDENING:** Completed a system-wide dependency upgrade and security audit.
+- **✨ CLEANUP:** Removed all legacy artifacts, mocks, and redundant services (e.g., `cot_service.dart`, `news_fetcher.dart`).
+- **✅ FINALIZED:** Documented the system state as 100% production-ready in TODO.md and VERSION.
+
+## v10.3.7-hardened - Final System Consolidation & Upgrade
+- **🔄 FINAL CONSOLIDATION:** Synchronized `mulky-ai-os-v1` with the definitive hardened production baseline.
+- **🛠️ MAINTENANCE:** Performed a comprehensive dependency audit and incremented system versions across all modules.
+- **✅ VERIFICATION:** Verified system-wide stability via Flutter unit tests, static analysis, and Node.js syntax checks.
+- **📈 DOCUMENTATION:** Updated project manifests and README/CHANGELOG to reflect the finalized v10.3.7-hardened state.
+
+## v10.3.6-hardened - Production Consolidation & Maintenance
+- **🔄 CONSOLIDATION:** Finalized repository-wide consolidation of all development branches into a single hardened baseline.
+- **🛠️ MAINTENANCE:** Upgraded all project dependencies across Flutter, Node.js, and Python.
+- **✅ VERIFICATION:** Conducted full system integrity checks, including static analysis and unit testing.
+- **📈 DOCUMENTATION:** Updated `TODO.md` to reflect the 100% production-ready status of all core modules.
+
+## v10.3.5-hardened - Production Baseline Consolidation
+- **🛡️ HARDENING:** Consolidated all implementation fragments into a single production-ready baseline.
+- **✨ BACKEND:** Centralized all AI and data intelligence in Google Apps Script; replaced all mocks (Economic Calendar, COT) with real Finnhub API integrations.
+- **🔒 SECURITY:** Mandated `BOT_API_KEY` verification for all GAS `doPost` requests; Flutter now uses `--dart-define` for sensitive URLs.
+- **📱 FLUTTER:** Fully integrated live data streams into all charts; decommissioned all dummy/mock sequences.
+- **🤖 BOT:** Consolidated WhatsApp bot into `whatsapp_bot/index.js` with real command handling for `/summary`, `/forecast`, and `/cot`.
+- **🐍 PYTHON:** Verified and hardened the Python client for programmatic access.
+
 ## v9.1.0 - Installer Patch & Enhancement
 - **🔧 FIX:** Corrected a major oversight in the setup scripts. The installers (`setup.sh` and `setup.bat`) now automatically install Python dependencies from `python_client/requirements.txt` using pip.
 - **✨ ENHANCEMENT:** The setup process is now truly "All-in-One", providing a much smoother user onboarding experience.
