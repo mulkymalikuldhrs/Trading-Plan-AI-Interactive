@@ -17,7 +17,8 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<List<Trade>> _fetchTrades() async {
-    final List<dynamic> tradeData = await ApiService.exportSheet('Journal');
+    final dynamic response = await ApiService.post('exportToJson', {'sheetName': 'Journal'});
+    final List<dynamic> tradeData = response is List ? response : [];
     return tradeData.map((json) => Trade.fromJson(json)).toList();
   }
 

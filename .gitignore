@@ -1,0 +1,29 @@
+# Miscellaneous
+*.log
+*.temp
+*.tmp
+.DS_Store
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+ios/.generated/
+pubspec.lock
+
+# JavaScript/Node
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+
+# Mobile specific
+*.ipa
+*.apk
+*.ap_

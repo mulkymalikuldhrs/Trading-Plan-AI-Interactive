@@ -11,7 +11,7 @@ class WinRatePieChart extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.3,
       child: Card(
-        color: Colors.blueGrey[900]?.withOpacity(0.5),
+        color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
         child: Column(
           children: <Widget>[
             const SizedBox(height: 18),

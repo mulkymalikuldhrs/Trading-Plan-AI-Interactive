@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
-import 'dart:ui' as ui;
+import 'dart:ui_web' as ui;
 
 class TradingViewEmbed extends StatefulWidget {
   final String symbol;
@@ -14,6 +15,18 @@ class TradingViewEmbed extends StatefulWidget {
 }
 
 class _TradingViewEmbedState extends State<TradingViewEmbed> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!kIsWeb) {
+      _controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse('https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
@@ -26,7 +39,7 @@ class _TradingViewEmbedState extends State<TradingViewEmbed> {
 
       // ignore: undefined_prefixed_name
       ui.platformViewRegistry.registerViewFactory(
-        'tradingview-iframe-${widget.symbol}', // Unique ID for each instance
+        'tradingview-iframe-${widget.symbol}',
         (int viewId) => iframeElement,
       );
 
@@ -35,10 +48,7 @@ class _TradingViewEmbedState extends State<TradingViewEmbed> {
       );
     } else {
       // Use WebView for mobile (Android/iOS)
-      return WebView(
-        initialUrl: 'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark',
-        javascriptMode: JavascriptMode.unrestricted,
-      );
+      return WebViewWidget(controller: _controller);
     }
   }
 }

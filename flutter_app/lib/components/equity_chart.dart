@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class EquityCurveChart extends StatelessWidget {
-  // Dummy data - in a real app, this would come from the Google Sheet
   final List<FlSpot> spots = const [
     FlSpot(0, 10000),
     FlSpot(1, 10100),
@@ -23,7 +22,7 @@ class EquityCurveChart extends StatelessWidget {
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: Colors.blueGrey[900]?.withOpacity(0.5),
+        color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: LineChart(
@@ -48,27 +47,38 @@ class EquityCurveChart extends StatelessWidget {
       ),
       titlesData: FlTitlesData(
           show: true,
-          rightTitles: SideTitles(showTitles: false),
-          topTitles: SideTitles(showTitles: false),
-          bottomTitles: SideTitles(showTitles: true, reservedSize: 22, getTextStyles: (c,v) => const TextStyle(color: Colors.white70, fontSize: 12), getTitles: (value) => 'Day ${value.toInt() + 1}'),
-          leftTitles: SideTitles(showTitles: true, reservedSize: 40, getTextStyles: (c,v) => const TextStyle(color: Colors.white70, fontSize: 12))
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 22,
+              getTitlesWidget: (value, meta) => Text('Day ${value.toInt() + 1}', style: const TextStyle(color: Colors.white70, fontSize: 12)),
+            ),
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: const TextStyle(color: Colors.white70, fontSize: 12)),
+            ),
+          ),
       ),
       borderData: FlBorderData(show: true, border: Border.all(color: Colors.white10)),
       minX: 0,
       maxX: spots.length.toDouble() - 1,
-      minY: 9800, // Should be calculated dynamically
-      maxY: 10800, // Should be calculated dynamically
+      minY: 9800,
+      maxY: 10800,
       lineBarsData: [
         LineChartBarData(
           spots: spots,
           isCurved: true,
-          colors: [Colors.cyan, Colors.blueAccent],
+          gradient: const LinearGradient(colors: [Colors.cyan, Colors.blueAccent]),
           barWidth: 4,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: true,
             getDotPainter: (spot, percent, barData, index) {
-              // Glowing dots logic
               if (winningTradesIndices.contains(index)) {
                 return FlDotCirclePainter(radius: 6, color: Colors.greenAccent, strokeWidth: 2, strokeColor: Colors.white);
               } else {
@@ -78,9 +88,11 @@ class EquityCurveChart extends StatelessWidget {
           ),
           belowBarData: BarAreaData(
             show: true,
-            colors: [Colors.cyan.withOpacity(0.3), Colors.blueAccent.withOpacity(0.1)],
-            gradientFrom: const Offset(0.5, 0),
-            gradientTo: const Offset(0.5, 1),
+            gradient: LinearGradient(
+              colors: [Colors.cyan.withValues(alpha: 0.3), Colors.blueAccent.withValues(alpha: 0.1)],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
         ),
       ],
