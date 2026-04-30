@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://i.imgur.com/8J5gO6R.png" alt="Dhaher Trading Plan AI Header">
-  <h1>🔮 Dhaher Trading Plan AI™</h1>
+  <h1>🔮 Dhaher Trading Plan AI™ <small>v10.4.5-hardened</small></h1>
   <p>
     <b>Your personal AI-powered market intelligence agency.</b>
     <br />
