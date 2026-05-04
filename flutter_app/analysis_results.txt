@@ -1,0 +1,9 @@
+Analyzing flutter_app...
+
+   info • 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre • lib/components/mood_selector.dart:27:7 • deprecated_member_use
+   info • 'dart:html' is deprecated and shouldn't be used. Use package:web and dart:js_interop instead • lib/components/trading_view_embed.dart:4:1 • deprecated_member_use
+  error • The method 'WebView' isn't defined for the type '_TradingViewEmbedState' • lib/components/trading_view_embed.dart:38:14 • undefined_method
+  error • Undefined name 'JavascriptMode' • lib/components/trading_view_embed.dart:40:25 • undefined_identifier
+warning • The asset directory 'assets/lottie/' doesn't exist • pubspec.yaml:30:7 • asset_directory_does_not_exist
+
+5 issues found. (ran in 27.4s)
