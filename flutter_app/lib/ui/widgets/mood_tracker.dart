@@ -3,33 +3,19 @@ import 'package:flutter/material.dart';
 class MoodTracker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text("Mood Tracker", style: Theme.of(context).textTheme.headline6),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildMoodEmoji('😊', 'Focused'),
-                _buildMoodEmoji('😐', 'Neutral'),
-                _buildMoodEmoji('😠', 'Frustrated'),
-                _buildMoodEmoji('😟', 'Anxious'),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMoodEmoji(String emoji, String mood) {
     return Column(
       children: [
-        Text(emoji, style: TextStyle(fontSize: 40)),
-        Text(mood),
+        Text("How are you feeling?", style: Theme.of(context).textTheme.titleLarge),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(icon: Icon(Icons.sentiment_very_satisfied), onPressed: () {}),
+            IconButton(icon: Icon(Icons.sentiment_satisfied), onPressed: () {}),
+            IconButton(icon: Icon(Icons.sentiment_neutral), onPressed: () {}),
+            IconButton(icon: Icon(Icons.sentiment_dissatisfied), onPressed: () {}),
+            IconButton(icon: Icon(Icons.sentiment_very_dissatisfied), onPressed: () {}),
+          ],
+        ),
       ],
     );
   }

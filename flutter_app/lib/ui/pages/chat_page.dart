@@ -58,12 +58,12 @@ class _ChatPageState extends State<ChatPage> {
 
         final summary = await GptSummarizer.getAiMasterSummary(symbol);
 
-        final formattedReply = `
-*🧠 AI Master Summary for ${symbol}*
+        final formattedReply = '''
+*🧠 AI Master Summary for $symbol*
 *Bias:* ${summary['final_bias']} (Confidence: ${summary['confidence_score']}/10)
-*Signal:* ${summary['signal']['active'] ? 'ACTIVE' : 'INACTIVE'}
-*Entry:* ${summary['signal']['entry'] ?? 'N/A'}
-        `;
+*Signal:* ${summary['signal']?['active'] == true ? 'ACTIVE' : 'INACTIVE'}
+*Entry:* ${summary['signal']?['entry'] ?? 'N/A'}
+''';
 
         setState(() {
           _messages.removeLast();
@@ -74,16 +74,16 @@ class _ChatPageState extends State<ChatPage> {
         final parts = userInput.split(' ');
         final symbol = parts.length > 1 ? parts[1].toUpperCase() : 'EURUSD';
 
-        final forecast = await ForecastService.getForecast(pair: symbol, timeframe: 'H4', days: 7);
+        final forecast = await ForecastService.getForecast(symbol);
 
-        final formattedReply = `
-*🔮 AI Forecast for ${symbol} (7-Day Outlook)*
+        final formattedReply = '''
+*🔮 AI Forecast for $symbol (7-Day Outlook)*
 *Bias:* ${forecast['bias']}
 *Probability:* ${forecast['probability']}%
 *Entry Zone:* ${forecast['entry_zone']}
 *Confirmation:* ${forecast['confirmation']}
 *SL:* ${forecast['stop_loss']} | *TP:* ${forecast['take_profit']}
-        `;
+''';
 
         setState(() {
           _messages.removeLast();

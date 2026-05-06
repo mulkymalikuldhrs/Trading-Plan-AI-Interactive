@@ -9,9 +9,9 @@ class IntelTab extends StatefulWidget {
 }
 
 class _IntelTabState extends State<IntelTab> {
-  String _selectedSymbol = "EURUSD";
+  final String _selectedSymbol = "EURUSD";
   Map<String, dynamic>? _aiSummary;
-  List<Map<String, String>>? _news;
+  List<dynamic>? _news;
   Map<String, dynamic>? _cotSummary;
   bool _isLoading = true;
 
@@ -71,8 +71,7 @@ class _IntelTabState extends State<IntelTab> {
       title: "🌐 Top News",
       child: Column(
         children: _news?.map((item) => ListTile(
-          title: Text(item['title']!),
-          subtitle: Text(item['source']!),
+          title: Text(item.toString()),
           dense: true,
         )).toList() ?? [Text("No news found.")],
       ),
@@ -84,7 +83,7 @@ class _IntelTabState extends State<IntelTab> {
       title: "🧠 COT Summary",
       child: ListTile(
         title: Text("Institutional Bias: ${_cotSummary?['bias']}"),
-        subtitle: Text("Net Position: ${_cotSummary?['netPosition']}"),
+        subtitle: Text("Net Position: ${_cotSummary?['net_position']}"),
         trailing: Icon(
           _cotSummary?['bias'] == 'Bullish' ? Icons.arrow_upward : Icons.arrow_downward,
           color: _cotSummary?['bias'] == 'Bullish' ? Colors.green : Colors.red,
@@ -120,14 +119,14 @@ class _IntelTabState extends State<IntelTab> {
   Widget _buildIntelCard({required String title, required Widget child}) {
     return Card(
       elevation: 2,
-      color: Colors.blueGrey[900]?.withOpacity(0.5),
+      color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 12),
             child,
           ],

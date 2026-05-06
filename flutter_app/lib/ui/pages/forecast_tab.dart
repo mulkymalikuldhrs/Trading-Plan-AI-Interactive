@@ -8,20 +8,14 @@ class ForecastTab extends StatefulWidget {
 }
 
 class _ForecastTabState extends State<ForecastTab> {
-  String _selectedPair = 'EURUSD';
-  String _selectedTf = 'H4';
-  int _selectedDays = 7;
+  final String _selectedPair = 'EURUSD';
   Map<String, dynamic>? _forecastData;
   bool _isLoading = false;
 
   void _getForecast() async {
     setState(() => _isLoading = true);
     try {
-      final data = await ForecastService.getForecast(
-        pair: _selectedPair,
-        timeframe: _selectedTf,
-        days: _selectedDays,
-      );
+      final data = await ForecastService.getForecast(_selectedPair);
       setState(() => _forecastData = data);
     } catch (e) {
       // Handle error
@@ -57,7 +51,6 @@ class _ForecastTabState extends State<ForecastTab> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        // Dropdowns for pair, timeframe, days would go here
         ElevatedButton.icon(
           icon: Icon(Icons.show_chart),
           label: Text("Forecast"),
@@ -71,7 +64,7 @@ class _ForecastTabState extends State<ForecastTab> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ForecastChartWidget(), // This would take real data
+          ForecastChartWidget(),
           SizedBox(height: 24),
           _buildSummaryCard(),
         ],
@@ -87,7 +80,7 @@ class _ForecastTabState extends State<ForecastTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("AI Forecast Summary", style: Theme.of(context).textTheme.headline6),
+            Text("AI Forecast Summary", style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 8),
             Text("Bias: ${forecast['bias']}"),
             Text("Entry Zone: ${forecast['entry_zone']}"),

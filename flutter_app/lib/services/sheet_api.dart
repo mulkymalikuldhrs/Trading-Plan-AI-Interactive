@@ -1,21 +1,16 @@
 import 'api_service.dart';
-import '../models/trade.dart';
 
 class SheetApi {
-  static Future<String> logTrade(Trade trade) {
-    return ApiService.post('logTrade', trade.toJson());
+  static Future<dynamic> logTrade(Map<String, dynamic> data) async {
+    return ApiService.post('logTrade', data);
   }
 
-  static Future<String> logViolation(String tradeId, String rule, String justification) {
-    return ApiService.post('logViolation', {
-      'tradeId': tradeId,
-      'ruleBroken': rule,
-      'justification': justification,
-    });
+  static Future<dynamic> logViolation(Map<String, dynamic> data) async {
+    return ApiService.post('logViolation', data);
   }
 
-  static Future<List<Trade>> getJournal() async {
-    final List<dynamic> tradesJson = await ApiService.exportSheet('Journal');
-    return tradesJson.map((json) => Trade.fromJson(json)).toList();
+  static Future<List<dynamic>> fetchJournal() async {
+    final data = await ApiService.post('exportToJson', {'sheetName': 'Journal'});
+    return data as List<dynamic>;
   }
 }

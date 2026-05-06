@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class WinRatePieChart extends StatelessWidget {
-  // Dummy data
   final int wins = 65;
   final int losses = 35;
 
@@ -11,7 +10,7 @@ class WinRatePieChart extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.3,
       child: Card(
-        color: Colors.blueGrey[900]?.withOpacity(0.5),
+        color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
         child: Column(
           children: <Widget>[
             const SizedBox(height: 18),
@@ -20,9 +19,6 @@ class WinRatePieChart extends StatelessWidget {
                 aspectRatio: 1,
                 child: PieChart(
                   PieChartData(
-                    pieTouchData: PieTouchData(touchCallback: (event, pieTouchResponse) {
-                      // Add interaction logic here
-                    }),
                     borderData: FlBorderData(show: false),
                     sectionsSpace: 0,
                     centerSpaceRadius: 40,
@@ -36,9 +32,9 @@ class WinRatePieChart extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Indicator(color: Colors.greenAccent, text: 'Wins', isSquare: true),
-                  SizedBox(width: 4),
-                  Indicator(color: Colors.redAccent, text: 'Losses', isSquare: true),
+                  const Indicator(color: Colors.greenAccent, text: 'Wins', isSquare: true),
+                  const SizedBox(width: 4),
+                  const Indicator(color: Colors.redAccent, text: 'Losses', isSquare: true),
                 ],
               ),
             ),
@@ -51,25 +47,24 @@ class WinRatePieChart extends StatelessWidget {
 
   List<PieChartSectionData> showingSections() {
     return List.generate(2, (i) {
-      final isTouching = false; // Add touch interaction later
-      final fontSize = isTouching ? 25.0 : 16.0;
-      final radius = isTouching ? 60.0 : 50.0;
+      const fontSize = 16.0;
+      const radius = 50.0;
       switch (i) {
         case 0:
           return PieChartSectionData(
             color: Colors.greenAccent,
             value: wins.toDouble(),
-            title: '${wins}%',
+            title: '$wins%',
             radius: radius,
-            titleStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+            titleStyle: const TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Color(0xffffffff)),
           );
         case 1:
           return PieChartSectionData(
             color: Colors.redAccent,
             value: losses.toDouble(),
-            title: '${losses}%',
+            title: '$losses%',
             radius: radius,
-            titleStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+            titleStyle: const TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Color(0xffffffff)),
           );
         default:
           throw Error();
@@ -109,7 +104,7 @@ class Indicator extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white70),
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white70),
         )
       ],
     );

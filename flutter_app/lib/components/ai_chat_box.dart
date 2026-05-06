@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../ui/widgets/chat_bubble.dart';
 import '../services/api_service.dart';
 
-class AiChatbox extends StatefulWidget {
+class AiChatBox extends StatefulWidget {
   @override
-  _AiChatboxState createState() => _AiChatboxState();
+  _AiChatBoxState createState() => _AiChatBoxState();
 }
 
-class _AiChatboxState extends State<AiChatbox> {
+class _AiChatBoxState extends State<AiChatBox> {
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, dynamic>> _messages = [
     {'message': 'Hello! I am your AI Trading Coach. How can I help you reflect today?', 'isUser': false},
@@ -23,14 +23,14 @@ class _AiChatboxState extends State<AiChatbox> {
       _controller.clear();
 
       try {
-        final response = await ApiService.getGptFeedback(
-          'ReflectiveQuestion', // This would be dynamic based on user input
-          'chat-ref',
-          {'last_action': userInput},
-        );
+        final response = await ApiService.post('getGptFeedback', {
+          'promptType': 'ReflectiveQuestion',
+          'referenceId': 'chat-ref',
+          'promptData': {'last_action': userInput},
+        });
         setState(() {
           _messages.removeLast();
-          _messages.add({'message': response['root_cause_question'], 'isUser': false});
+          _messages.add({'message': response['root_cause_question'] ?? response['detailed_explanation'] ?? 'I see. Tell me more.', 'isUser': false});
         });
       } catch (e) {
         setState(() {
@@ -44,7 +44,7 @@ class _AiChatboxState extends State<AiChatbox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400, // Example height
+      height: 400,
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade700),

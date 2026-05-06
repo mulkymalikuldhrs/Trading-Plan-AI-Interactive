@@ -7,9 +7,10 @@
 
 // --- SPREADSHEET & API CONFIGURATION ---
 const SPREADSHEET_ID = "1I8uVUlquRPwIc_cMKr-toHZ9qHW38uDom4TYdKexaoE";
-const LLM7_API_KEY = "YOUR_LLM7_API_KEY";
+const LLM7_API_KEY = PropertiesService.getScriptProperties().getProperty('LLM7_API_KEY');
 const LLM7_API_URL = "https://api.llm7.io/v1/chat/completions";
-const WHATSAPP_API_URL = "YOUR_WHATSAPP_WEBJS_SERVER_URL/send"; // URL to your running WhatsApp bot server
+const WHATSAPP_API_URL = PropertiesService.getScriptProperties().getProperty('WHATSAPP_BOT_URL');
+const BOT_API_KEY = PropertiesService.getScriptProperties().getProperty('BOT_API_KEY');
 
 // --- SHEET HANDLERS ---
 const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -25,7 +26,12 @@ const settingsSheet = ss.getSheetByName("Settings");
  */
 function doPost(e) {
   const contents = JSON.parse(e.postData.contents);
-  const { action, data } = contents;
+  const { action, data, apiKey } = contents;
+
+  // Security Check
+  if (apiKey !== BOT_API_KEY) {
+    throw new Error("Unauthorized: Invalid API Key");
+  }
 
   try {
     let result;
@@ -44,6 +50,12 @@ function doPost(e) {
         break;
       case "exportToJson":
         result = exportSheetToJson(data.sheetName);
+        break;
+      case "getMarketData":
+        result = getComprehensiveMarketData(data.symbol);
+        break;
+      case "generateForecast":
+        result = generateAndLogForecast(data);
         break;
       default:
         throw new Error("Invalid action specified.");
@@ -131,7 +143,7 @@ function analyzeAndSummarizeWeek() {
     total_trades: tradeCount,
     win_rate: ((winCount / tradeCount) * 100).toFixed(2),
     dominant_emotion: dominantEmotion,
-    journal_summary: "User traded " + tradeCount + " times." // Simple summary
+    journal_summary: "User traded " + tradeCount + " times."
   };
 
   const weeklyFeedback = getGptFeedback({
@@ -154,7 +166,7 @@ function analyzeAndSummarizeWeek() {
 // --- MODULE 4: NOTIFICATION SYSTEM ---
 
 function sendWhatsAppNotification(message) {
-  const userPhoneNumber = "6285322624048"; // Hardcoded phone number
+  const userPhoneNumber = "6285322624048";
   if (!userPhoneNumber) return;
 
   const payload = {
@@ -178,17 +190,18 @@ function sendWhatsAppNotification(message) {
 // --- UTILITIES ---
 
 function getPromptTemplate(promptType) {
-    // In a production app, this would fetch from a dedicated "Prompts" sheet.
     const prompts = {
         'EntryValidation': `Setup saya:\n- Pair: {{Pair}}\n- Arah: {{Arah}}\n- SL: {{SL}}\n- TP: {{TP}}\n- Mood: {{Mood}}\n- Setup: {{Setup}}\nTolong validasi dan beri saran. Jika saya override, tolong bantu refleksi.`,
         'EmotionalOverride': `Saya override entry. Mood saya {{Mood}}. Kenapa ini bisa terjadi dan bagaimana saya bisa memperbaiki mindset saya?`,
-        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`
+        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`,
+        'MasterTradeAnalyst': `Analisislah data pasar berikut untuk {{symbol}}:\nTeknikal: {{technicals}}\nBerita: {{news_headlines}}\nKalender: {{economic_calendar}}\nCOT: {{cot_report}}\nBerikan bias akhir, skor keyakinan (1-10), dan signal jika keyakinan > 7. Respond in JSON format.`,
+        'ForecastEngine': `Berdasarkan data {{symbol}}, buatlah prakiraan untuk 3 hari ke depan. Sertakan level entri potensial, SL, dan TP. Respond in JSON format.`
     };
     return prompts[promptType] || '';
 }
 
 function formatPrompt(template, data) {
-    return template.replace(/{{(\w+)}}/g, (placeholder, key) => data[key] || placeholder);
+    return template.replace(/{{(\w+)}}/g, (placeholder, key) => (typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key]) || placeholder);
 }
 
 function exportSheetToJson(sheetName) {
@@ -198,11 +211,11 @@ function exportSheetToJson(sheetName) {
   const jsonArray = rows.map(row =>
     headers.reduce((obj, header, i) => ({...obj, [header]: row[i]}), {})
   );
-  return JSON.stringify(jsonArray);
+  return jsonArray;
 }
 
 // --- TRIGGERS ---
-// Manually create time-based triggers in Apps Script UI to run these.
+
 function createWeeklyAnalysisTrigger() {
   ScriptApp.newTrigger('analyzeAndSummarizeWeek')
       .timeBased()
@@ -215,7 +228,7 @@ function createKillzoneReminderTrigger() {
     ScriptApp.newTrigger('sendKillzoneReminder')
       .timeBased()
       .everyDays(1)
-      .atHour(8) // e.g., 8 AM for London Killzone
+      .atHour(8)
       .create();
 }
 
@@ -225,27 +238,18 @@ function sendKillzoneReminder() {
 
 // --- MODULE 5: AUTONOMOUS SIGNAL GENERATION ---
 
-/**
- * Scans for trading opportunities based on user's trading plan.
- * This function is designed to be run on a time-based trigger (e.g., every hour).
- */
 function scanForTradeSignals() {
-  // 1. Get user's trading plan (e.g., preferred symbols) from Settings sheet
-  const tradingPlan = ss.getSheetByName("Trading Plan").getDataRange().getValues();
-  const symbolsToScan = tradingPlan.slice(1).map(row => row[0]); // Assumes symbol is in the first column
+  const tradingPlan = ss.getSheetByName("Settings").getDataRange().getValues();
+  const symbolsToScan = ["EURUSD", "GBPUSD", "XAUUSD"];
 
   symbolsToScan.forEach(symbol => {
-    // 2. Gather all market data
     const marketData = getComprehensiveMarketData(symbol);
-
-    // 3. Get analysis from AI
     const analysis = getGptFeedback({
       promptType: 'MasterTradeAnalyst',
       promptData: { ...marketData, symbol: symbol },
       referenceId: 'SIGNAL-' + symbol + '-' + new Date().getTime()
     });
 
-    // 4. If a high-confidence signal is generated, send it
     if (analysis.signal && analysis.signal.active && analysis.signal.confidence_score >= 7) {
       const signalMessage = `
         🚀 **New High-Conviction Trade Signal for ${symbol}** 🚀
@@ -258,30 +262,31 @@ function scanForTradeSignals() {
         - *Tech:* ${analysis.technical_thesis}
         - *Funda:* ${analysis.fundamental_thesis}
         - *COT:* ${analysis.positional_thesis}
-
-        (This is not financial advice. Always do your own research.)
       `;
-
-      // Send via WhatsApp
       sendWhatsAppNotification(signalMessage);
-
-      // We would also push this to a 'Signals' table/sheet to be displayed in the app
     }
   });
 }
 
-function logForecast(forecastData) {
+function generateAndLogForecast(data) {
+  const marketData = getComprehensiveMarketData(data.symbol);
+  const forecast = getGptFeedback({
+    promptType: 'ForecastEngine',
+    promptData: { ...marketData, symbol: data.symbol },
+    referenceId: 'FORECAST-' + data.symbol + '-' + new Date().getTime()
+  });
+
   const forecastSheet = ss.getSheetByName("Forecasts");
   forecastSheet.appendRow([
     new Date(),
-    forecastData.pair,
-    forecastData.timeframe,
-    forecastData.summary,
-    forecastData.entry,
-    forecastData.sl,
-    forecastData.tp,
-    forecastData.probability,
-    JSON.stringify(forecastData.gptAnalysis)
+    data.symbol,
+    "H4",
+    forecast.summary,
+    forecast.entry,
+    forecast.sl,
+    forecast.tp,
+    forecast.probability,
+    JSON.stringify(forecast)
   ]);
-  return "Forecast logged successfully.";
+  return forecast;
 }

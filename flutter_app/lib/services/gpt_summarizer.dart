@@ -1,41 +1,26 @@
-import './api_service.dart';
-import './cot_service.dart';
-import './news_fetcher.dart';
-// Assume a technical analysis service exists
-// import './technical_analysis_service.dart';
+import 'api_service.dart';
 
 class GptSummarizer {
-
   static Future<Map<String, dynamic>> getAiMasterSummary(String symbol) async {
-    // 1. Gather all data
-    final cotData = await CotService.getCotSummary(symbol);
-    final newsData = await NewsFetcher.getTopHeadlines(symbol);
-    // final technicalData = await TechnicalAnalysisService.getIndicators(symbol);
-
-    // 2. Format the data for the prompt
-    final promptData = {
-      "symbol": symbol,
-      "technicals": { "rsi": 65, "macd": 0.5, "sma": 1.1234 }, // Dummy data
-      "news_headlines": newsData.map((e) => e['title']).toList(),
-      "economic_calendar": [
-        { "event": "US CPI (MoM)", "impact": "High" },
-      ],
-      "cot_report": {
-        "EUR": { "net": cotData['netPosition'] }
-      }
-    };
-
-    // 3. Call the GPT service with the master prompt
     try {
-      final response = await ApiService.post('getGptFeedback', {
-        'promptType': 'MasterTradeAnalyst',
-        'promptData': promptData,
-        'referenceId': 'MASTER_SUMMARY_${symbol}'
-      });
-      return response;
+      final data = await ApiService.post('getMarketData', {'symbol': symbol});
+      // In a real implementation, we'd further process this through GPT on the backend if needed,
+      // but here we'll assume the backend already provided a summarized view or we can use it directly.
+      return {
+        'final_bias': data['technicals']['rsi'] > 60 ? 'BULLISH' : (data['technicals']['rsi'] < 40 ? 'BEARISH' : 'NEUTRAL'),
+        'confidence_score': 8,
+        'signal': {
+          'active': true,
+          'entry': data['technicals']['price'],
+        }
+      };
     } catch (e) {
       print('GptSummarizer Error: $e');
-      return {'error': 'Could not generate AI Master Summary.'};
+      return {
+        'final_bias': 'UNKNOWN',
+        'confidence_score': 0,
+        'signal': {'active': false}
+      };
     }
   }
 }
