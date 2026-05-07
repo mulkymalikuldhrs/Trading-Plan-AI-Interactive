@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:provider/provider.dart'; // Add this dependency
+import 'package:provider/provider.dart';
 import 'services/emotional_lockout_service.dart';
 import 'ui/pages/entry_page.dart';
 import 'ui/pages/journal_page.dart';
@@ -22,7 +22,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Dhaher Trading Plan AI',
-      theme: ThemeData.dark(),
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        useMaterial3: true,
+        colorSchemeSeed: Colors.blueGrey,
+      ),
       home: MainPage(),
     );
   }
@@ -63,7 +67,7 @@ class _MainPageState extends State<MainPage> {
             BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: Container(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withValues(alpha: 0.5),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +76,7 @@ class _MainPageState extends State<MainPage> {
                       SizedBox(height: 20),
                       Text(
                         "Emotional Lockout Activated",
-                        style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white),
                       ),
                       Text(
                         "You've had 3 consecutive negative events. It's time for a break.",
@@ -82,7 +86,6 @@ class _MainPageState extends State<MainPage> {
                        SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          // In a real app, this would be more sophisticated
                           lockoutService.resetOverrides();
                           lockoutService.recordWin(); // Reset loss counter
                         },
