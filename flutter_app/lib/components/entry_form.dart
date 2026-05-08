@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../services/gpt_service.dart';
-import './mood_selector.dart';
 import './animated_button.dart';
 import './trading_view_embed.dart';
 
@@ -10,7 +8,6 @@ class EntryForm extends StatefulWidget {
 }
 
 class _EntryFormState extends State<EntryForm> {
-  final _formKey = GlobalKey<FormState>();
   final _assetController = TextEditingController(text: "EURUSD");
   // ... other controllers
 
