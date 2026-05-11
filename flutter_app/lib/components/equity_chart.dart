@@ -1,89 +1,96 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
 
-class EquityCurveChart extends StatelessWidget {
-  // Dummy data - in a real app, this would come from the Google Sheet
-  final List<FlSpot> spots = const [
-    FlSpot(0, 10000),
-    FlSpot(1, 10100),
-    FlSpot(2, 10050),
-    FlSpot(3, 10250),
-    FlSpot(4, 10350),
-    FlSpot(5, 10300),
-    FlSpot(6, 10450),
-    FlSpot(7, 10600),
-  ];
+class EquityCurveChart extends StatefulWidget {
+  @override
+  _EquityCurveChartState createState() => _EquityCurveChartState();
+}
 
-  final List<int> winningTradesIndices = [1, 3, 4, 6, 7];
+class _EquityCurveChartState extends State<EquityCurveChart> {
+  List<FlSpot> spots = [FlSpot(0, 0)];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final List<dynamic> journal = await ApiService.exportSheet('Journal');
+      double balance = 10000; // Starting balance
+      List<FlSpot> newSpots = [FlSpot(0, balance)];
+
+      for (int i = 0; i < journal.length; i++) {
+        final double pnl = (journal[i]['PnL'] ?? 0).toDouble();
+        balance += pnl;
+        newSpots.add(FlSpot((i + 1).toDouble(), balance));
+      }
+
+      setState(() {
+        spots = newSpots;
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error loading equity data: $e");
+      setState(() => isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) return Center(child: CircularProgressIndicator());
+
     return AspectRatio(
       aspectRatio: 1.7,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: Colors.blueGrey[900]?.withOpacity(0.5),
+        color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: LineChart(
-            mainData(),
+            LineChartData(
+              gridData: FlGridData(show: true, drawVerticalLine: true),
+              titlesData: FlTitlesData(
+                show: true,
+                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 22,
+                    getTitlesWidget: (value, meta) => Text('T${value.toInt()}', style: TextStyle(color: Colors.white70, fontSize: 10)),
+                  ),
+                ),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 40,
+                    getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: TextStyle(color: Colors.white70, fontSize: 10)),
+                  ),
+                ),
+              ),
+              borderData: FlBorderData(show: true, border: Border.all(color: Colors.white10)),
+              lineBarsData: [
+                LineChartBarData(
+                  spots: spots,
+                  isCurved: true,
+                  gradient: LinearGradient(colors: [Colors.cyan, Colors.blueAccent]),
+                  barWidth: 4,
+                  isStrokeCapRound: true,
+                  belowBarData: BarAreaData(
+                    show: true,
+                    gradient: LinearGradient(colors: [Colors.cyan.withValues(alpha: 0.3), Colors.blueAccent.withValues(alpha: 0.1)]),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-
-  LineChartData mainData() {
-    return LineChartData(
-      gridData: FlGridData(
-        show: true,
-        drawVerticalLine: true,
-        getDrawingHorizontalLine: (value) {
-          return FlLine(color: Colors.white10, strokeWidth: 1);
-        },
-        getDrawingVerticalLine: (value) {
-          return FlLine(color: Colors.white10, strokeWidth: 1);
-        },
-      ),
-      titlesData: FlTitlesData(
-          show: true,
-          rightTitles: SideTitles(showTitles: false),
-          topTitles: SideTitles(showTitles: false),
-          bottomTitles: SideTitles(showTitles: true, reservedSize: 22, getTextStyles: (c,v) => const TextStyle(color: Colors.white70, fontSize: 12), getTitles: (value) => 'Day ${value.toInt() + 1}'),
-          leftTitles: SideTitles(showTitles: true, reservedSize: 40, getTextStyles: (c,v) => const TextStyle(color: Colors.white70, fontSize: 12))
-      ),
-      borderData: FlBorderData(show: true, border: Border.all(color: Colors.white10)),
-      minX: 0,
-      maxX: spots.length.toDouble() - 1,
-      minY: 9800, // Should be calculated dynamically
-      maxY: 10800, // Should be calculated dynamically
-      lineBarsData: [
-        LineChartBarData(
-          spots: spots,
-          isCurved: true,
-          colors: [Colors.cyan, Colors.blueAccent],
-          barWidth: 4,
-          isStrokeCapRound: true,
-          dotData: FlDotData(
-            show: true,
-            getDotPainter: (spot, percent, barData, index) {
-              // Glowing dots logic
-              if (winningTradesIndices.contains(index)) {
-                return FlDotCirclePainter(radius: 6, color: Colors.greenAccent, strokeWidth: 2, strokeColor: Colors.white);
-              } else {
-                return FlDotCirclePainter(radius: 6, color: Colors.redAccent, strokeWidth: 2, strokeColor: Colors.white);
-              }
-            },
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            colors: [Colors.cyan.withOpacity(0.3), Colors.blueAccent.withOpacity(0.1)],
-            gradientFrom: const Offset(0.5, 0),
-            gradientTo: const Offset(0.5, 1),
-          ),
-        ),
-      ],
     );
   }
 }
