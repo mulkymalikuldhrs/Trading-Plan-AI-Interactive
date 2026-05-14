@@ -1,32 +1,31 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'api_service.dart';
 
 class CotService {
-  // In a real app, this would point to a real COT data API
-  static const String _cotApiUrl = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=cftc-futures-and-options-combined-report&q=GOLD";
-
   static Future<Map<String, dynamic>> getCotSummary(String symbol) async {
     try {
-      // This is a simplified example. A real implementation would need
-      // to parse the complex data from the CFTC or a dedicated API.
-      final response = await http.get(Uri.parse(_cotApiUrl));
-      if (response.statusCode == 200) {
-        // Dummy parsing logic
+      final response = await ApiService.post('getMarketData', {'symbol': symbol});
+      final cot = response['cot_report'];
+
+      if (cot == null || cot['status'] == 'error') {
         return {
-          'institutionalLong': 75,
-          'retailShort': 68,
-          'netPosition': "+25,000 contracts",
-          'bias': 'Bullish',
-          'divergenceDetected': true,
+          'institutionalLong': 0,
+          'retailShort': 0,
+          'netPosition': 'Data unavailable',
+          'bias': 'Neutral',
+          'divergenceDetected': false,
         };
-      } else {
-        throw Exception('Failed to load COT data');
       }
+
+      return {
+        'institutionalLong': cot['nonCommercialLong'] ?? 0,
+        'retailShort': cot['nonCommercialShort'] ?? 0,
+        'netPosition': cot['netPosition']?.toString() ?? 'N/A',
+        'bias': cot['bias'] ?? 'Neutral',
+        'divergenceDetected': (cot['netPosition'] ?? 0).abs() > (cot['oi'] ?? 0) * 0.1, // Example dynamic logic
+      };
     } catch (e) {
       print('CotService Error: $e');
-      return {
-        'error': 'Could not fetch COT data.'
-      };
+      return {'error': 'Could not fetch COT data.'};
     }
   }
 }

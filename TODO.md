@@ -1,4 +1,4 @@
-# ✅ TODO - MULKY AI TRADING OS™
+# ✅ TODO - MULKY AI TRADING OS™ [v10.5.1-hardened]
 
 ## Phase 1: Foundation (Complete)
 - [x] Design Google Sheet Schema
@@ -7,22 +7,27 @@
 - [x] Build Flutter Project Skeleton
 - [x] Create WhatsApp Bot Server
 
-## Phase 2: UI & Feature Implementation
-- [ ] **Entry Form:** Connect UI to GPT validation and Sheet logging.
-- [ ] **Dashboard:** Implement `fl_chart` for live data visualization.
-- [ ] **Journal:** Add ability to edit and add detailed notes to trades.
-- [ ] **Risk Engine:** Build the UI for the risk calculator and soft lock system.
-- [ ] **Animations:** Integrate Lottie/Rive for emotional feedback animations.
-- [ ] **Dark Mode:** Implement a system-wide dark mode toggle.
+## Phase 2: UI & Feature Implementation (Complete)
+- [x] **Entry Form:** Connect UI to GPT validation and Sheet logging.
+- [x] **Dashboard:** Implement `fl_chart` for live data visualization.
+- [x] **Journal:** Add ability to edit and add detailed notes to trades.
+- [x] **Risk Engine:** Build the UI for the risk calculator and soft lock system.
+- [x] **Animations:** Integrate Lottie/Rive for emotional feedback animations.
+- [x] **Dark Mode:** Implement a system-wide dark mode toggle.
 
-## Phase 3: Automation & Intelligence
-- [ ] **Weekly Analyzer:** Finalize and test the automated weekly summary trigger.
-- [ ] **WhatsApp Notifications:** Implement all notification triggers (override, emotion, killzone).
-- [ ] **Emotional Lockout:** Implement the 3-strike violation lockout logic.
-- [ ] **Supabase Integration:** Add Supabase as a secondary, more robust data backup.
+## Phase 3: Automation & Intelligence (Complete)
+- [x] **Weekly Analyzer:** Finalize and test the automated weekly summary trigger.
+- [x] **WhatsApp Notifications:** Implement all notification triggers (override, emotion, killzone).
+- [x] **Emotional Lockout:** Implement the 3-strike violation lockout logic.
+- [x] **Supabase Integration:** Add Supabase as a secondary, more robust data backup.
 
-## Phase 4: Deployment & Polish
-- [ ] **Deploy:** Host Flutter Web on Vercel/Firebase.
-- [ ] **Host Bot:** Deploy WhatsApp bot to a persistent server (e.g., Render).
-- [ ] **Testing:** Conduct end-to-end testing of all features.
-- [ ] **User Onboarding:** Create a simple onboarding flow for new users.
+## Phase 4: Deployment & Polish (Complete)
+- [x] **Deploy:** Host Flutter Web on Vercel/Firebase.
+- [x] **Host Bot:** Deploy WhatsApp bot to a persistent server.
+- [x] **Testing:** Conduct end-to-end testing of all features.
+- [x] **User Onboarding:** Create a simple onboarding flow for new users.
+
+## Phase 5: Hardening & Final Audit (Complete)
+- [x] **Audit:** Conduct system-wide audit for mocks and placeholders.
+- [x] **Real Data:** Integrate real COT data streams.
+- [x] **Dependency Refresh:** Update all system dependencies.
