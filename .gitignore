@@ -1,0 +1,15 @@
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+local.properties
+*.lock
+__pycache__/
+*.pyc
+.env
+node_modules/
+*.log
+analysis_results.txt
+analysis_results_2.txt
