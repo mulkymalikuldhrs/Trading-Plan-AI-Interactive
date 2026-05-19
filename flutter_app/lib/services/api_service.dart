@@ -3,47 +3,62 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   // IMPORTANT: REPLACE WITH YOUR ACTUAL DEPLOYED GOOGLE APPS SCRIPT URL
-  static const String _googleAppsScriptUrl = "AQ.Ab8RN6Lpynl-lou0SdHQmWWIMuSXzHZmHzZ0Gfvx8snhJsehUA";
+  static const String _googleAppsScriptUrl = String.fromEnvironment('GAS_URL', defaultValue: "https://script.google.com/macros/s/AKfycbz_REPLACE_WITH_REAL_ID/exec");
+  static const String _apiKey = String.fromEnvironment('API_KEY', defaultValue: "");
 
   // Reusable POST call handler
   static Future<Map<String, dynamic>> post(String action, Map<String, dynamic> data) async {
-    if (_googleAppsScriptUrl.contains("YOUR_DEPLOYMENT_ID")) {
-      // This is a dummy response for when the URL is not set.
-      // In a real app, this would be a proper error.
-      print("DUMMY MODE: Google Apps Script URL not set.");
-      if (action == 'getGptFeedback') {
-        return {
-          "validation_score": 5,
-          "is_valid_setup": false,
-          "rule_violations": ["Dummy violation"],
-          "emotional_warning": "This is a dummy warning.",
-          "tough_love_feedback": "This is dummy feedback.",
-          "detailed_explanation": "This is a dummy explanation because the API URL is not set."
-        };
-      }
-      return {'status': 'success', 'data': 'Dummy response'};
+    if (_googleAppsScriptUrl.contains("REPLACE_WITH_REAL_ID")) {
+      print("CRITICAL: Google Apps Script URL not set.");
+      throw Exception('Backend URL not configured.');
     }
 
     try {
+      // Encapsulate API_KEY within the data nested object of the JSON request body
+      final payload = {
+        'action': action,
+        'data': {
+          ...data,
+          'apiKey': _apiKey,
+        }
+      };
+
       final response = await http.post(
         Uri.parse(_googleAppsScriptUrl),
         headers: { 'Content-Type': 'application/json' },
-        body: jsonEncode({ 'action': action, 'data': data }),
+        body: jsonEncode(payload),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 302) { // 302 is a common redirect status from GAS
-        final responseBody = jsonDecode(response.body);
-        if (responseBody['status'] == 'success') {
-          return responseBody['data'];
-        } else {
-          throw Exception('API Error: ${responseBody['message']}');
+      // Handle redirects (status code 302) which are common in Google Apps Script
+      if (response.statusCode == 302) {
+        final newUrl = response.headers['location'];
+        if (newUrl != null) {
+          final redirectedResponse = await http.post(
+            Uri.parse(newUrl),
+            headers: { 'Content-Type': 'application/json' },
+            body: jsonEncode(payload),
+          );
+          return _handleResponse(redirectedResponse);
         }
-      } else {
-        throw Exception('Failed to connect to the server. Status code: ${response.statusCode}');
       }
+
+      return _handleResponse(response);
     } catch (e) {
       print('ApiService Error: $e');
       throw Exception('An error occurred while communicating with the server.');
+    }
+  }
+
+  static Map<String, dynamic> _handleResponse(http.Response response) {
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      if (responseBody['status'] == 'success') {
+        return responseBody['data'];
+      } else {
+        throw Exception('API Error: ${responseBody['message']}');
+      }
+    } else {
+      throw Exception('Failed to connect to the server. Status code: ${response.statusCode}');
     }
   }
 }

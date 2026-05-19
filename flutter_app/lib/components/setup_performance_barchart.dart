@@ -14,7 +14,7 @@ class SetupPerformanceBarChart extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: BarChart(
             mainBarData(),
-            swapAnimationDuration: Duration(milliseconds: 250),
+            swapAnimationDuration: const Duration(milliseconds: 250),
           ),
         ),
       ),
@@ -28,22 +28,29 @@ class SetupPerformanceBarChart extends StatelessWidget {
       barTouchData: BarTouchData(enabled: false),
       titlesData: FlTitlesData(
         show: true,
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (context, value) => const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 14),
-          margin: 16,
-          getTitles: (double value) {
-            switch (value.toInt()) {
-              case 0: return 'FVG';
-              case 1: return 'BOS';
-              case 2: return 'CHoCH';
-              default: return '';
-            }
-          },
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (double value, TitleMeta meta) {
+              const style = TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 14);
+              String text;
+              switch (value.toInt()) {
+                case 0: text = 'FVG'; break;
+                case 1: text = 'BOS'; break;
+                case 2: text = 'CHoCH'; break;
+                default: text = ''; break;
+              }
+              return Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: Text(text, style: style),
+              );
+            },
+            reservedSize: 38,
+          ),
         ),
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        rightTitles: SideTitles(showTitles: false),
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       borderData: FlBorderData(show: false),
       barGroups: showingGroups(),
@@ -62,8 +69,12 @@ class SetupPerformanceBarChart extends StatelessWidget {
       x: x,
       barRods: [
         BarChartRodData(
-          y: y,
-          colors: [barColor.withOpacity(0.6), barColor],
+          toY: y,
+          gradient: LinearGradient(
+            colors: [barColor.withOpacity(0.6), barColor],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
           width: 22,
           borderRadius: BorderRadius.circular(4),
         ),

@@ -45,6 +45,15 @@ function doPost(e) {
       case "exportToJson":
         result = exportSheetToJson(data.sheetName);
         break;
+      case "getAiMasterSummary":
+        result = getAiMasterSummary(data);
+        break;
+      case "getMarketData":
+        result = getMarketData(data);
+        break;
+      case "getForecast":
+        result = getForecast(data);
+        break;
       default:
         throw new Error("Invalid action specified.");
     }
@@ -175,6 +184,67 @@ function sendWhatsAppNotification(message) {
   }
 }
 
+/**
+ * Master function for high-level AI analysis.
+ */
+function getAiMasterSummary(data) {
+  const marketData = getComprehensiveMarketData(data.symbol);
+  const promptData = {
+    ...marketData,
+    symbol: data.symbol,
+    technicals: JSON.stringify(marketData.technicals),
+    news_headlines: marketData.news_headlines.join(", "),
+    economic_calendar: JSON.stringify(marketData.economic_calendar),
+    cot_report: JSON.stringify(marketData.cot_report)
+  };
+
+  const gptResponse = getGptFeedback({
+    promptType: 'MasterTradeAnalyst',
+    promptData: promptData,
+    referenceId: 'SUMMARY-' + data.symbol + '-' + new Date().getTime()
+  });
+
+  // Include raw COT data for frontend visualization
+  gptResponse.cot_raw = marketData.cot_report;
+
+  return gptResponse;
+}
+
+function getMarketData(data) {
+  return getComprehensiveMarketData(data.symbol);
+}
+
+function getForecast(data) {
+  const marketData = getComprehensiveMarketData(data.pair);
+  const forecast = getGptFeedback({
+    promptType: 'ForecastEngine',
+    promptData: {
+      ...marketData,
+      pair: data.pair,
+      timeframe: data.timeframe,
+      days: data.days,
+      technicals: JSON.stringify(marketData.technicals),
+      news_headlines: marketData.news_headlines.join(", "),
+      economic_calendar: JSON.stringify(marketData.economic_calendar),
+      cot_report: JSON.stringify(marketData.cot_report)
+    },
+    referenceId: 'FORECAST-' + data.pair + '-' + new Date().getTime()
+  });
+
+  logForecast({
+    pair: data.pair,
+    timeframe: data.timeframe,
+    summary: forecast.summary,
+    entry: forecast.entry_zone,
+    sl: forecast.stop_loss,
+    tp: forecast.take_profit,
+    probability: forecast.probability,
+    gptAnalysis: forecast
+  });
+
+  return forecast;
+}
+
 // --- UTILITIES ---
 
 function getPromptTemplate(promptType) {
@@ -182,7 +252,9 @@ function getPromptTemplate(promptType) {
     const prompts = {
         'EntryValidation': `Setup saya:\n- Pair: {{Pair}}\n- Arah: {{Arah}}\n- SL: {{SL}}\n- TP: {{TP}}\n- Mood: {{Mood}}\n- Setup: {{Setup}}\nTolong validasi dan beri saran. Jika saya override, tolong bantu refleksi.`,
         'EmotionalOverride': `Saya override entry. Mood saya {{Mood}}. Kenapa ini bisa terjadi dan bagaimana saya bisa memperbaiki mindset saya?`,
-        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`
+        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`,
+        'MasterTradeAnalyst': `Analyze {{symbol}} using:\nTechnicals: {{technicals}}\nNews: {{news_headlines}}\nCalendar: {{economic_calendar}}\nCOT: {{cot_report}}\nProvide a final bias, confidence score (1-10), and a potential signal.`,
+        'ForecastEngine': `Predict {{pair}} for the next {{days}} days on {{timeframe}}.\nData: {{technicals}}, {{news_headlines}}, {{economic_calendar}}, {{cot_report}}.\nReturn bias, probability%, entry zone, confirmation, SL, TP, and summary.`
     };
     return prompts[promptType] || '';
 }

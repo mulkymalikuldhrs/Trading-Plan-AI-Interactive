@@ -1,27 +1,30 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import './api_service.dart';
 
 class CotService {
-  // In a real app, this would point to a real COT data API
-  static const String _cotApiUrl = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=cftc-futures-and-options-combined-report&q=GOLD";
-
   static Future<Map<String, dynamic>> getCotSummary(String symbol) async {
     try {
-      // This is a simplified example. A real implementation would need
-      // to parse the complex data from the CFTC or a dedicated API.
-      final response = await http.get(Uri.parse(_cotApiUrl));
-      if (response.statusCode == 200) {
-        // Dummy parsing logic
-        return {
-          'institutionalLong': 75,
-          'retailShort': 68,
-          'netPosition': "+25,000 contracts",
-          'bias': 'Bullish',
-          'divergenceDetected': true,
-        };
-      } else {
-        throw Exception('Failed to load COT data');
+      // Delegate to GAS getMarketData action
+      final marketData = await ApiService.post('getMarketData', {'symbol': symbol});
+      if (marketData != null && marketData['cot_report'] != null) {
+        // Find the currency part of the symbol (e.g., 'EUR' from 'EUR/USD')
+        String baseCurrency = symbol.split('/')[0].split('-')[0].toUpperCase();
+        if (symbol.contains('GOLD') || symbol.contains('XAU')) baseCurrency = 'USD'; // Gold is often compared to USD index or specific gold COT
+
+        final cotReport = marketData['cot_report'];
+        final currencyData = cotReport[baseCurrency];
+
+        if (currencyData != null) {
+          return {
+            'institutionalLong': currencyData['nonCommercialLong'] ?? 0,
+            'institutionalShort': currencyData['nonCommercialShort'] ?? 0,
+            'netPosition': currencyData['net'] ?? 0,
+            'label': currencyData['label'] ?? baseCurrency,
+            'bias': (currencyData['net'] ?? 0) > 0 ? 'Bullish' : 'Bearish',
+            'divergenceDetected': false, // Logic could be added here
+          };
+        }
       }
+      throw Exception('Failed to parse COT data from backend');
     } catch (e) {
       print('CotService Error: $e');
       return {

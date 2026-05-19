@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../services/api_service.dart';
 import '../../models/trade.dart';
@@ -17,8 +18,10 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<List<Trade>> _fetchTrades() async {
-    final List<dynamic> tradeData = await ApiService.exportSheet('Journal');
-    return tradeData.map((json) => Trade.fromJson(json)).toList();
+    final dynamic tradeData = await ApiService.post('exportToJson', {'sheetName': 'Journal'});
+    // GAS might return a JSON string if not parsed correctly by ApiService
+    final List<dynamic> list = tradeData is String ? jsonDecode(tradeData) : tradeData;
+    return list.map((json) => Trade.fromJson(json)).toList();
   }
 
   @override

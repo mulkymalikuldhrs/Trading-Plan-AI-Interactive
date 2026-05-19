@@ -23,14 +23,17 @@ class _AiChatboxState extends State<AiChatbox> {
       _controller.clear();
 
       try {
-        final response = await ApiService.getGptFeedback(
-          'ReflectiveQuestion', // This would be dynamic based on user input
-          'chat-ref',
-          {'last_action': userInput},
+        final response = await ApiService.post(
+          'getGptFeedback',
+          {
+            'promptType': 'ReflectiveQuestion',
+            'referenceId': 'chat-ref',
+            'promptData': {'last_action': userInput},
+          },
         );
         setState(() {
           _messages.removeLast();
-          _messages.add({'message': response['root_cause_question'], 'isUser': false});
+          _messages.add({'message': response['root_cause_question'] ?? 'What are your thoughts on this?', 'isUser': false});
         });
       } catch (e) {
         setState(() {

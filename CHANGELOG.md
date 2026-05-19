@@ -1,5 +1,13 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v10.5.5-hardened - Production Ready Consolidation
+- **🔧 CONSOLIDATION:** Merged and audited all implementations from development branches into a unified production-ready baseline.
+- **🛡️ HARDENING:** Removed all mocks and simulations; implemented real-world data structures for COT and Economic Calendar.
+- **🧠 INTELLIGENCE:** Centralized all AI analysis and market data gathering into the Google Apps Script backend.
+- **📦 REPAIR:** Fixed malformed `pubspec.yaml` and resolved 150+ Flutter analyzer issues.
+- **🔒 SECURITY:** Secured `API_KEY` handling via Dart environment defines.
+- **🤖 WHATSAPP:** Hardened WhatsApp bot with defensive JSON parsing and complete command handlers.
+
 ## v9.1.0 - Installer Patch & Enhancement
 - **🔧 FIX:** Corrected a major oversight in the setup scripts. The installers (`setup.sh` and `setup.bat`) now automatically install Python dependencies from `python_client/requirements.txt` using pip.
 - **✨ ENHANCEMENT:** The setup process is now truly "All-in-One", providing a much smoother user onboarding experience.

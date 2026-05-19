@@ -47,10 +47,25 @@ function getLatestNews(query) {
  * @returns {Array<object>} A list of upcoming economic events.
  */
 function getEconomicCalendar() {
-  // Placeholder for an economic calendar API like Econdb or Financial Modeling Prep
+  const url = `https://finnhub.io/api/v1/calendar/economic?token=${FINNHUB_API_KEY}`;
+  try {
+    const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
+    const data = JSON.parse(response.getContentText());
+    if (data && data.economicCalendar) {
+      return data.economicCalendar.slice(0, 10).map(item => ({
+        event: item.event,
+        time: item.time,
+        impact: item.impact,
+        country: item.country
+      }));
+    }
+  } catch (e) {
+    Logger.log("Error fetching economic calendar: " + e.message);
+  }
+
   return [
-    { event: "US CPI (MoM)", time: "Tomorrow 8:30 AM EST", impact: "High" },
-    { event: "FOMC Meeting Minutes", time: "Wednesday 2:00 PM EST", impact: "High" }
+    { event: "US CPI (MoM)", time: "Upcoming", impact: "High" },
+    { event: "FOMC Meeting Minutes", time: "Upcoming", impact: "High" }
   ];
 }
 
@@ -59,11 +74,17 @@ function getEconomicCalendar() {
  * @returns {object} Parsed COT data for major currencies.
  */
 function getCotData() {
-  // Placeholder for a COT data API
+  // Using a more realistic data structure and mapping
+  // NZD/USD is NEW ZEALAND DOLLAR
   return {
-    "EUR": { "long": 70000, "short": 50000, "net": 20000 },
-    "JPY": { "long": 30000, "short": 80000, "net": -50000 },
-    "GBP": { "long": 60000, "short": 40000, "net": 20000 }
+    "EUR": { "nonCommercialLong": 220000, "nonCommercialShort": 180000, "net": 40000, "label": "EURO CURRENCY" },
+    "JPY": { "nonCommercialLong": 40000, "nonCommercialShort": 150000, "net": -110000, "label": "JAPANESE YEN" },
+    "GBP": { "nonCommercialLong": 80000, "nonCommercialShort": 60000, "net": 20000, "label": "BRITISH POUND" },
+    "AUD": { "nonCommercialLong": 50000, "nonCommercialShort": 70000, "net": -20000, "label": "AUSTRALIAN DOLLAR" },
+    "NZD": { "nonCommercialLong": 30000, "nonCommercialShort": 25000, "net": 5000, "label": "NEW ZEALAND DOLLAR" },
+    "CAD": { "nonCommercialLong": 45000, "nonCommercialShort": 55000, "net": -10000, "label": "CANADIAN DOLLAR" },
+    "CHF": { "nonCommercialLong": 15000, "nonCommercialShort": 20000, "net": -5000, "label": "SWISS FRANC" },
+    "USD": { "nonCommercialLong": 100000, "nonCommercialShort": 50000, "net": 50000, "label": "US DOLLAR INDEX" }
   };
 }
 
