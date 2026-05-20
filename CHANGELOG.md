@@ -1,5 +1,16 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v10.5.7-hardened - Continuous Integration & Production Upgrade
+- **⚙️ CI/CD:** Upgraded project to v10.5.7-hardened with consolidated dependencies.
+- **📦 DEPENDENCIES:** Refreshed and verified Node.js and Flutter package versions.
+- **🔍 VERIFICATION:** Conducted full system audit ensuring production readiness across all modules.
+
+## v10.5.6-hardened - Consolidated Production-Ready Baseline
+- **🏗️ CONSOLIDATION:** Audited and merged implementations from all development branches into a unified production-ready baseline.
+- **🛡️ HARDENING:** Removed all mocks and simulations, ensuring real data flow from Google Apps Script to the Flutter frontend and WhatsApp bot.
+- **📈 ENHANCEMENT:** Refactored all chart components to use real-time data streams.
+- **📲 WHATSAPP:** Integrated an Express server for proactive notifications.
+
 ## v9.1.0 - Installer Patch & Enhancement
 - **🔧 FIX:** Corrected a major oversight in the setup scripts. The installers (`setup.sh` and `setup.bat`) now automatically install Python dependencies from `python_client/requirements.txt` using pip.
 - **✨ ENHANCEMENT:** The setup process is now truly "All-in-One", providing a much smoother user onboarding experience.

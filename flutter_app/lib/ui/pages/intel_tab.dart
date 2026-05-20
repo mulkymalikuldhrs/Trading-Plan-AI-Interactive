@@ -120,14 +120,14 @@ class _IntelTabState extends State<IntelTab> {
   Widget _buildIntelCard({required String title, required Widget child}) {
     return Card(
       elevation: 2,
-      color: Colors.blueGrey[900]?.withOpacity(0.5),
+      color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 12),
             child,
           ],
