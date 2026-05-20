@@ -71,7 +71,7 @@ class _ForecastTabState extends State<ForecastTab> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          ForecastChartWidget(), // This would take real data
+          ForecastChart(), // Use the correct component name
           SizedBox(height: 24),
           _buildSummaryCard(),
         ],
@@ -87,7 +87,7 @@ class _ForecastTabState extends State<ForecastTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("AI Forecast Summary", style: Theme.of(context).textTheme.headline6),
+            Text("AI Forecast Summary", style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 8),
             Text("Bias: ${forecast['bias']}"),
             Text("Entry Zone: ${forecast['entry_zone']}"),

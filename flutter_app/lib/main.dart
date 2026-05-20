@@ -72,7 +72,7 @@ class _MainPageState extends State<MainPage> {
                       SizedBox(height: 20),
                       Text(
                         "Emotional Lockout Activated",
-                        style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white),
+                        style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white),
                       ),
                       Text(
                         "You've had 3 consecutive negative events. It's time for a break.",
