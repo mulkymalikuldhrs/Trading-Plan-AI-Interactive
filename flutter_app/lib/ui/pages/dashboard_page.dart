@@ -3,6 +3,7 @@ import '../responsive.dart';
 import '../../components/equity_chart.dart';
 import '../../components/winrate_pie_chart.dart';
 import '../../components/setup_performance_barchart.dart';
+import '../../components/consistency_streak_calendar.dart';
 
 class DashboardPage extends StatelessWidget {
   @override
@@ -33,13 +34,15 @@ class DashboardMobileLayout extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text("Equity Curve", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
+          Text("Equity Curve", style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white)),
           SizedBox(height: 16),
           EquityCurveChart(),
           SizedBox(height: 24),
+          ConsistencyStreakCalendar(),
+          SizedBox(height: 24),
           WinRatePieChart(),
           SizedBox(height: 24),
-          Text("Setup Performance", style: Theme.of(context).textTheme.headline5?.copyWith(color: Colors.white)),
+          Text("Setup Performance", style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white)),
           SizedBox(height: 16),
           SetupPerformanceBarChart(),
         ],
@@ -55,9 +58,11 @@ class DashboardTabletLayout extends StatelessWidget {
       padding: EdgeInsets.all(24),
       child: Column(
         children: [
-          Text("Equity Curve", style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
+          Text("Equity Curve", style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white)),
           SizedBox(height: 16),
           EquityCurveChart(),
+          SizedBox(height: 24),
+          ConsistencyStreakCalendar(),
           SizedBox(height: 24),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,9 +90,11 @@ class DashboardDesktopLayout extends StatelessWidget {
             flex: 3,
             child: Column(
               children: [
-                Text("Equity Curve", style: Theme.of(context).textTheme.headline4?.copyWith(color: Colors.white)),
+                Text("Equity Curve", style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white)),
                 SizedBox(height: 16),
                 Expanded(child: EquityCurveChart()),
+                SizedBox(height: 24),
+                ConsistencyStreakCalendar(),
               ],
             ),
           ),

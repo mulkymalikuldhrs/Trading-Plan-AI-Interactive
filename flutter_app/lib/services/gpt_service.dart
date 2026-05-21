@@ -1,18 +1,24 @@
-import 'api_service.dart';
+import './api_service.dart';
 
 class GptService {
-  static Future<Map<String, dynamic>> getValidation(Map<String, dynamic> tradeData) {
-    return ApiService.getGptFeedback('EntryValidation', 'trade-validation', tradeData);
+  static Future<Map<String, dynamic>> getGptFeedback(Map<String, dynamic> data) async {
+    final response = await ApiService.post('getGptFeedback', data);
+    return response;
   }
 
-  static Future<Map<String, dynamic>> getReflection(String mood, String lastAction) {
-    return ApiService.getGptFeedback('EmotionalOverride', 'reflection', {
-      'Mood': mood,
-      'last_action': lastAction,
+  static Future<Map<String, dynamic>> validateEntry(Map<String, dynamic> entryData) async {
+    return await getGptFeedback({
+      'promptType': 'EntryValidation',
+      'promptData': entryData,
+      'referenceId': 'ENTRY_${DateTime.now().millisecondsSinceEpoch}'
     });
   }
 
-  static Future<Map<String, dynamic>> getWeeklySummary(Map<String, dynamic> summaryData) {
-    return ApiService.getGptFeedback('WeeklySummary', 'weekly-summary', summaryData);
+  static Future<Map<String, dynamic>> getEmotionalReflection(String mood) async {
+    return await getGptFeedback({
+      'promptType': 'EmotionalOverride',
+      'promptData': {'Mood': mood},
+      'referenceId': 'EMOTION_${DateTime.now().millisecondsSinceEpoch}'
+    });
   }
 }
