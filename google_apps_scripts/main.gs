@@ -7,9 +7,9 @@
 
 // --- SPREADSHEET & API CONFIGURATION ---
 const SPREADSHEET_ID = "1I8uVUlquRPwIc_cMKr-toHZ9qHW38uDom4TYdKexaoE";
-const LLM7_API_KEY = "YOUR_LLM7_API_KEY";
+const LLM7_API_KEY = PropertiesService.getScriptProperties().getProperty('LLM7_API_KEY');
 const LLM7_API_URL = "https://api.llm7.io/v1/chat/completions";
-const WHATSAPP_API_URL = "YOUR_WHATSAPP_WEBJS_SERVER_URL/send"; // URL to your running WhatsApp bot server
+const WHATSAPP_API_URL = PropertiesService.getScriptProperties().getProperty('WHATSAPP_BOT_URL') || "http://localhost:3000/send";
 
 // --- SHEET HANDLERS ---
 const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -26,6 +26,13 @@ const settingsSheet = ss.getSheetByName("Settings");
 function doPost(e) {
   const contents = JSON.parse(e.postData.contents);
   const { action, data } = contents;
+
+  // Security check
+  const APP_API_KEY = PropertiesService.getScriptProperties().getProperty('APP_API_KEY');
+  if (data.apiKey !== APP_API_KEY) {
+     return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": "Unauthorized access." }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 
   try {
     let result;
@@ -45,6 +52,15 @@ function doPost(e) {
       case "exportToJson":
         result = exportSheetToJson(data.sheetName);
         break;
+      case "getMarketData":
+        result = getComprehensiveMarketData(data.symbol);
+        break;
+      case "getAiMasterSummary":
+        result = getAiMasterSummary(data.symbol);
+        break;
+      case "getForecast":
+        result = getForecast(data);
+        break;
       default:
         throw new Error("Invalid action specified.");
     }
@@ -62,7 +78,7 @@ function doPost(e) {
 function logTrade(data) {
   journalSheet.appendRow([
     "TRADE-" + new Date().getTime(), new Date(), data.pair, data.direction, data.entry, data.sl, data.tp, data.rrr,
-    data.setup, data.mood, data.ai_status, data.result, data.emotion_after, data.gpt_comment
+    data.setup, data.mood, data.ai_status, data.result, data.emotion_after, data.gpt_comment, data.pnl
   ]);
   return "Trade logged.";
 }
@@ -114,7 +130,6 @@ function analyzeAndSummarizeWeek() {
   const journalData = journalSheet.getDataRange().getValues();
   const headers = journalData.shift();
 
-  // Simple analysis (can be expanded)
   let winCount = 0;
   let tradeCount = journalData.length;
   let emotions = {};
@@ -131,7 +146,7 @@ function analyzeAndSummarizeWeek() {
     total_trades: tradeCount,
     win_rate: ((winCount / tradeCount) * 100).toFixed(2),
     dominant_emotion: dominantEmotion,
-    journal_summary: "User traded " + tradeCount + " times." // Simple summary
+    journal_summary: "User traded " + tradeCount + " times."
   };
 
   const weeklyFeedback = getGptFeedback({
@@ -154,7 +169,7 @@ function analyzeAndSummarizeWeek() {
 // --- MODULE 4: NOTIFICATION SYSTEM ---
 
 function sendWhatsAppNotification(message) {
-  const userPhoneNumber = "6285322624048"; // Hardcoded phone number
+  const userPhoneNumber = PropertiesService.getScriptProperties().getProperty('USER_PHONE_NUMBER') || "6285322624048";
   if (!userPhoneNumber) return;
 
   const payload = {
@@ -178,17 +193,18 @@ function sendWhatsAppNotification(message) {
 // --- UTILITIES ---
 
 function getPromptTemplate(promptType) {
-    // In a production app, this would fetch from a dedicated "Prompts" sheet.
     const prompts = {
         'EntryValidation': `Setup saya:\n- Pair: {{Pair}}\n- Arah: {{Arah}}\n- SL: {{SL}}\n- TP: {{TP}}\n- Mood: {{Mood}}\n- Setup: {{Setup}}\nTolong validasi dan beri saran. Jika saya override, tolong bantu refleksi.`,
         'EmotionalOverride': `Saya override entry. Mood saya {{Mood}}. Kenapa ini bisa terjadi dan bagaimana saya bisa memperbaiki mindset saya?`,
-        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`
+        'WeeklySummary': `Berikut data jurnal saya minggu ini:\n- Total Trades: {{total_trades}}\n- Win Rate: {{win_rate}}%\n- Emosi Dominan: {{dominant_emotion}}\n- Ringkasan: {{journal_summary}}\nTolong beri analisa teknikal, emosi dominan, motivasi, dan saran peningkatan minggu depan.`,
+        'MasterTradeAnalyst': `Analisa pasar lengkap untuk {{symbol}}:\nTechnicals: {{technicals}}\nNews: {{news_headlines}}\nCalendar: {{economic_calendar}}\nCOT: {{cot_report}}\nTolong berikan bias akhir, skor keyakinan (1-10), dan signal entry jika ada (JSON format).`,
+        'Forecast': `Berikan prakiraan {{days}} hari untuk {{pair}} pada timeframe {{timeframe}}. Gunakan data pasar saat ini. Output JSON: bias, entry_zone, confirmation, stop_loss, take_profit, probability, is_tradeable, chart_spots (list of [x, y] coordinates for a line chart).`
     };
     return prompts[promptType] || '';
 }
 
 function formatPrompt(template, data) {
-    return template.replace(/{{(\w+)}}/g, (placeholder, key) => data[key] || placeholder);
+    return template.replace(/{{(\w+)}}/g, (placeholder, key) => data[key] ? (typeof data[key] === 'object' ? JSON.stringify(data[key]) : data[key]) : placeholder);
 }
 
 function exportSheetToJson(sheetName) {
@@ -198,55 +214,42 @@ function exportSheetToJson(sheetName) {
   const jsonArray = rows.map(row =>
     headers.reduce((obj, header, i) => ({...obj, [header]: row[i]}), {})
   );
-  return JSON.stringify(jsonArray);
-}
-
-// --- TRIGGERS ---
-// Manually create time-based triggers in Apps Script UI to run these.
-function createWeeklyAnalysisTrigger() {
-  ScriptApp.newTrigger('analyzeAndSummarizeWeek')
-      .timeBased()
-      .onWeekDay(ScriptApp.WeekDay.FRIDAY)
-      .atHour(18)
-      .create();
-}
-
-function createKillzoneReminderTrigger() {
-    ScriptApp.newTrigger('sendKillzoneReminder')
-      .timeBased()
-      .everyDays(1)
-      .atHour(8) // e.g., 8 AM for London Killzone
-      .create();
-}
-
-function sendKillzoneReminder() {
-    sendWhatsAppNotification("London Killzone is approaching. Prepare your mind and your charts. Stay disciplined.");
+  return jsonArray; // Return as object, doPost handles JSON stringify
 }
 
 // --- MODULE 5: AUTONOMOUS SIGNAL GENERATION ---
 
-/**
- * Scans for trading opportunities based on user's trading plan.
- * This function is designed to be run on a time-based trigger (e.g., every hour).
- */
+function getAiMasterSummary(symbol) {
+  const marketData = getComprehensiveMarketData(symbol);
+  const analysis = getGptFeedback({
+    promptType: 'MasterTradeAnalyst',
+    promptData: { ...marketData, symbol: symbol },
+    referenceId: 'MASTER-SUMMARY-' + symbol + '-' + new Date().getTime()
+  });
+  return {
+    ...analysis,
+    market_data: marketData // Include raw data for the frontend to display
+  };
+}
+
+function getForecast(data) {
+  const marketData = getComprehensiveMarketData(data.pair);
+  return getGptFeedback({
+    promptType: 'Forecast',
+    promptData: { ...marketData, ...data },
+    referenceId: 'FORECAST-' + data.pair + '-' + new Date().getTime()
+  });
+}
+
 function scanForTradeSignals() {
-  // 1. Get user's trading plan (e.g., preferred symbols) from Settings sheet
-  const tradingPlan = ss.getSheetByName("Trading Plan").getDataRange().getValues();
-  const symbolsToScan = tradingPlan.slice(1).map(row => row[0]); // Assumes symbol is in the first column
+  const tradingPlanSheet = ss.getSheetByName("Trading Plan");
+  if (!tradingPlanSheet) return;
+  const symbolsToScan = tradingPlanSheet.getDataRange().getValues().slice(1).map(row => row[0]);
 
   symbolsToScan.forEach(symbol => {
-    // 2. Gather all market data
-    const marketData = getComprehensiveMarketData(symbol);
+    const analysis = getAiMasterSummary(symbol);
 
-    // 3. Get analysis from AI
-    const analysis = getGptFeedback({
-      promptType: 'MasterTradeAnalyst',
-      promptData: { ...marketData, symbol: symbol },
-      referenceId: 'SIGNAL-' + symbol + '-' + new Date().getTime()
-    });
-
-    // 4. If a high-confidence signal is generated, send it
-    if (analysis.signal && analysis.signal.active && analysis.signal.confidence_score >= 7) {
+    if (analysis.signal && analysis.signal.active && analysis.signal.confidence_score >= 8) {
       const signalMessage = `
         🚀 **New High-Conviction Trade Signal for ${symbol}** 🚀
         **Bias:** ${analysis.final_bias} (Confidence: ${analysis.confidence_score}/10)
@@ -258,30 +261,8 @@ function scanForTradeSignals() {
         - *Tech:* ${analysis.technical_thesis}
         - *Funda:* ${analysis.fundamental_thesis}
         - *COT:* ${analysis.positional_thesis}
-
-        (This is not financial advice. Always do your own research.)
       `;
-
-      // Send via WhatsApp
       sendWhatsAppNotification(signalMessage);
-
-      // We would also push this to a 'Signals' table/sheet to be displayed in the app
     }
   });
-}
-
-function logForecast(forecastData) {
-  const forecastSheet = ss.getSheetByName("Forecasts");
-  forecastSheet.appendRow([
-    new Date(),
-    forecastData.pair,
-    forecastData.timeframe,
-    forecastData.summary,
-    forecastData.entry,
-    forecastData.sl,
-    forecastData.tp,
-    forecastData.probability,
-    JSON.stringify(forecastData.gptAnalysis)
-  ]);
-  return "Forecast logged successfully.";
 }
