@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import 'dart:convert';
 
-// This is a simplified version. A real implementation would use a package
-// like `flutter_heatmap_calendar` or build a custom grid.
-class ConsistencyStreakCalendar extends StatelessWidget {
-  // Dummy data: keys are day index (0-364), values are "intensity" (0-4)
-  final Map<int, int> dataset = {
-    1: 1, 2: 2, 3: 3, 4: 4, 5: 1, 6: 0,
-    7: 2, 8: 3, 9: 4, 10: 1, 11: 2, 12: 0,
-    14: 1, 15: 2, 16: 3,
-  };
+class ConsistencyStreakCalendar extends StatefulWidget {
+  @override
+  _ConsistencyStreakCalendarState createState() => _ConsistencyStreakCalendarState();
+}
+
+class _ConsistencyStreakCalendarState extends State<ConsistencyStreakCalendar> {
+  Map<int, int> dataset = {};
+  bool isLoading = true;
 
   final List<Color> colors = [
     Colors.grey.shade800, // No activity
@@ -20,32 +21,70 @@ class ConsistencyStreakCalendar extends StatelessWidget {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    try {
+      final data = await ApiService.post('exportToJson', {'sheetName': 'Journal'});
+      final List<dynamic> journal = (data is String) ? jsonDecode(data) : data;
+      Map<int, int> newDataset = {};
+
+      final now = DateTime.now();
+      for (var trade in journal) {
+        final date = DateTime.tryParse(trade['timestamp'] ?? '') ?? now;
+        final difference = now.difference(date).inDays;
+        if (difference >= 0 && difference < 90) {
+          int index = 89 - difference;
+          newDataset[index] = (newDataset[index] ?? 0) + 1;
+          if (newDataset[index]! > 4) newDataset[index] = 4;
+
+          if (trade['ai_status'] == 'OVERRIDE') {
+            newDataset[index] = 5;
+          }
+        }
+      }
+
+      setState(() {
+        dataset = newDataset;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() { isLoading = false; });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blueGrey[900]?.withOpacity(0.5),
+      color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Consistency Calendar", style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text("Consistency Calendar", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 16),
-            // This is a simplified representation of the grid
-            Wrap(
-              spacing: 4,
-              runSpacing: 4,
-              children: List.generate(90, (index) {
-                int intensity = dataset[index] ?? 0;
-                return Container(
-                  width: 15,
-                  height: 15,
-                  decoration: BoxDecoration(
-                    color: colors[intensity],
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                );
-              }),
-            )
+            if (isLoading)
+              Center(child: CircularProgressIndicator())
+            else
+              Wrap(
+                spacing: 4,
+                runSpacing: 4,
+                children: List.generate(90, (index) {
+                  int intensity = dataset[index] ?? 0;
+                  return Container(
+                    width: 15,
+                    height: 15,
+                    decoration: BoxDecoration(
+                      color: colors[intensity],
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  );
+                }),
+              )
           ],
         ),
       ),

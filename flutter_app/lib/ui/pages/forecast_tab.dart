@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../../services/forecast_service.dart';
 import '../../components/forecast_chart.dart';
 
@@ -68,10 +69,16 @@ class _ForecastTabState extends State<ForecastTab> {
   }
 
   Widget _buildForecastDisplay() {
+    final forecast = _forecastData!;
+    List<FlSpot>? spots;
+    if (forecast['chart_spots'] != null) {
+      spots = (forecast['chart_spots'] as List).map((s) => FlSpot(s[0].toDouble(), s[1].toDouble())).toList();
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          ForecastChartWidget(), // This would take real data
+          ForecastChart(spots: spots),
           SizedBox(height: 24),
           _buildSummaryCard(),
         ],
@@ -87,7 +94,7 @@ class _ForecastTabState extends State<ForecastTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("AI Forecast Summary", style: Theme.of(context).textTheme.headline6),
+            Text("AI Forecast Summary", style: Theme.of(context).textTheme.titleLarge),
             SizedBox(height: 8),
             Text("Bias: ${forecast['bias']}"),
             Text("Entry Zone: ${forecast['entry_zone']}"),

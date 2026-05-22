@@ -37,7 +37,10 @@ class _MoodSelectorState extends State<MoodSelector> {
           child: Text('${entry.value} ${entry.key}'),
         );
       }).toList(),
-      decoration: InputDecoration(labelText: 'Current Mood'),
+      decoration: InputDecoration(
+        labelText: 'Current Mood',
+        labelStyle: Theme.of(context).textTheme.bodyLarge,
+      ),
     );
   }
 }
