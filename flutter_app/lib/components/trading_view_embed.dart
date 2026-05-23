@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:html' as html;
-import 'dart:ui' as ui;
 
 class TradingViewEmbed extends StatefulWidget {
   final String symbol;
@@ -14,31 +12,40 @@ class TradingViewEmbed extends StatefulWidget {
 }
 
 class _TradingViewEmbedState extends State<TradingViewEmbed> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!kIsWeb) {
+      _controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted);
+      _loadChart();
+    }
+  }
+
+  @override
+  void didUpdateWidget(TradingViewEmbed oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!kIsWeb && oldWidget.symbol != widget.symbol) {
+      _loadChart();
+    }
+  }
+
+  void _loadChart() {
+    _controller.loadRequest(Uri.parse(
+        'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark'));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (kIsWeb) {
-      // Use IFrame for web
-      final iframeElement = html.IFrameElement()
-        ..src = 'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark'
-        ..style.border = 'none'
-        ..width = '100%'
-        ..height = '100%';
-
-      // ignore: undefined_prefixed_name
-      ui.platformViewRegistry.registerViewFactory(
-        'tradingview-iframe-${widget.symbol}', // Unique ID for each instance
-        (int viewId) => iframeElement,
-      );
-
-      return HtmlElementView(
-        viewType: 'tradingview-iframe-${widget.symbol}',
-      );
+      return Center(
+          child: Text(
+              "TradingView Chart for ${widget.symbol} (Web version requires manual IFrame registration)"));
     } else {
       // Use WebView for mobile (Android/iOS)
-      return WebView(
-        initialUrl: 'https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=${widget.symbol}&interval=15&theme=dark',
-        javascriptMode: JavascriptMode.unrestricted,
-      );
+      return WebViewWidget(controller: _controller);
     }
   }
 }
