@@ -112,3 +112,9 @@ You can run your entire analysis on the go:
 -   `/journal last`
 
 The Dhaher Trading Plan AI is more than an app; it's a **system for building an elite trading mindset.** Follow the ritual, trust the process, and let the AI be your guide.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

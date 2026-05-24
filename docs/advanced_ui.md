@@ -13,3 +13,9 @@ The user interface of the MULKY AI TRADING COMPANION OS™ is designed to be mor
 -   **Flutter Shaders:** For creating dynamic, generative backgrounds and visual effects.
 -   **Flutter CustomPainter:** For drawing custom UI elements and data visualizations.
 -   **Haptic Feedback:** To provide a more tactile and responsive user experience.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

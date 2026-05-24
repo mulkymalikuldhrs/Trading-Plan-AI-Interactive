@@ -26,3 +26,9 @@ While the chatbot can understand natural language, here are some core commands t
 -   We use the `speech_to_text` package in Flutter to handle the speech recognition.
 -   The transcribed text is then processed by the same natural language understanding (NLU) layer as text input, ensuring consistent responses from the AI.
 -   The system is designed to be robust against background noise, but for best results, speak clearly in a quiet environment.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

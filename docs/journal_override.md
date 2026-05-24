@@ -11,3 +11,9 @@ An "override" is when a user proceeds with an action despite a warning from the 
     *   A direct message from the AI chatbot.
     *   A WhatsApp notification suggesting a reflection session.
 5.  **Weekly Analysis:** Overrides are a key metric in the weekly performance review, helping the user identify patterns of undisciplined behavior.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

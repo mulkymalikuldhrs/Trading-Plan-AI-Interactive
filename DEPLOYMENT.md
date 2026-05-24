@@ -47,3 +47,9 @@ This guide provides the steps to deploy the various components of the system.
 ## 4. Backup Logs
 
 1.  **Google Drive:** The `exportSheetToJson` function in the Apps Script can be triggered on a schedule (e.g., daily) to save a JSON backup of your sheets to a specific Google Drive folder. You would add a new function that calls `exportSheetToJson` and saves the result using `DriveApp.createFile()`.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

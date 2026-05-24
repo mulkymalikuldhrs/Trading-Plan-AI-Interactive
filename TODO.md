@@ -26,3 +26,9 @@
 - [ ] **Host Bot:** Deploy WhatsApp bot to a persistent server (e.g., Render).
 - [ ] **Testing:** Conduct end-to-end testing of all features.
 - [ ] **User Onboarding:** Create a simple onboarding flow for new users.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

@@ -13,3 +13,9 @@ The emotional state of the trader is a primary data point in this system.
 ## Gamification & Lockouts
 -   **Streaks:** The system will track consecutive trades taken in a "Focused" or "Neutral" state, rewarding the user with positive reinforcement.
 -   **Emotional Lockout:** If a user logs 3 consecutive trades with a negative emotion (or has 3 consecutive violations), the system will trigger a "soft lockout," suggesting a mandatory break and providing reflective exercises through the AI Chatbot. The `logViolation` function in the Google Apps Script contains the initial logic for this.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

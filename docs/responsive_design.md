@@ -19,3 +19,9 @@ This logic is encapsulated in the `lib/ui/responsive.dart` helper class.
 
 ### Other Pages
 -   Other pages like the Entry Form and Journal use a single-column layout that naturally adapts to different screen widths, ensuring readability and usability on all devices. Padding and font sizes may be adjusted subtly based on the screen size to improve ergonomics.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

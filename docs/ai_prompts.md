@@ -72,3 +72,9 @@ Based on my last action ({{last_action}}), ask me one deep, open-ended question 
 ```
 I'm feeling {{mood}}. Give me a powerful, relevant quote to help me stay disciplined and focused.
 ```
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

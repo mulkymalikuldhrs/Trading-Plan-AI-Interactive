@@ -21,3 +21,9 @@ The Forecast Engine™ is the most advanced module in the Dhaher Trading Plan AI
 ## The Goal: From Reactive to Proactive
 
 The Forecast Engine™ is designed to shift the trader's mindset from being *reactive* to the market to being *proactive*. By understanding the probabilities and seeing a clear, data-driven picture of the week ahead, the trader can plan their trades with more confidence and precision. It's the ultimate fusion of data, AI, and strategic foresight.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

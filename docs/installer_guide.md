@@ -40,3 +40,9 @@ The launch script will start both the Flutter web server and the WhatsApp bot se
 This will open two terminal windows: one for the Flutter app and one for the WhatsApp bot. The Flutter app will automatically open in a new Chrome window.
 
 To stop the application, you can close both terminal windows.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)
