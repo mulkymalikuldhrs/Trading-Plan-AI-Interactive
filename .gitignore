@@ -1,0 +1,22 @@
+# Build artifacts
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+build/
+
+# Android-specific
+local.properties
+GeneratedPluginRegistrant.java
+
+# Logs
+*.log
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Python cache
+__pycache__/
+*.pyc
