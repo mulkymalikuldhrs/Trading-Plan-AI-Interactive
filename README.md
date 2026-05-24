@@ -1,8 +1,8 @@
 <div align="center">
   <img src="https://i.imgur.com/8J5gO6R.png" alt="Dhaher Trading Plan AI Header">
-  <h1>🔮 Dhaher Trading Plan AI™</h1>
+  <h1>🔮 Dhaher Trading Plan AI™ v10.5.9-hardened</h1>
   <p>
-    <b>Your personal AI-powered market intelligence agency.</b>
+    <b>Your personal AI-powered market intelligence agency. Fully Autonomous. Production Ready.</b>
     <br />
     This is not just a trading journal; it's a proactive, predictive, and psychologically-aware co-pilot designed to help you master the market by mastering yourself.
   </p>

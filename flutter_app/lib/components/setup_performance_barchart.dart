@@ -1,20 +1,59 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import 'dart:convert';
 
-class SetupPerformanceBarChart extends StatelessWidget {
+class SetupPerformanceBarChart extends StatefulWidget {
+  @override
+  _SetupPerformanceBarChartState createState() => _SetupPerformanceBarChartState();
+}
+
+class _SetupPerformanceBarChartState extends State<SetupPerformanceBarChart> {
+  Map<String, int> setupStats = {};
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  Future<void> _fetchData() async {
+    try {
+      final data = await ApiService.post('exportToJson', {'sheetName': 'Journal'});
+      final List<dynamic> journal = (data is String) ? jsonDecode(data) : data;
+      Map<String, int> stats = {};
+      for (var trade in journal) {
+        String setup = trade['setup'] ?? 'Unknown';
+        if (trade['result'] == 'WIN') {
+          stats[setup] = (stats[setup] ?? 0) + 1;
+        }
+      }
+      setState(() {
+        setupStats = stats;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() { isLoading = false; });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) return Center(child: CircularProgressIndicator());
+    if (setupStats.isEmpty) return Center(child: Text("No win data by setup"));
+
     return AspectRatio(
       aspectRatio: 1.6,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        color: Colors.blueGrey[900]?.withOpacity(0.5),
+        color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: BarChart(
             mainBarData(),
-            swapAnimationDuration: Duration(milliseconds: 250),
+            duration: Duration(milliseconds: 250),
           ),
         ),
       ),
@@ -22,48 +61,44 @@ class SetupPerformanceBarChart extends StatelessWidget {
   }
 
   BarChartData mainBarData() {
+    List<String> setups = setupStats.keys.toList();
     return BarChartData(
       alignment: BarChartAlignment.spaceAround,
-      maxY: 100,
+      maxY: setupStats.values.fold(0, (prev, element) => element > prev ? element : prev).toDouble() + 1,
       barTouchData: BarTouchData(enabled: false),
       titlesData: FlTitlesData(
         show: true,
-        bottomTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (context, value) => const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 14),
-          margin: 16,
-          getTitles: (double value) {
-            switch (value.toInt()) {
-              case 0: return 'FVG';
-              case 1: return 'BOS';
-              case 2: return 'CHoCH';
-              default: return '';
-            }
-          },
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: (value, meta) {
+              if (value.toInt() < setups.length) {
+                return Text(setups[value.toInt()], style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold, fontSize: 10));
+              }
+              return Text('');
+            },
+            reservedSize: 30,
+          ),
         ),
-        leftTitles: SideTitles(showTitles: false),
-        topTitles: SideTitles(showTitles: false),
-        rightTitles: SideTitles(showTitles: false),
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
       borderData: FlBorderData(show: false),
-      barGroups: showingGroups(),
+      barGroups: List.generate(setups.length, (index) {
+        return makeGroupData(index, setupStats[setups[index]]!.toDouble(), barColor: Colors.primaries[index % Colors.primaries.length]);
+      }),
       gridData: FlGridData(show: false),
     );
   }
-
-  List<BarChartGroupData> showingGroups() => [
-    makeGroupData(0, 65, barColor: Colors.cyan),
-    makeGroupData(1, 45, barColor: Colors.amber),
-    makeGroupData(2, 30, barColor: Colors.purpleAccent),
-  ];
 
   BarChartGroupData makeGroupData(int x, double y, {Color barColor = Colors.white}) {
     return BarChartGroupData(
       x: x,
       barRods: [
         BarChartRodData(
-          y: y,
-          colors: [barColor.withOpacity(0.6), barColor],
+          toY: y,
+          color: barColor,
           width: 22,
           borderRadius: BorderRadius.circular(4),
         ),

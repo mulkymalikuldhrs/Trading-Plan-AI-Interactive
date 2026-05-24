@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/api_service.dart';
 import '../../models/trade.dart';
+import 'dart:convert';
 
 class JournalPage extends StatefulWidget {
   @override
@@ -17,7 +18,8 @@ class _JournalPageState extends State<JournalPage> {
   }
 
   Future<List<Trade>> _fetchTrades() async {
-    final List<dynamic> tradeData = await ApiService.exportSheet('Journal');
+    final data = await ApiService.post('exportToJson', {'sheetName': 'Journal'});
+    final List<dynamic> tradeData = (data is String) ? jsonDecode(data) : data;
     return tradeData.map((json) => Trade.fromJson(json)).toList();
   }
 

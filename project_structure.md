@@ -66,7 +66,7 @@ This document outlines the file and directory structure for the entire system.
 ## 💬 `whatsapp_bot/`
 ```
 /whatsapp_bot
-├── main.js
+├── index.js
 └── package.json
 ```
 
