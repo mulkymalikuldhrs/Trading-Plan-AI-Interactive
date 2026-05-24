@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../services/gpt_summarizer.dart';
-import '../../services/news_fetcher.dart';
-import '../../services/cot_service.dart';
 
 class IntelTab extends StatefulWidget {
   @override
@@ -25,15 +23,26 @@ class _IntelTabState extends State<IntelTab> {
     setState(() => _isLoading = true);
     try {
       final summary = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
-      final news = await NewsFetcher.getTopHeadlines(_selectedSymbol);
-      final cot = await CotService.getCotSummary(_selectedSymbol);
+
+      // Parse data from the centralized GAS response
+      final List<dynamic>? rawNews = summary['market_data']?['news_headlines'];
+      final Map<String, dynamic>? rawCot = summary['market_data']?['cot_report'];
+      final currency = _selectedSymbol.substring(0, 3).toUpperCase();
+
       setState(() {
         _aiSummary = summary;
-        _news = news;
-        _cotSummary = cot;
+        _news = rawNews?.map((n) => {'title': n.toString(), 'source': 'Finnhub'}).toList();
+
+        if (rawCot != null && rawCot.containsKey(currency)) {
+          final cot = rawCot[currency];
+          _cotSummary = {
+            'bias': cot['sentiment'],
+            'netPosition': cot['net'],
+          };
+        }
       });
     } catch (e) {
-      // Handle error
+      print('IntelTab Error: $e');
     } finally {
       setState(() => _isLoading = false);
     }
@@ -120,14 +129,14 @@ class _IntelTabState extends State<IntelTab> {
   Widget _buildIntelCard({required String title, required Widget child}) {
     return Card(
       elevation: 2,
-      color: Colors.blueGrey[900]?.withOpacity(0.5),
+      color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.white)),
+            Text(title, style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
             SizedBox(height: 12),
             child,
           ],

@@ -24,7 +24,7 @@ class _MoodSelectorState extends State<MoodSelector> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: _selectedMood,
+      initialValue: _selectedMood,
       onChanged: (String? newValue) {
         setState(() {
           _selectedMood = newValue!;
@@ -37,7 +37,10 @@ class _MoodSelectorState extends State<MoodSelector> {
           child: Text('${entry.value} ${entry.key}'),
         );
       }).toList(),
-      decoration: InputDecoration(labelText: 'Current Mood'),
+      decoration: InputDecoration(
+        labelText: 'Current Mood',
+        labelStyle: Theme.of(context).textTheme.bodyLarge,
+      ),
     );
   }
 }

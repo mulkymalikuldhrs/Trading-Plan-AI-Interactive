@@ -5,13 +5,17 @@ class DhaherAiClient:
     """
     A Python client for interacting with the Dhaher Trading Plan AI Google Apps Script API.
     """
-    def __init__(self, apps_script_url):
+    def __init__(self, apps_script_url, api_key=None):
         if not apps_script_url or "YOUR_DEPLOYMENT_ID" in apps_script_url:
             raise ValueError("Google Apps Script URL is not set or is a placeholder.")
         self.api_url = apps_script_url
+        self.api_key = api_key
 
     def _post_request(self, action, data={}):
         """Helper function to make POST requests to the API."""
+        if self.api_key:
+            data['apiKey'] = self.api_key
+
         payload = {
             'action': action,
             'data': data
@@ -71,14 +75,16 @@ class DhaherAiClient:
         print(f"Logging violation for trade {trade_id}...")
         return self._post_request('logViolation', {'tradeId': trade_id, 'ruleBroken': rule, 'justification': justification})
 
+import os
+
 # Example Usage:
 if __name__ == '__main__':
-    # This is for testing purposes. Replace with your actual deployed URL.
-    # The script will raise a ValueError if this is a placeholder.
-    APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"
+    # Retrieve configuration from environment variables for production readiness.
+    APPS_SCRIPT_URL = os.environ.get("GAS_URL", "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL")
+    API_KEY = os.environ.get("API_KEY")
 
     try:
-        client = DhaherAiClient(APPS_SCRIPT_URL)
+        client = DhaherAiClient(APPS_SCRIPT_URL, api_key=API_KEY)
 
         # --- Get Journal Data ---
         journal = client.get_journal_data()
