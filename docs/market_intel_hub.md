@@ -26,3 +26,9 @@ The Market Intelligence Hub is the analytical core of the MULKY AI TRADING COMPA
 ## The Goal: Your Personal Intelligence Agency
 
 The Market Intelligence Hub is designed to be your personal, 24/7 intelligence agency. It automates the time-consuming process of data collection and analysis, allowing you to focus on high-level decision-making and trade execution. It combines the power of data with the analytical capabilities of a large language model to give you a unique and powerful edge in the market.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

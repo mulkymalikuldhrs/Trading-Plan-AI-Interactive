@@ -20,3 +20,9 @@ This project, **Mulky AI OS (TradingPlan Interactive)**, is a multi-component in
 - **WhatsApp Bot:** `cd whatsapp_bot && node --check index.js`
 - **Python:** `python3 -m py_compile python_client/dhaher_ai_client.py`
 - **Audit:** `grep -riE "mock|simulation" . | grep -v "node_modules" | grep -v "CHANGELOG.md"`
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

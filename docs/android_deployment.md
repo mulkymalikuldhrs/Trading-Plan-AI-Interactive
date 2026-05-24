@@ -34,3 +34,9 @@ To build the Android installer (`.apk`), follow these steps from your terminal, 
     3.  You may need to enable "Install from unknown sources" in your device's security settings to proceed.
 
 Your Dhaher Trading Plan AI application is now installed and ready to use on your Android device.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

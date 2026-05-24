@@ -12,3 +12,9 @@
 3.  **Review Your Week:**
     *   Every Friday, you will receive a WhatsApp notification that your weekly summary is ready.
     *   Go to the "Dashboard" to see a full analysis of your performance, including your dominant emotions and biggest leaks.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

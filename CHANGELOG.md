@@ -39,3 +39,9 @@
 - **📱 FLUTTER:** Consolidated chat functionality and integrated all dashboard charts with live GAS data.
 - **🎨 UI:** Fully migrated to Material 3 and replaced deprecated `withOpacity` with `withValues`.
 - **🧹 CLEANUP:** Removed unused placeholder assets and verified system-wide production readiness.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

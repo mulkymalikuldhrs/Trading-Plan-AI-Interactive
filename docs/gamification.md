@@ -16,3 +16,9 @@ The MULKY AI TRADING COMPANION OS™ is not just a tool, but a gamified experien
 ## The Psychology
 
 The goal of these features is to hijack the brain's reward system and associate it with *process* (discipline, consistency, reflection) rather than just *outcome* (profit/loss). By making discipline feel like a game you can win, we encourage the user to build the habits of a professional trader.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

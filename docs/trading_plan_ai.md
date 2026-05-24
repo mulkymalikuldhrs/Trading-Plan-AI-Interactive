@@ -32,3 +32,9 @@ You are a trading plan validator. Based on the following information, please pro
 
 ## Override Logic
 -   Users can override the validation and save the plan anyway, but it will be flagged for review.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

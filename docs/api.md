@@ -38,3 +38,9 @@ The system uses a Google Apps Script as a simple REST API.
 ### `exportToJson`
 -   **Description:** Exports an entire sheet to a JSON object.
 -   **Data:** `{ "sheetName": "..." }`
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

@@ -62,3 +62,9 @@ client.log_trade(my_trade)
 ```
 
 This programmatic access opens up endless possibilities for advanced data analysis, backtesting trading strategies, and integrating the Dhaher Trading Plan AI with other systems.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

@@ -21,3 +21,9 @@ The MULKY AI TRADING COMPANION OS™ now includes a sophisticated AI Trade Analy
 ## The Goal: An AI-Powered Analyst on Your Team
 
 The purpose of this system is to provide the user with a tireless, data-driven, and unbiased trading analyst working for them 24/7. It handles the heavy lifting of data collection and analysis, allowing the user to focus on execution and managing their own psychology.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

@@ -32,3 +32,9 @@
 - [x] **Centralization:** Move all logic to the GAS backend.
 - [x] **Security:** Secure all API keys using environment variables/script properties.
 - [x] **Documentation:** Synchronize all documentation with the hardened baseline.
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

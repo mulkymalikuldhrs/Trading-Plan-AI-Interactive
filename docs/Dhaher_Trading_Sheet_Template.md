@@ -68,3 +68,9 @@ This document outlines the structure of the Google Sheet that will serve as the 
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **WeekID** | **StartDate** | **EndDate** | **WinRate** | **TotalTrades** | **AI_Analysis_JSON** |
 | W-2025-31 | 2025-07-28 | 2025-08-03 | 65% | 20 | `{"summary":...}` |
+
+---
+
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+>
+> **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)
