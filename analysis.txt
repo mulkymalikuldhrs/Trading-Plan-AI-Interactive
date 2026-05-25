@@ -1,0 +1,23 @@
+Analyzing branches relative to main
+Branch                                                                 | Unmerged Commits | Last Commit Date
+--------------------------------------------------------------------------------------------------------------
+origin/mulky-ai-os-v1-17406691386389127871                             | 1                | 2026-05-15 20:28:21 +0000
+origin/main-11232261757284075030                                       | 1                | 2026-05-15 12:53:26 +0000
+origin/main-11997706143395029384                                       | 1                | 2026-05-14 12:15:45 +0000
+origin/main-hardened-v10-5-0-final-consolidation-10765190012817382543  | 1                | 2026-05-13 12:37:35 +0000
+origin/main-hardened-v10-5-0-final-consolidation-baseline-verified-1534876216676204930 | 1                | 2026-05-12 12:25:34 +0000
+origin/jules-v10-5-0-hardened-consolidation-1697482739849916914        | 1                | 2026-05-11 21:11:52 +0000
+origin/main-hardened-v10-5-0-final-consolidation-11800606350943250271  | 1                | 2026-05-11 12:10:03 +0000
+origin/main-hardened-v10-5-0-final-consolidation-12345678901234567890-15480263544606025942 | 1                | 2026-05-10 12:08:08 +0000
+origin/consolidate-and-upgrade-to-v10-5-0-hardened-final-audit-verification-consolidated-1576763757473828994 | 1                | 2026-05-08 17:58:54 +0000
+origin/harden-v10-4-9-production-ready-baseline-consolidation-final-audit-verification-consolidated-2652102170090797554-8661424452506214753-202747542959409701 | 1                | 2026-05-08 12:36:59 +0000
+origin/main-system-upgrade-v10-4-8-hardened-14653196935799178499       | 1                | 2026-05-07 19:18:12 +0000
+origin/main-9455058398052659269                                        | 1                | 2026-05-07 12:26:31 +0000
+origin/main-hardened-production-v10-4-7-15255806801412645354           | 1                | 2026-05-06 12:18:15 +0000
+origin/main-production-upgrade-v10-4-7-hardened-16318999694587674002   | 1                | 2026-05-05 17:03:15 +0000
+origin/main-hardened-v10-4-6-production-ready-upgrade-final-12137271276796238158 | 1                | 2026-05-05 12:06:59 +0000
+origin/main-production-upgrade-v10-4-6-12966063559296376754            | 1                | 2026-05-04 17:46:54 +0000
+origin/main-3542275726330423711                                        | 1                | 2026-05-04 12:18:34 +0000
+origin/main-16753761369152416142                                       | 1                | 2026-05-02 19:11:39 +0000
+origin/main-hardened-v10-4-5-final-4024286620746127848                 | 1                | 2026-05-02 12:05:08 +0000
+origin/main-13378325587694156625                                       | 1                | 2026-04-30 19:12:42 +0000
