@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../services/gpt_summarizer.dart';
-import '../../services/news_fetcher.dart';
-import '../../services/cot_service.dart';
 
 class IntelTab extends StatefulWidget {
   @override
@@ -11,8 +9,6 @@ class IntelTab extends StatefulWidget {
 class _IntelTabState extends State<IntelTab> {
   String _selectedSymbol = "EURUSD";
   Map<String, dynamic>? _aiSummary;
-  List<Map<String, String>>? _news;
-  Map<String, dynamic>? _cotSummary;
   bool _isLoading = true;
 
   @override
@@ -25,12 +21,8 @@ class _IntelTabState extends State<IntelTab> {
     setState(() => _isLoading = true);
     try {
       final summary = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
-      final news = await NewsFetcher.getTopHeadlines(_selectedSymbol);
-      final cot = await CotService.getCotSummary(_selectedSymbol);
       setState(() {
         _aiSummary = summary;
-        _news = news;
-        _cotSummary = cot;
       });
     } catch (e) {
       // Handle error
@@ -67,27 +59,41 @@ class _IntelTabState extends State<IntelTab> {
   }
 
   Widget _buildNewsSection() {
+    final List<dynamic> newsHeadlines = _aiSummary?['news_headlines'] ?? [];
+
     return _buildIntelCard(
       title: "🌐 Top News",
       child: Column(
-        children: _news?.map((item) => ListTile(
-          title: Text(item['title']!),
-          subtitle: Text(item['source']!),
-          dense: true,
-        )).toList() ?? [Text("No news found.")],
+        children: newsHeadlines.isNotEmpty
+            ? newsHeadlines.map((item) {
+                final text = item.toString();
+                final sourceMatch = RegExp(r'\[(.*?)\]').firstMatch(text);
+                final source = sourceMatch?.group(1) ?? "News";
+                final title = text.replaceFirst(RegExp(r'\[.*?\]\s*'), '');
+
+                return ListTile(
+                  title: Text(title),
+                  subtitle: Text(source),
+                  dense: true,
+                );
+              }).toList()
+            : [Text("No news found.")],
       ),
     );
   }
 
   Widget _buildCotSummary() {
+    final cotBias = _aiSummary?['final_bias'] ?? 'Neutral';
+    final netPosition = _aiSummary?['positional_thesis'] ?? 'N/A';
+
     return _buildIntelCard(
       title: "🧠 COT Summary",
       child: ListTile(
-        title: Text("Institutional Bias: ${_cotSummary?['bias']}"),
-        subtitle: Text("Net Position: ${_cotSummary?['netPosition']}"),
+        title: Text("Institutional Bias: $cotBias"),
+        subtitle: Text("Thesis: $netPosition"),
         trailing: Icon(
-          _cotSummary?['bias'] == 'Bullish' ? Icons.arrow_upward : Icons.arrow_downward,
-          color: _cotSummary?['bias'] == 'Bullish' ? Colors.green : Colors.red,
+          cotBias.toString().toUpperCase() == 'BULLISH' ? Icons.arrow_upward : (cotBias.toString().toUpperCase() == 'BEARISH' ? Icons.arrow_downward : Icons.horizontal_rule),
+          color: cotBias.toString().toUpperCase() == 'BULLISH' ? Colors.green : (cotBias.toString().toUpperCase() == 'BEARISH' ? Colors.red : Colors.grey),
         ),
       ),
     );
