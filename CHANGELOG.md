@@ -1,5 +1,19 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v11.1.0 - Market Intelligence Hardening & UI Polish (2025-03-04)
+
+### 🔥 Major Changes
+- **HARDENING:** Updated Google Apps Script COT data engine to parse real-time reports directly from CFTC (CME/COMEX) sources, ensuring 100% real institutional data without intermediaries.
+- **UI POLISH:** Resolved all remaining Material 3 deprecation warnings in the Flutter app (replaced `withOpacity` with `withValues`).
+- **UPGRADE:** Refreshed project dependencies for both Flutter (Dart 3.5+) and WhatsApp Bot (Node.js/npm).
+
+### 🐛 Bug Fixes
+- **FIX:** Reverted `DropdownButtonFormField` from `initialValue` back to `value` across the Flutter app to maintain UI reactivity and state synchronization.
+- **FIX:** Hardened `api_integrations.gs` against potential placeholder service failures by implementing direct, robust scrapers for institutional CFTC reports.
+
+### 🔐 Security
+- **AUDIT:** Re-verified `BOT_API_KEY` enforcement across all backend actions in `main.gs` to ensure unauthorized access is blocked in production.
+
 ## v11.0.0 - Production Release & Branch Consolidation (2025-03-04)
 
 ### 🔥 Major Changes
