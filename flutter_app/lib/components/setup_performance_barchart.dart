@@ -72,10 +72,10 @@ class _SetupPerformanceBarChartState extends State<SetupPerformanceBarChart> {
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    getTitlesWidget: (value, meta) {
+                    getTitlesWidget: (value, TitleMeta meta) {
                       if (value.toInt() < 0 || value.toInt() >= setups.length) return Container();
                       return SideTitleWidget(
-                        axisSide: meta.axisSide,
+                        meta: meta,
                         space: 4,
                         child: Text(
                           setups[value.toInt()],
@@ -90,7 +90,10 @@ class _SetupPerformanceBarChartState extends State<SetupPerformanceBarChart> {
                   sideTitles: SideTitles(
                     showTitles: true,
                     reservedSize: 28,
-                    getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: const TextStyle(color: Colors.white70, fontSize: 10)),
+                    getTitlesWidget: (value, TitleMeta meta) => SideTitleWidget(
+                      meta: meta,
+                      child: Text(value.toInt().toString(), style: const TextStyle(color: Colors.white70, fontSize: 10)),
+                    ),
                   ),
                 ),
                 topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
