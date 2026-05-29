@@ -83,6 +83,7 @@ class _ForecastTabState extends State<ForecastTab> {
           SizedBox(height: 16),
 
           // Pair selector
+          // ignore: deprecated_member_use
           DropdownButtonFormField<String>(
             value: _selectedPair,
             decoration: InputDecoration(
