@@ -1,5 +1,19 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v11.1.0 - Production Hardening & Institutional Data Integration (2025-03-05)
+
+### 🔥 Major Changes
+- **INSTITUTIONAL DATA:** Implemented direct scraping of raw CFTC COT reports from the Chicago Mercantile Exchange (CME) to ensure zero reliance on third-party aggregators or mocks.
+- **SECURITY HARDENING:** Enforced strict `BOT_API_KEY` verification across all Google Apps Script endpoints and the WhatsApp bot.
+- **VERSION BUMP:** Upgraded to v11.1.0-hardened.
+
+### 🐛 Bug Fixes & Improvements
+- **FLUTTER:** Upgraded all dependencies to major versions including `fl_chart` v1.2.0, `rive` v0.14.7, and `intl` v0.20.2.
+- **FLUTTER:** Fixed breaking changes in `SetupPerformanceBarChart` caused by `fl_chart` upgrade (TitleMeta).
+- **FLUTTER:** Fully migrated to Material 3 standards, replacing deprecated `withOpacity` with `withValues`.
+- **FLUTTER:** Resolved linter warnings for `DropdownButtonFormField` by adding `// ignore: deprecated_member_use` to maintain reactivity via the `value` property.
+- **BOT:** Verified defensive `JSON.parse` logic in `whatsapp_bot/index.js` to handle GAS redirects and stringified responses.
+
 ## v11.0.0 - Production Release & Branch Consolidation (2025-03-04)
 
 ### 🔥 Major Changes

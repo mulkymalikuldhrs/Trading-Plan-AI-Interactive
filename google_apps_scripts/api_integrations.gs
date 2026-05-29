@@ -96,11 +96,15 @@ function getEconomicCalendar() {
 
 /**
  * Fetches Commitment of Traders (COT) data.
- * Uses the Barchart API or a direct CFTC parser for real data.
- * For this production baseline, we implement a direct fetch from a verified financial data provider.
+ * Direct fetch and parse from CFTC (Legacy Report) to ensure 100% real institutional data.
  */
 function getCotData(symbol) {
-  // Mapping symbols to CFTC names
+  // Normalize symbol (e.g., EURUSD -> EUR/USD)
+  let normalizedSymbol = symbol.toUpperCase();
+  if (!normalizedSymbol.includes('/') && normalizedSymbol.length === 6) {
+    normalizedSymbol = normalizedSymbol.substring(0, 3) + '/' + normalizedSymbol.substring(3);
+  }
+
   const cftcMap = {
     'EUR/USD': 'EURO CURRENCY',
     'GBP/USD': 'BRITISH POUND STERLING',
@@ -112,38 +116,49 @@ function getCotData(symbol) {
     'GOLD': 'GOLD - COMMODITY EXCHANGE INC.'
   };
 
-  const asset = cftcMap[symbol] || symbol;
-
-  // Using a production-grade financial data aggregator for COT
-  const apiKey = PropertiesService.getScriptProperties().getProperty('FINANCIAL_DATA_API_KEY');
-  const url = `https://api.financialdata.com/v1/cot/latest?symbol=${encodeURIComponent(asset)}&apikey=${apiKey}`;
+  const assetName = cftcMap[normalizedSymbol] || normalizedSymbol;
+  // Determine correct CFTC report URL (CME for Forex, COMEX for Gold)
+  const url = (normalizedSymbol === 'GOLD' || normalizedSymbol === 'XAU/USD')
+    ? "https://www.cftc.gov/dea/futures/deacmxl.txt" // COMEX
+    : "https://www.cftc.gov/dea/futures/deacmcl.txt"; // CME
 
   try {
-    const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
-    if (response.getResponseCode() === 200) {
-      const data = JSON.parse(response.getContentText());
-      // Real data processing from institutional source
-      return {
-        symbol: symbol,
-        reportDate: data.report_date,
-        nonCommercialLong: data.non_comm_long,
-        nonCommercialShort: data.non_comm_short,
-        netPosition: data.non_comm_long - data.non_comm_short,
-        bias: (data.non_comm_long > data.non_comm_short * 2) ? 'BULLISH' : (data.non_comm_short > data.non_comm_long * 2) ? 'BEARISH' : 'NEUTRAL',
-        oi: data.open_interest
-      };
-    } else {
-       throw new Error("Source responded with status: " + response.getResponseCode());
+    const response = UrlFetchApp.fetch(url);
+    const content = response.getContentText();
+    const lines = content.split('\n');
+
+    let found = false;
+    let reportDate = "Unknown";
+    const dateMatch = content.match(/COMMITMENTS AS OF (.*)/);
+    if (dateMatch) reportDate = dateMatch[1].trim();
+
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].includes(assetName)) {
+        // The data is usually a few lines below the asset name
+        for (let j = i; j < i + 15; j++) {
+          const row = lines[j].trim();
+          const parts = row.split(/\s+/);
+          // Non-Commercial rows have at least 5 numeric columns
+          if (parts.length >= 5 && !isNaN(parseInt(parts[0])) && !isNaN(parseInt(parts[1]))) {
+            const long = parseInt(parts[0].replace(/,/g, ''));
+            const short = parseInt(parts[1].replace(/,/g, ''));
+            return {
+              symbol: symbol,
+              reportDate: reportDate,
+              nonCommercialLong: long,
+              nonCommercialShort: short,
+              netPosition: long - short,
+              bias: (long > short * 1.5) ? 'BULLISH' : (short > long * 1.5) ? 'BEARISH' : 'NEUTRAL',
+              status: 'success'
+            };
+          }
+        }
+      }
     }
+    throw new Error("Asset not found in CFTC report: " + assetName);
   } catch (e) {
-    Logger.log("COT Data Fetch Failed: " + e.message);
-    // Return structured data indicating service status rather than mocks
-    return {
-      symbol: symbol,
-      status: "error",
-      message: "Real-time COT stream offline: " + e.message,
-      timestamp: new Date().toISOString()
-    };
+    Logger.log("COT Fetch Error: " + e.message);
+    return { symbol: symbol, status: 'error', message: e.message };
   }
 }
 

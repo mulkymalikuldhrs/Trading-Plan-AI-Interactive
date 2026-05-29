@@ -23,6 +23,7 @@ class _MoodSelectorState extends State<MoodSelector> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
     return DropdownButtonFormField<String>(
       value: _selectedMood,
       onChanged: (String? newValue) {

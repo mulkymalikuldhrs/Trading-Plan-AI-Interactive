@@ -75,7 +75,7 @@ class _SetupPerformanceBarChartState extends State<SetupPerformanceBarChart> {
                     getTitlesWidget: (value, meta) {
                       if (value.toInt() < 0 || value.toInt() >= setups.length) return Container();
                       return SideTitleWidget(
-                        axisSide: meta.axisSide,
+                        meta: meta,
                         space: 4,
                         child: Text(
                           setups[value.toInt()],
