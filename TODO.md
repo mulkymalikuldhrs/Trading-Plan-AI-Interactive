@@ -1,4 +1,4 @@
-# ✅ TODO - MULKY AI TRADING OS™ [v10.5.5-hardened]
+# ✅ TODO - MULKY AI TRADING OS™ [v11.1.0-hardened]
 
 ## Phase 1: Foundation (Complete)
 - [x] Design Google Sheet Schema
@@ -32,6 +32,7 @@
 - [x] **Centralization:** Move all logic to the GAS backend.
 - [x] **Security:** Secure all API keys using environment variables/script properties.
 - [x] **Documentation:** Synchronize all documentation with the hardened baseline.
+- [x] **Institutional Data:** Implement direct CFTC/COT scraping.
 
 ---
 
