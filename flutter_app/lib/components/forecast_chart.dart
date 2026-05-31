@@ -33,9 +33,12 @@ class ForecastChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 40,
-                getTitlesWidget: (value, meta) => Text(
-                  value.toStringAsFixed(2),
-                  style: TextStyle(color: Colors.white70, fontSize: 10),
+                getTitlesWidget: (value, meta) => SideTitleWidget(
+                  meta: meta,
+                  child: Text(
+                    value.toStringAsFixed(2),
+                    style: TextStyle(color: Colors.white70, fontSize: 10),
+                  ),
                 ),
               ),
             ),
@@ -44,9 +47,12 @@ class ForecastChart extends StatelessWidget {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
-                getTitlesWidget: (value, meta) => Text(
-                  'D${value.toInt()}',
-                  style: TextStyle(color: Colors.white70, fontSize: 10),
+                getTitlesWidget: (value, meta) => SideTitleWidget(
+                  meta: meta,
+                  child: Text(
+                    'D${value.toInt()}',
+                    style: TextStyle(color: Colors.white70, fontSize: 10),
+                  ),
                 ),
               ),
             ),

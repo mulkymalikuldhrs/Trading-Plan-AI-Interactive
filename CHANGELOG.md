@@ -1,5 +1,31 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v11.1.1 - Hardening & Dependency Alignment (2025-03-04)
+
+### 🔥 Major Changes
+- **DEPENDENCIES:** Upgraded Flutter dependencies to major versions (`fl_chart` v1.2.0, `rive` v0.14.7, `speech_to_text` v7.4.0).
+- **UPGRADE:** Synchronized all project modules to v11.1.1-hardened baseline.
+- **MERGE:** Consolidated v11.1.0 hardened release changes into the main production branch.
+
+### 🛠️ Hardening & Refinement
+- **FIX: fl_chart v1.2.0** — Resolved breaking changes in `SetupPerformanceBarChart`, `ForecastChart`, and `EquityCurveChart` by updating `getTitlesWidget` to use `SideTitleWidget` with the required `meta` parameter.
+- **FIX: Deprecations** — Replaced deprecated `value` property with `initialValue` in `DropdownButtonFormField` components across the Flutter app.
+- **COT:** Verified direct institutional data scraping from CFTC for reliable institutional sentiment analysis.
+- **CLEANUP:** Eliminated all remaining mock/simulation strings and verified production data integrity in GAS.
+
+## v11.1.0 - Final Production Consolidation & Market Intelligence Hardening (2025-03-04)
+
+### 🔥 Major Changes
+- **🚀 CONSOLIDATION:** Finalized the merge of all verified branch implementations into the authoritative `main` branch.
+- **🛠️ HARDENING:** Updated Google Apps Script COT data engine to parse real-time reports directly from CFTC (CME/COMEX) sources, ensuring 100% real institutional data without intermediaries.
+- **✨ UPGRADE:** Synchronized all system components to the definitive `11.1.0` version and refreshed dependencies.
+
+### 🐛 Bug Fixes
+- **FIX:** Hardened `api_integrations.gs` against potential placeholder service failures by implementing direct, robust scrapers for institutional CFTC reports.
+
+### 🔐 Security
+- **AUDIT:** Re-verified `BOT_API_KEY` enforcement across all backend actions in `main.gs` to ensure unauthorized access is blocked in production.
+
 ## v11.0.0 - Production Release & Branch Consolidation (2025-03-04)
 
 ### 🔥 Major Changes
