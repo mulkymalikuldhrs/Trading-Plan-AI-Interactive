@@ -100,44 +100,81 @@ function getEconomicCalendar() {
  * For this production baseline, we implement a direct fetch from a verified financial data provider.
  */
 function getCotData(symbol) {
-  // Mapping symbols to CFTC names
   const cftcMap = {
-    'EUR/USD': 'EURO CURRENCY',
-    'GBP/USD': 'BRITISH POUND STERLING',
-    'JPY/USD': 'JAPANESE YEN',
-    'AUD/USD': 'AUSTRALIAN DOLLAR',
-    'NZD/USD': 'NEW ZEALAND DOLLAR',
-    'USD/CAD': 'CANADIAN DOLLAR',
-    'USD/CHF': 'SWISS FRANC',
-    'GOLD': 'GOLD - COMMODITY EXCHANGE INC.'
+    'EUR/USD': { name: 'EURO CURRENCY', report: 'CME' },
+    'GBP/USD': { name: 'BRITISH POUND STERLING', report: 'CME' },
+    'JPY/USD': { name: 'JAPANESE YEN', report: 'CME' },
+    'AUD/USD': { name: 'AUSTRALIAN DOLLAR', report: 'CME' },
+    'NZD/USD': { name: 'NEW ZEALAND DOLLAR', report: 'CME' },
+    'USD/CAD': { name: 'CANADIAN DOLLAR', report: 'CME' },
+    'USD/CHF': { name: 'SWISS FRANC', report: 'CME' },
+    'GOLD': { name: 'GOLD - COMMODITY EXCHANGE INC.', report: 'COMEX' }
   };
 
-  const asset = cftcMap[symbol] || symbol;
+  // Handle symbols with or without '/' (e.g., EUR/USD or EURUSD)
+  let formattedSymbol = symbol.toUpperCase();
+  if (!formattedSymbol.includes('/') && formattedSymbol.length === 6) {
+    formattedSymbol = formattedSymbol.substring(0, 3) + '/' + formattedSymbol.substring(3);
+  }
 
-  // Using a production-grade financial data aggregator for COT
-  const apiKey = PropertiesService.getScriptProperties().getProperty('FINANCIAL_DATA_API_KEY');
-  const url = `https://api.financialdata.com/v1/cot/latest?symbol=${encodeURIComponent(asset)}&apikey=${apiKey}`;
+  const asset = cftcMap[formattedSymbol];
+  if (!asset) return { symbol: symbol, status: "error", message: "Asset not mapped for COT: " + formattedSymbol };
+
+  const reportUrls = {
+    'CME': 'https://www.cftc.gov/dea/futures/deacmesf.htm',
+    'COMEX': 'https://www.cftc.gov/dea/futures/deacmx.htm'
+  };
+
+  const url = reportUrls[asset.report];
 
   try {
     const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
-    if (response.getResponseCode() === 200) {
-      const data = JSON.parse(response.getContentText());
-      // Real data processing from institutional source
-      return {
-        symbol: symbol,
-        reportDate: data.report_date,
-        nonCommercialLong: data.non_comm_long,
-        nonCommercialShort: data.non_comm_short,
-        netPosition: data.non_comm_long - data.non_comm_short,
-        bias: (data.non_comm_long > data.non_comm_short * 2) ? 'BULLISH' : (data.non_comm_short > data.non_comm_long * 2) ? 'BEARISH' : 'NEUTRAL',
-        oi: data.open_interest
-      };
-    } else {
-       throw new Error("Source responded with status: " + response.getResponseCode());
+    if (response.getResponseCode() !== 200) throw new Error("CFTC site unavailable");
+
+    const content = response.getContentText();
+    const startIndex = content.toUpperCase().indexOf(asset.name.toUpperCase());
+    if (startIndex === -1) throw new Error("Asset not found in report");
+
+    // Find the report date globally first, as it's often at the top of the file
+    let reportDate = new Date().toLocaleDateString();
+    const globalDateMatch = content.match(/COMMITMENTS AS OF\s+(\d{2}\/\d{2}\/\d{2})/);
+    if (globalDateMatch) reportDate = globalDateMatch[1];
+
+    // Extract enough content to find the data row
+    const section = content.substring(startIndex, startIndex + 1500);
+    const lines = section.split('\n');
+
+    let dataLine = "";
+
+    for (let i = 0; i < lines.length; i++) {
+      // The numbers are usually in a row that has at least 5-7 columns of numbers
+      const cleanLine = lines[i].trim();
+      const numbers = cleanLine.split(/\s+/).filter(n => /^-?\d{1,3}(,\d{3})*$/.test(n));
+      if (numbers.length >= 5) {
+         dataLine = cleanLine;
+         break;
+      }
     }
+
+    if (!dataLine) throw new Error("Data line not found in section");
+
+    const numbers = dataLine.trim().split(/\s+/).filter(n => /^-?\d{1,3}(,\d{3})*$/.test(n)).map(n => parseInt(n.replace(/,/g, '')));
+
+    // Non-Commercial: Long is index 0, Short is index 1
+    const long = numbers[0];
+    const short = numbers[1];
+
+    return {
+      symbol: symbol,
+      reportDate: reportDate,
+      nonCommercialLong: long,
+      nonCommercialShort: short,
+      netPosition: long - short,
+      bias: (long > short * 1.5) ? 'BULLISH' : (short > long * 1.5) ? 'BEARISH' : 'NEUTRAL',
+      status: "success"
+    };
   } catch (e) {
-    Logger.log("COT Data Fetch Failed: " + e.message);
-    // Return structured data indicating service status rather than mocks
+    Logger.log("COT Fetch Error: " + e.message);
     return {
       symbol: symbol,
       status: "error",
