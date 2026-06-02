@@ -62,14 +62,20 @@ class _EquityCurveChartState extends State<EquityCurveChart> {
                   sideTitles: SideTitles(
                     showTitles: true,
                     reservedSize: 22,
-                    getTitlesWidget: (value, meta) => Text('T${value.toInt()}', style: TextStyle(color: Colors.white70, fontSize: 10)),
+                    getTitlesWidget: (value, meta) => SideTitleWidget(
+                      meta: meta,
+                      child: Text('T${value.toInt()}', style: TextStyle(color: Colors.white70, fontSize: 10)),
+                    ),
                   ),
                 ),
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
                     reservedSize: 40,
-                    getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: TextStyle(color: Colors.white70, fontSize: 10)),
+                    getTitlesWidget: (value, meta) => SideTitleWidget(
+                      meta: meta,
+                      child: Text(value.toInt().toString(), style: TextStyle(color: Colors.white70, fontSize: 10)),
+                    ),
                   ),
                 ),
               ),
