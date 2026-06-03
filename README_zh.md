@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>🔮 Dhaher Trading Plan AI™</h1>
+  <h1>🔮 Dhaher Trading Plan AI™ <small>v11.1.2</small></h1>
   <p>
     <b>您的个人AI驱动市场情报机构。</b>
     <br />
