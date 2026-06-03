@@ -1,6 +1,6 @@
 {
   "name": "whatsapp_bot",
-  "version": "10.5.5-hardened",
+  "version": "11.1.3-hardened",
   "description": "",
   "main": "index.js",
   "scripts": {
