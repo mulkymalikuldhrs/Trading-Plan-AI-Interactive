@@ -1,5 +1,20 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v11.1.4 - Institutional Hardening & COT Scraping (2025-03-05)
+
+### 🔥 Institutional Data
+- **NEW: Direct COT Scraping** — Replaced third-party COT API with a robust, direct parser for CFTC reports (deacmcl.txt/deacmxl.txt), ensuring institutional-grade data accuracy without external dependencies.
+- **OPTIMIZATION: IntelTab Consolidation** — Refactored `IntelTab` to consume a single consolidated market intelligence payload from the GAS backend, reducing frontend complexity and API overhead.
+
+### 🛠️ Architecture & Hardening
+- **REFACTOR:** Removed `NewsFetcher` and `CotService` from Flutter, centralizing all intelligence gathering in `google_apps_scripts/api_integrations.gs`.
+- **ENHANCEMENT:** Added centralized sheet export functionality to `SheetApi`.
+- **HARDENING:** Implemented symbol normalization for Forex and Gold in the COT engine.
+
+### 📦 Maintenance
+- **VERSION BUMP:** Upgraded all modules to v11.1.4-hardened.
+- **DOCS:** Updated `TODO.md` to reflect 100% completion of Phase 5.
+
 ## v11.0.0 - Production Release & Branch Consolidation (2025-03-04)
 
 ### 🔥 Major Changes

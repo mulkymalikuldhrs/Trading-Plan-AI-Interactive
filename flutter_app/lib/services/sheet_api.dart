@@ -24,4 +24,9 @@ class SheetApi {
     final List<dynamic> tradesJson = await ApiService.exportSheet('Journal');
     return tradesJson.map((json) => Trade.fromJson(json)).toList();
   }
+
+  /// Export a specific sheet to JSON
+  static Future<List<dynamic>> exportSheet(String sheetName) async {
+    return await ApiService.exportSheet(sheetName);
+  }
 }

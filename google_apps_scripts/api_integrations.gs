@@ -95,12 +95,16 @@ function getEconomicCalendar() {
 }
 
 /**
- * Fetches Commitment of Traders (COT) data.
- * Uses the Barchart API or a direct CFTC parser for real data.
- * For this production baseline, we implement a direct fetch from a verified financial data provider.
+ * Fetches Commitment of Traders (COT) data via direct CFTC scraping.
+ * Eliminates reliance on 3rd party aggregators.
  */
 function getCotData(symbol) {
-  // Mapping symbols to CFTC names
+  // Normalize symbol (e.g., EURUSD -> EUR/USD)
+  let normalizedSymbol = symbol.toUpperCase();
+  if (normalizedSymbol.length === 6 && !normalizedSymbol.includes('/')) {
+    normalizedSymbol = normalizedSymbol.substring(0, 3) + '/' + normalizedSymbol.substring(3);
+  }
+
   const cftcMap = {
     'EUR/USD': 'EURO CURRENCY',
     'GBP/USD': 'BRITISH POUND STERLING',
@@ -109,41 +113,59 @@ function getCotData(symbol) {
     'NZD/USD': 'NEW ZEALAND DOLLAR',
     'USD/CAD': 'CANADIAN DOLLAR',
     'USD/CHF': 'SWISS FRANC',
-    'GOLD': 'GOLD - COMMODITY EXCHANGE INC.'
+    'GOLD': 'GOLD - COMMODITY EXCHANGE INC.',
+    'XAU/USD': 'GOLD - COMMODITY EXCHANGE INC.'
   };
 
-  const asset = cftcMap[symbol] || symbol;
+  const asset = cftcMap[normalizedSymbol] || normalizedSymbol;
 
-  // Using a production-grade financial data aggregator for COT
-  const apiKey = PropertiesService.getScriptProperties().getProperty('FINANCIAL_DATA_API_KEY');
-  const url = `https://api.financialdata.com/v1/cot/latest?symbol=${encodeURIComponent(asset)}&apikey=${apiKey}`;
+  // Select URL: CME for Forex, COMEX for Gold
+  const url = (asset.includes('GOLD'))
+    ? 'https://www.cftc.gov/dea/futures/deacmxl.txt'
+    : 'https://www.cftc.gov/dea/futures/deacmcl.txt';
 
   try {
     const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
-    if (response.getResponseCode() === 200) {
-      const data = JSON.parse(response.getContentText());
-      // Real data processing from institutional source
-      return {
-        symbol: symbol,
-        reportDate: data.report_date,
-        nonCommercialLong: data.non_comm_long,
-        nonCommercialShort: data.non_comm_short,
-        netPosition: data.non_comm_long - data.non_comm_short,
-        bias: (data.non_comm_long > data.non_comm_short * 2) ? 'BULLISH' : (data.non_comm_short > data.non_comm_long * 2) ? 'BEARISH' : 'NEUTRAL',
-        oi: data.open_interest
-      };
-    } else {
-       throw new Error("Source responded with status: " + response.getResponseCode());
+    if (response.getResponseCode() !== 200) throw new Error("CFTC Server unresponsive");
+
+    const content = response.getContentText();
+    const reports = content.split('-----------------------------------------------------------------------');
+
+    const report = reports.find(r => r.includes(asset));
+    if (!report) throw new Error("Asset not found in report");
+
+    const dateMatch = content.match(/COMMITMENTS AS OF\s+(\d{2}\/\d{2}\/\d{2})/);
+    const reportDate = dateMatch ? dateMatch[1] : "Unknown";
+
+    const lines = report.split('\n');
+    let nonCommLong = 0, nonCommShort = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].includes("NON-COMMERCIAL")) {
+        for (let j = i; j < i + 5; j++) {
+          const matches = lines[j].match(/(\d{1,3}(,\d{3})*)/g);
+          if (matches && matches.length >= 5) {
+            nonCommLong = parseInt(matches[0].replace(/,/g, ''));
+            nonCommShort = parseInt(matches[1].replace(/,/g, ''));
+            break;
+          }
+        }
+        break;
+      }
     }
-  } catch (e) {
-    Logger.log("COT Data Fetch Failed: " + e.message);
-    // Return structured data indicating service status rather than mocks
+
     return {
-      symbol: symbol,
-      status: "error",
-      message: "Real-time COT stream offline: " + e.message,
-      timestamp: new Date().toISOString()
+      symbol: normalizedSymbol,
+      reportDate: reportDate,
+      nonCommercialLong: nonCommLong,
+      nonCommercialShort: nonCommShort,
+      netPosition: nonCommLong - nonCommShort,
+      bias: (nonCommLong > nonCommShort * 1.5) ? 'BULLISH' : (nonCommShort > nonCommLong * 1.5) ? 'BEARISH' : 'NEUTRAL',
+      oi: 'N/A'
     };
+  } catch (e) {
+    Logger.log("COT Scraping Failed: " + e.message);
+    return { symbol: normalizedSymbol, status: "error", message: e.message };
   }
 }
 
