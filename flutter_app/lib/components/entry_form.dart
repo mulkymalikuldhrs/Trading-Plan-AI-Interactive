@@ -151,7 +151,7 @@ class _EntryFormState extends State<EntryForm> {
 
             // Direction
             DropdownButtonFormField<String>(
-              value: _selectedDirection,
+              initialValue: _selectedDirection,
               decoration: const InputDecoration(
                 labelText: 'Direction',
                 prefixIcon: Icon(Icons.swap_vert),
@@ -303,7 +303,7 @@ class _EntryFormState extends State<EntryForm> {
     final rrr = risk > 0 ? reward / risk : 0.0;
 
     return Card(
-      color: rrr >= 2.0 ? Colors.green.shade900.withOpacity(0.3) : Colors.red.shade900.withOpacity(0.3),
+      color: rrr >= 2.0 ? Colors.green.shade900.withValues(alpha: 0.3) : Colors.red.shade900.withValues(alpha: 0.3),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
@@ -367,5 +367,3 @@ class _EntryFormState extends State<EntryForm> {
     );
   }
 }
-
-
