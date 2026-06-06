@@ -7,7 +7,7 @@
     This is not just a trading journal; it's a proactive, predictive, and psychologically-aware co-pilot designed to help you master the market by mastering yourself.
   </p>
   <p>
-    <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen" alt="Production Ready">
+    <img src="https://img.shields.io/badge/Status-In%20Development-yellow" alt="In Development">
     <img src="https://img.shields.io/badge/Platform-Flutter%20%7C%20Web%20%7C%20Android-blue" alt="Platform">
     <img src="https://img.shields.io/badge/AI-GPT--4o%20%7C%20Finnhub-orange" alt="AI">
   </p>
@@ -43,7 +43,7 @@ Selamat datang di agensi intelijen pasar pribadi Anda. Ini bukan sekadar jurnal 
 
 Proyek ini dikonsep dan disutradarai oleh:
 **Mulky Malikul Dhaher**
--   **Kontak:** mulkymalikuldhaher@email.com
+-   **Kontak:** mulkymalikudhr@mail.com
 
 </details>
 
@@ -75,7 +75,7 @@ Proyek ini dikonsep dan disutradarai oleh:
 
 本项目由以下人员构思和指导：
 **Mulky Malikul Dhaher**
--   **联系方式：** mulkymalikuldhaher@email.com
+-   **联系方式：** mulkymalikudhr@mail.com
 
 </details>
 
@@ -124,7 +124,7 @@ Welcome to your personal AI-powered market intelligence agency. This is not just
 
 This project was conceptualized and directed by:
 **Mulky Malikul Dhaher**
--   **Contact:** mulkymalikuldhaher@email.com
+-   **Contact:** mulkymalikudhr@mail.com
 
 </details>
 ---
@@ -145,7 +145,7 @@ Please make sure to update tests as appropriate and follow the existing code sty
 
 ## 📬 Contact
 
-**Mulky Malikul Dhaher** — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+**Mulky Malikul Dhaher** — [mulkymalikudhr@mail.com](mailto:mulkymalikudhr@mail.com)
 
 GitHub: [https://github.com/mulkymalikuldhrs](https://github.com/mulkymalikuldhrs)
 
