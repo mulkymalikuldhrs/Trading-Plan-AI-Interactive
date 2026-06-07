@@ -84,7 +84,7 @@ class _ForecastTabState extends State<ForecastTab> {
 
           // Pair selector
           DropdownButtonFormField<String>(
-            value: _selectedPair,
+            initialValue: _selectedPair,
             decoration: InputDecoration(
               labelText: 'Select Pair',
               border: OutlineInputBorder(),

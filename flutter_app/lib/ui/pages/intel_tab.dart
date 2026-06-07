@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../services/gpt_summarizer.dart';
-import '../../services/news_fetcher.dart';
-import '../../services/cot_service.dart';
 
 class IntelTab extends StatefulWidget {
   @override
@@ -10,9 +8,7 @@ class IntelTab extends StatefulWidget {
 
 class _IntelTabState extends State<IntelTab> {
   String _selectedSymbol = "EURUSD";
-  Map<String, dynamic>? _aiSummary;
-  List<Map<String, String>>? _news;
-  Map<String, dynamic>? _cotSummary;
+  Map<String, dynamic>? _marketIntel;
   bool _isLoading = true;
 
   @override
@@ -22,20 +18,21 @@ class _IntelTabState extends State<IntelTab> {
   }
 
   Future<void> _fetchMarketIntel() async {
+    if (!mounted) return;
     setState(() => _isLoading = true);
     try {
-      final summary = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
-      final news = await NewsFetcher.getTopHeadlines(_selectedSymbol);
-      final cot = await CotService.getCotSummary(_selectedSymbol);
-      setState(() {
-        _aiSummary = summary;
-        _news = news;
-        _cotSummary = cot;
-      });
+      final intel = await GptSummarizer.getAiMasterSummary(_selectedSymbol);
+      if (mounted) {
+        setState(() {
+          _marketIntel = intel;
+        });
+      }
     } catch (e) {
-      // Handle error
+      debugPrint('Error fetching market intel: $e');
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
@@ -67,50 +64,71 @@ class _IntelTabState extends State<IntelTab> {
   }
 
   Widget _buildNewsSection() {
+    final List<dynamic> news = _marketIntel?['news_headlines'] ?? [];
     return _buildIntelCard(
       title: "🌐 Top News",
       child: Column(
-        children: _news?.map((item) => ListTile(
-          title: Text(item['title']!),
-          subtitle: Text(item['source']!),
-          dense: true,
-        )).toList() ?? [Text("No news found.")],
+        children: news.isNotEmpty
+            ? news.map((item) {
+                final headline = item.toString();
+                final source = headline.contains('[') ? headline.split(']')[0].replaceAll('[', '') : 'News';
+                return ListTile(
+                  title: Text(headline),
+                  subtitle: Text(source),
+                  dense: true,
+                );
+              }).toList()
+            : [Text("No news found.")],
       ),
     );
   }
 
   Widget _buildCotSummary() {
+    final bias = _marketIntel?['final_bias'] ?? 'N/A';
+    final netPosition = (_marketIntel?['positional_thesis'] ?? 'N/A').toString();
+
     return _buildIntelCard(
       title: "🧠 COT Summary",
       child: ListTile(
-        title: Text("Institutional Bias: ${_cotSummary?['bias']}"),
-        subtitle: Text("Net Position: ${_cotSummary?['netPosition']}"),
+        title: Text("Institutional Bias: $bias"),
+        subtitle: Text("Thesis: $netPosition"),
         trailing: Icon(
-          _cotSummary?['bias'] == 'Bullish' ? Icons.arrow_upward : Icons.arrow_downward,
-          color: _cotSummary?['bias'] == 'Bullish' ? Colors.green : Colors.red,
+          bias.toString().toUpperCase().contains('BULL')
+              ? Icons.arrow_upward
+              : bias.toString().toUpperCase().contains('BEAR')
+                  ? Icons.arrow_downward
+                  : Icons.horizontal_rule,
+          color: bias.toString().toUpperCase().contains('BULL')
+              ? Colors.green
+              : bias.toString().toUpperCase().contains('BEAR')
+                  ? Colors.red
+                  : Colors.grey,
         ),
       ),
     );
   }
 
   Widget _buildAiMasterSummary() {
-    bool hasSignal = _aiSummary?['signal']?['active'] ?? false;
+    bool hasSignal = _marketIntel?['signal']?['active'] ?? false;
     return _buildIntelCard(
       title: "🎯 AI Master Summary",
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Bias: ${_aiSummary?['final_bias']} (Confidence: ${_aiSummary?['confidence_score']}/10)", style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+              "Bias: ${_marketIntel?['final_bias'] ?? 'N/A'} (Confidence: ${_marketIntel?['confidence_score'] ?? '0'}/10)",
+              style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 8),
-          Text("Technical: ${_aiSummary?['technical_thesis']}"),
-          Text("Fundamental: ${_aiSummary?['fundamental_thesis']}"),
-          Text("Positional: ${_aiSummary?['positional_thesis']}"),
-          if(hasSignal) ...[
+          Text("Technical: ${_marketIntel?['technical_thesis'] ?? 'N/A'}"),
+          Text("Fundamental: ${_marketIntel?['fundamental_thesis'] ?? 'N/A'}"),
+          Text("Positional: ${_marketIntel?['positional_thesis'] ?? 'N/A'}"),
+          if (hasSignal) ...[
             SizedBox(height: 16),
-            Text("Recommended Signal:", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
-            Text("Entry: ${_aiSummary?['signal']['entry']}"),
-            Text("SL: ${_aiSummary?['signal']['stop_loss']}"),
-            Text("TP: ${_aiSummary?['signal']['take_profit']}"),
+            Text("Recommended Signal:",
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber)),
+            Text("Entry: ${_marketIntel?['signal']['entry']}"),
+            Text("SL: ${_marketIntel?['signal']['stop_loss']}"),
+            Text("TP: ${_marketIntel?['signal']['take_profit']}"),
           ]
         ],
       ),
