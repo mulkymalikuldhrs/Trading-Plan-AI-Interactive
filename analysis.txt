@@ -1,23 +1,211 @@
-Analyzing branches relative to main
-Branch                                                                 | Unmerged Commits | Last Commit Date
---------------------------------------------------------------------------------------------------------------
-origin/mulky-ai-os-v1-17406691386389127871                             | 1                | 2026-05-15 20:28:21 +0000
-origin/main-11232261757284075030                                       | 1                | 2026-05-15 12:53:26 +0000
-origin/main-11997706143395029384                                       | 1                | 2026-05-14 12:15:45 +0000
-origin/main-hardened-v10-5-0-final-consolidation-10765190012817382543  | 1                | 2026-05-13 12:37:35 +0000
-origin/main-hardened-v10-5-0-final-consolidation-baseline-verified-1534876216676204930 | 1                | 2026-05-12 12:25:34 +0000
-origin/jules-v10-5-0-hardened-consolidation-1697482739849916914        | 1                | 2026-05-11 21:11:52 +0000
-origin/main-hardened-v10-5-0-final-consolidation-11800606350943250271  | 1                | 2026-05-11 12:10:03 +0000
-origin/main-hardened-v10-5-0-final-consolidation-12345678901234567890-15480263544606025942 | 1                | 2026-05-10 12:08:08 +0000
-origin/consolidate-and-upgrade-to-v10-5-0-hardened-final-audit-verification-consolidated-1576763757473828994 | 1                | 2026-05-08 17:58:54 +0000
-origin/harden-v10-4-9-production-ready-baseline-consolidation-final-audit-verification-consolidated-2652102170090797554-8661424452506214753-202747542959409701 | 1                | 2026-05-08 12:36:59 +0000
-origin/main-system-upgrade-v10-4-8-hardened-14653196935799178499       | 1                | 2026-05-07 19:18:12 +0000
-origin/main-9455058398052659269                                        | 1                | 2026-05-07 12:26:31 +0000
-origin/main-hardened-production-v10-4-7-15255806801412645354           | 1                | 2026-05-06 12:18:15 +0000
-origin/main-production-upgrade-v10-4-7-hardened-16318999694587674002   | 1                | 2026-05-05 17:03:15 +0000
-origin/main-hardened-v10-4-6-production-ready-upgrade-final-12137271276796238158 | 1                | 2026-05-05 12:06:59 +0000
-origin/main-production-upgrade-v10-4-6-12966063559296376754            | 1                | 2026-05-04 17:46:54 +0000
-origin/main-3542275726330423711                                        | 1                | 2026-05-04 12:18:34 +0000
-origin/main-16753761369152416142                                       | 1                | 2026-05-02 19:11:39 +0000
-origin/main-hardened-v10-4-5-final-4024286620746127848                 | 1                | 2026-05-02 12:05:08 +0000
-origin/main-13378325587694156625                                       | 1                | 2026-04-30 19:12:42 +0000
+Analyzing flutter_app...
+
+   info • Constructors for public widgets should have a named 'key' parameter • lib/components/ai_chatbox.dart:6:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/components/ai_chatbox.dart:8:3 • library_private_types_in_public_api
+   info • Use 'const' with the constructor to improve performance • lib/components/ai_chatbox.dart:76:21 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/ai_chatbox.dart:104:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/ai_chatbox.dart:114:27 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/components/animated_button.dart:7:3 • use_key_in_widget_constructors
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/components/animated_button.dart:7:3 • prefer_const_constructors_in_immutables
+   info • Invalid use of a private type in a public API • lib/components/animated_button.dart:10:3 • library_private_types_in_public_api
+   info • Use 'const' with the constructor to improve performance • lib/components/animated_button.dart:33:23 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/animated_button.dart:39:18 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/components/consistency_streak_calendar.dart:4:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/components/consistency_streak_calendar.dart:6:3 • library_private_types_in_public_api
+   info • Don't invoke 'print' in production code • lib/components/consistency_streak_calendar.dart:48:7 • avoid_print
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:69:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:71:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:71:33 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:71:72 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:99:12 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:101:14 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:102:16 • prefer_const_constructors
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • lib/components/consistency_streak_calendar.dart:103:21 • prefer_const_literals_to_create_immutables
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:104:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:105:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:106:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:109:22 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:122:9 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:124:9 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:135:9 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/consistency_streak_calendar.dart:136:28 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/components/entry_form.dart:8:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/components/entry_form.dart:10:3 • library_private_types_in_public_api
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:264:27 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:265:28 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:267:32 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:275:27 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:276:28 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:278:32 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:316:61 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:317:65 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:340:13 • prefer_const_constructors
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • lib/components/entry_form.dart:341:25 • prefer_const_literals_to_create_immutables
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:342:17 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:343:17 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:344:17 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:346:26 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:354:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:358:24 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/entry_form.dart:365:26 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/components/equity_chart.dart:5:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/components/equity_chart.dart:7:3 • library_private_types_in_public_api
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:11:25 • prefer_const_constructors
+   info • Don't invoke 'print' in production code • lib/components/equity_chart.dart:37:7 • avoid_print
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:44:27 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:44:41 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:56:25 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:59:30 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:59:53 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:60:28 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:60:51 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:65:88 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:72:93 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/equity_chart.dart:81:29 • prefer_const_constructors
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • lib/components/equity_chart.dart:81:52 • prefer_const_literals_to_create_immutables
+   info • Parameter 'key' could be a super parameter • lib/components/forecast_chart.dart:9:9 • use_super_parameters
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:24:50 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:28:24 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:38:26 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:42:26 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:42:49 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:43:24 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:43:47 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:49:26 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:57:50 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/forecast_chart.dart:58:48 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/components/setup_performance_barchart.dart:5:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/components/setup_performance_barchart.dart:7:3 • library_private_types_in_public_api
+   info • Don't invoke 'print' in production code • lib/components/setup_performance_barchart.dart:33:7 • avoid_print
+   info • Use 'const' with the constructor to improve performance • lib/components/setup_performance_barchart.dart:40:27 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/setup_performance_barchart.dart:40:41 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/setup_performance_barchart.dart:96:28 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/setup_performance_barchart.dart:96:51 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/setup_performance_barchart.dart:97:30 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/setup_performance_barchart.dart:97:53 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/setup_performance_barchart.dart:99:25 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/trading_view_embed_stub.dart:7:10 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/trading_view_embed_stub.dart:8:12 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/trading_view_embed_stub.dart:10:14 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/components/winrate_pie_chart.dart:5:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/components/winrate_pie_chart.dart:7:3 • library_private_types_in_public_api
+   info • Don't invoke 'print' in production code • lib/components/winrate_pie_chart.dart:36:7 • avoid_print
+   info • Use 'const' with the constructor to improve performance • lib/components/winrate_pie_chart.dart:43:27 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/winrate_pie_chart.dart:43:56 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/winrate_pie_chart.dart:43:70 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/winrate_pie_chart.dart:52:125 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/components/winrate_pie_chart.dart:53:127 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/main.dart:20:7 • use_key_in_widget_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/main.dart:35:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/main.dart:37:3 • library_private_types_in_public_api
+   info • The private field _widgetOptions could be 'final' • lib/main.dart:42:23 • prefer_final_fields
+   info • Use 'const' with the constructor to improve performance • lib/main.dart:75:23 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/main.dart:76:23 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/main.dart:81:23 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/main.dart:84:32 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/main.dart:86:24 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/main.dart:92:32 • prefer_const_constructors
+   info • Don't invoke 'print' in production code • lib/services/api_service.dart:40:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/services/cot_service.dart:19:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/services/forecast_service.dart:22:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/services/gpt_summarizer.dart:15:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/services/news_fetcher.dart:14:7 • avoid_print
+   info • Don't invoke 'print' in production code • lib/services/whatsapp_trigger.dart:7:5 • avoid_print
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/chat_page.dart:4:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/chat_page.dart:9:16 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/dashboard_page.dart:8:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:13:16 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/dashboard_page.dart:29:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:33:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:38:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:40:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:42:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:44:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:46:11 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/dashboard_page.dart:54:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:58:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:62:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:64:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:69:15 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:73:11 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/dashboard_page.dart:81:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:94:17 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:99:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:106:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/dashboard_page.dart:108:19 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/entry_page.dart:4:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/entry_page.dart:9:16 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/forecast_tab.dart:6:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/ui/pages/forecast_tab.dart:8:3 • library_private_types_in_public_api
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:78:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:83:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:88:25 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:90:23 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:99:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:106:21 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:107:22 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:110:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:113:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:113:27 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:122:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:134:14 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:136:16 • prefer_const_constructors
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • lib/ui/pages/forecast_tab.dart:137:21 • prefer_const_literals_to_create_immutables
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:138:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:139:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:140:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:143:22 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:159:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:160:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:161:85 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:174:18 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:176:9 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:195:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:195:45 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:196:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:215:30 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/forecast_tab.dart:216:30 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/intel_tab.dart:4:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/ui/pages/intel_tab.dart:6:3 • library_private_types_in_public_api
+   info • The private field _selectedSymbol could be 'final' • lib/ui/pages/intel_tab.dart:10:10 • prefer_final_fields
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:43:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:46:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:52:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:52:27 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:54:24 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:57:17 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:59:17 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:81:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:120:22 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:121:11 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:126:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:127:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:128:24 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/intel_tab.dart:149:13 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/journal_page.dart:5:7 • use_key_in_widget_constructors
+   info • Invalid use of a private type in a public API • lib/ui/pages/journal_page.dart:7:3 • library_private_types_in_public_api
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/journal_page.dart:28:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/journal_page.dart:36:20 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/journal_page.dart:36:34 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/journal_page.dart:40:20 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/journal_page.dart:40:34 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/risk_page.dart:3:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/risk_page.dart:8:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/risk_page.dart:12:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/risk_page.dart:13:16 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/pages/settings_page.dart:3:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/settings_page.dart:8:16 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/settings_page.dart:12:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/pages/settings_page.dart:13:16 • prefer_const_constructors
+   info • Parameter 'key' could be a super parameter • lib/ui/responsive.dart:8:9 • use_super_parameters
+   info • The local variable '_size' starts with an underscore • lib/ui/responsive.dart:27:16 • no_leading_underscores_for_local_identifiers
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/widgets/chat_bubble.dart:7:3 • use_key_in_widget_constructors
+   info • Constructors in '@immutable' classes should be declared as 'const' • lib/ui/widgets/chat_bubble.dart:7:3 • prefer_const_constructors_in_immutables
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/widgets/mood_tracker.dart:3:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/widgets/mood_tracker.dart:12:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/widgets/mood_tracker.dart:31:28 • prefer_const_constructors
+   info • Constructors for public widgets should have a named 'key' parameter • lib/ui/widgets/risk_calculator.dart:3:7 • use_key_in_widget_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/widgets/risk_calculator.dart:12:13 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/ui/widgets/risk_calculator.dart:13:13 • prefer_const_constructors
+
+207 issues found. (ran in 2.0s)
