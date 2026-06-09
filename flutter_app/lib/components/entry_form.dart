@@ -6,6 +6,8 @@ import '../services/sheet_api.dart';
 import '../services/gpt_service.dart';
 
 class EntryForm extends StatefulWidget {
+  const EntryForm({super.key});
+
   @override
   _EntryFormState createState() => _EntryFormState();
 }
@@ -156,10 +158,12 @@ class _EntryFormState extends State<EntryForm> {
                 labelText: 'Direction',
                 prefixIcon: Icon(Icons.swap_vert),
               ),
-              items: _directions.map((dir) => DropdownMenuItem(
-                value: dir,
-                child: Text(dir),
-              )).toList(),
+              items: _directions
+                  .map((dir) => DropdownMenuItem(
+                        value: dir,
+                        child: Text(dir),
+                      ))
+                  .toList(),
               onChanged: (value) => setState(() => _selectedDirection = value!),
             ),
             const SizedBox(height: 16),
@@ -259,10 +263,10 @@ class _EntryFormState extends State<EntryForm> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: _isSubmitting ? null : _getAiValidation,
-                    icon: Icon(Icons.psychology),
-                    label: Text('AI Validate'),
+                    icon: const Icon(Icons.psychology),
+                    label: const Text('AI Validate'),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                   ),
                 ),
@@ -270,10 +274,10 @@ class _EntryFormState extends State<EntryForm> {
                 Expanded(
                   child: ElevatedButton.icon(
                     onPressed: _isSubmitting ? null : _submitForm,
-                    icon: Icon(Icons.save),
-                    label: Text('Log Trade'),
+                    icon: const Icon(Icons.save),
+                    label: const Text('Log Trade'),
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
                   ),
                 ),
@@ -303,14 +307,16 @@ class _EntryFormState extends State<EntryForm> {
     final rrr = risk > 0 ? reward / risk : 0.0;
 
     return Card(
-      color: rrr >= 2.0 ? Colors.green.shade900.withOpacity(0.3) : Colors.red.shade900.withOpacity(0.3),
+      color: rrr >= 2.0
+          ? Colors.green.shade900.withValues(alpha: 0.3)
+          : Colors.red.shade900.withValues(alpha: 0.3),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Risk: ${risk.toStringAsFixed(2)}', style: TextStyle(color: Colors.redAccent)),
-            Text('Reward: ${reward.toStringAsFixed(2)}', style: TextStyle(color: Colors.greenAccent)),
+            Text('Risk: ${risk.toStringAsFixed(2)}', style: const TextStyle(color: Colors.redAccent)),
+            Text('Reward: ${reward.toStringAsFixed(2)}', style: const TextStyle(color: Colors.greenAccent)),
             Text('RRR: ${rrr.toStringAsFixed(1)}', style: TextStyle(
               color: rrr >= 2.0 ? Colors.greenAccent : Colors.redAccent,
               fontWeight: FontWeight.bold,
@@ -333,7 +339,7 @@ class _EntryFormState extends State<EntryForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
                 Icon(Icons.psychology, color: Colors.amber),
                 SizedBox(width: 8),
@@ -347,18 +353,18 @@ class _EntryFormState extends State<EntryForm> {
                 ),
               ],
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             if (_aiFeedback!['error'] != null)
               Text(
                 _aiFeedback!['error'],
-                style: TextStyle(color: Colors.redAccent),
+                style: const TextStyle(color: Colors.redAccent),
               )
             else
               ..._aiFeedback!.entries.map((entry) => Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Text(
                   '${entry.key}: ${entry.value}',
-                  style: TextStyle(color: Colors.white70),
+                  style: const TextStyle(color: Colors.white70),
                 ),
               )),
           ],
@@ -367,5 +373,3 @@ class _EntryFormState extends State<EntryForm> {
     );
   }
 }
-
-

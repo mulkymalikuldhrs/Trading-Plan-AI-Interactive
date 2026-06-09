@@ -1,17 +1,22 @@
 import requests
 import json
+import os
 
 class DhaherAiClient:
     """
     A Python client for interacting with the Dhaher Trading Plan AI Google Apps Script API.
     """
-    def __init__(self, apps_script_url):
+    def __init__(self, apps_script_url, api_key=None):
         if not apps_script_url or "YOUR_DEPLOYMENT_ID" in apps_script_url:
             raise ValueError("Google Apps Script URL is not set or is a placeholder.")
         self.api_url = apps_script_url
+        self.api_key = api_key or os.environ.get('BOT_API_KEY')
 
     def _post_request(self, action, data={}):
         """Helper function to make POST requests to the API."""
+        if self.api_key:
+            data['apiKey'] = self.api_key
+
         payload = {
             'action': action,
             'data': data
@@ -57,12 +62,6 @@ class DhaherAiClient:
 
     def log_trade(self, trade_data):
         """Logs a new trade to the journal."""
-        # Example trade_data:
-        # {
-        #   'pair': 'BTC/USD', 'direction': 'Buy', 'entry': 60000, 'sl': 59000, 'tp': 65000,
-        #   'rrr': 5, 'setup': 'Breakout', 'mood': 'Confident', 'ai_status': 'Approved',
-        #   'result': 'WIN', 'emotion_after': 'Elated', 'gpt_comment': 'Good trade.'
-        # }
         print(f"Logging trade for {trade_data.get('pair')}...")
         return self._post_request('logTrade', trade_data)
 
@@ -74,21 +73,15 @@ class DhaherAiClient:
 # Example Usage:
 if __name__ == '__main__':
     # This is for testing purposes. Replace with your actual deployed URL.
-    # The script will raise a ValueError if this is a placeholder.
-    APPS_SCRIPT_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL"
+    APPS_SCRIPT_URL = os.environ.get('GAS_URL', "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL")
+    API_KEY = os.environ.get('BOT_API_KEY')
 
     try:
-        client = DhaherAiClient(APPS_SCRIPT_URL)
+        client = DhaherAiClient(APPS_SCRIPT_URL, API_KEY)
 
         # --- Get Journal Data ---
         journal = client.get_journal_data()
         print(f"Successfully fetched {len(journal)} journal entries.")
-        # print(journal[0] if journal else "Journal is empty.")
-
-        # --- Get a Forecast ---
-        # forecast = client.get_forecast('GOLD')
-        # print("\nForecast for GOLD:")
-        # print(json.dumps(forecast, indent=2))
 
     except ValueError as e:
         print(f"\nError: {e}")
