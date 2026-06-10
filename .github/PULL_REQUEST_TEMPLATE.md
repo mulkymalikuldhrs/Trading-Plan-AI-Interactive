@@ -1,29 +1,34 @@
-# 🔄 Pull Request
+## Description
+Brief description of the changes in this PR.
 
-## 📝 Description
+## Type of Change
+- [ ] Bug fix (non-breaking change that fixes an issue)
+- [ ] New feature (non-breaking change that adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation update
+- [ ] Refactoring (no functional changes)
+- [ ] Test addition/update
 
-Summary of changes and related issue.
+## Related Issues
+Fixes #(issue number)
 
-Fixes # (issue)
+## Changes Made
+- Change 1
+- Change 2
+- Change 3
 
-## 🎯 Type of Change
+## Testing
+- [ ] I have tested my changes locally
+- [ ] I have added tests for new functionality
+- [ ] All existing tests pass
 
-- [ ] 🐛 Bug fix
-- [ ] ✨ New feature
-- [ ] 💥 Breaking change
-- [ ] 📝 Documentation update
-- [ ] 🎨 Style/UI update
-- [ ] ♻️ Code refactoring
+## Screenshots (if applicable)
+Add screenshots to help explain your changes.
 
-## ✅ Checklist
-
-- [ ] My code follows the style guidelines
-- [ ] I have performed a self-review
-- [ ] I have updated documentation
+## Checklist
+- [ ] My code follows the project's style guidelines
+- [ ] I have performed a self-review of my code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
 - [ ] My changes generate no new warnings
-
-## ⚠️ Disclaimer
-
-This project is for Education Purpose Only. The authors assume no responsibility or liability.
-
-**Contact:** Mulky Malikul Dhaher | mulkymalikuldhaher@email.com
+- [ ] I have added tests that prove my fix is effective or that my feature works
