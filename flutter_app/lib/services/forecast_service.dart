@@ -24,4 +24,16 @@ class ForecastService {
     }
   }
 
+  static Future<List<dynamic>> getRecentForecasts() async {
+    try {
+      final response = await ApiService.post('exportToJson', {
+        'sheetName': 'Forecasts',
+      });
+      return response as List<dynamic>;
+    } catch (e) {
+      print('ForecastService Error: $e');
+      return [];
+    }
+  }
+
 }
