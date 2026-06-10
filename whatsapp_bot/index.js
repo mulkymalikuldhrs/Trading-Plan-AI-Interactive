@@ -1,168 +1,120 @@
-const { Client, LocalAuth, MessageMedia, Buttons } = require('whatsapp-web.js');
+/**
+ * 📲 MULKY AI TRADING OS - WHATSAPP BOT SERVER
+ *
+ * This server connects the Google Apps Script backend to WhatsApp
+ * using the whatsapp-web.js library.
+ */
+
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const axios = require('axios');
 const express = require('express');
 const bodyParser = require('body-parser');
-const axios = require('axios');
+
+const app = express();
+app.use(bodyParser.json());
 
 // --- CONFIGURATION ---
-const app = express();
-const port = process.env.PORT || 3000;
-const GOOGLE_APPS_SCRIPT_URL = process.env.GAS_URL;
+const GAS_URL = process.env.GAS_URL;
 const BOT_API_KEY = process.env.BOT_API_KEY;
+const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
-let clientReady = false;
-
-// --- WHATSAPP CLIENT SETUP ---
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        executablePath: process.env.CHROME_PATH || null
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
     }
 });
 
-client.on('qr', (qr) => qrcode.generate(qr, { small: true }));
+// --- WHATSAPP EVENT HANDLERS ---
+
+client.on('qr', (qr) => {
+    qrcode.generate(qr, { small: true });
+    console.log('Scan the QR code above to log in.');
+});
 
 client.on('ready', () => {
-    console.log('Dhaher Trading Plan AI Bot is ready!');
-    clientReady = true;
+    console.log('WhatsApp Bot is ready!');
 });
 
-// --- ADVANCED COMMAND HANDLING ---
 client.on('message', async (msg) => {
-    const text = msg.body.toLowerCase();
-    const command = text.split(' ')[0];
-    const args = text.split(' ').slice(1);
+    if (msg.body.startsWith('!')) {
+        const [command, ...args] = msg.body.slice(1).split(' ');
+        const symbol = args[0] || 'EURUSD';
 
-    const commandHandlers = {
-        '!ping': (m) => m.reply('pong'),
-        '!reflect': handleReflect,
-        '/summary': handleSummary,
-        '/cot': handleCot,
-        '/forecast': handleForecast,
-    };
-
-    if (commandHandlers[command]) {
         try {
-            await commandHandlers[command](msg, args);
-        } catch (error) {
-            console.error(`Error handling command ${command}:`, error);
-            msg.reply('❌ An error occurred while processing your request.');
+            msg.reply(`⏳ Processing request for ${symbol}...`);
+
+            const actionMap = {
+                'intel': 'getAiMasterSummary',
+                'summary': 'getAiMasterSummary',
+                'forecast': 'getForecast',
+                'plan': 'getForecast'
+            };
+
+            const action = actionMap[command.toLowerCase()] || 'getAiMasterSummary';
+
+            const response = await axios.post(GAS_URL, {
+                action: action,
+                data: {
+                    symbol: symbol,
+                    pair: symbol,
+                    timeframe: 'H4',
+                    days: 3,
+                    apiKey: BOT_API_KEY
+                }
+            });
+
+            if (response.data.status === 'success') {
+                const result = response.data.data;
+                let replyText = `🔮 *AI ANALYSIS: ${symbol}*\n\n`;
+
+                if (action === 'getAiMasterSummary') {
+                    replyText += `Bias: ${result.final_bias}\n`;
+                    replyText += `Confidence: ${result.confidence_score}/10\n\n`;
+                    replyText += `*Thesis:*\n${result.technical_thesis}\n\n`;
+                    if (result.signal && result.signal.active) {
+                        replyText += `*🎯 Recommended Setup:*\nEntry: ${result.signal.entry}\nSL: ${result.signal.stop_loss}\nTP: ${result.signal.take_profit}`;
+                    }
+                } else {
+                    replyText += `Forecast: ${result.bias}\n`;
+                    replyText += `Prob: ${result.probability}%\n\n`;
+                    replyText += `*Zone:* ${result.entry_zone}\n`;
+                    replyText += `*Targets:* SL ${result.stop_loss} | TP ${result.take_profit}`;
+                }
+
+                msg.reply(replyText);
+            } else {
+                msg.reply("❌ Error: " + response.data.message);
+            }
+        } catch (e) {
+            console.error(e);
+            msg.reply("⚠️ Failed to connect to AI engine.");
         }
     }
 });
 
-client.initialize();
+// --- HTTP ENDPOINTS FOR NOTIFICATIONS ---
 
-// --- COMMAND HANDLER FUNCTIONS ---
-async function handleReflect(msg, args) {
-    msg.reply('🧘‍♂️ Reflection mode: How was your discipline today? (Good/Average/Poor)');
-}
-
-async function handleSummary(msg, args) {
-    const symbol = args[0] ? args[0].toUpperCase() : 'EURUSD';
-    msg.reply(`🤖 Generating intelligence summary for **${symbol}**...`);
-
-    try {
-        const response = await axios.post(GOOGLE_APPS_SCRIPT_URL, {
-            action: 'getAiMasterSummary',
-            data: { symbol: symbol, apiKey: BOT_API_KEY }
-        });
-
-        // Defensive handling for stringified JSON responses from GAS
-        let summary = response.data.data;
-        if (typeof summary === 'string') {
-            summary = JSON.parse(summary);
-        }
-
-        const formattedReply = `
-*🧠 AI Master Summary for ${symbol}*
-*Bias:* ${summary.final_bias} (Confidence: ${summary.confidence_score}/10)
-*Signal:* ${summary.signal.active ? 'ACTIVE' : 'INACTIVE'}
-*Entry:* ${summary.signal.entry || 'N/A'}
-*Stop Loss:* ${summary.signal.stop_loss || 'N/A'}
-*Take Profit:* ${summary.signal.take_profit || 'N/A'}
-
-*Technical Thesis:* ${summary.technical_thesis}
-        `;
-        msg.reply(formattedReply);
-    } catch (error) {
-        msg.reply('❌ Sorry, I could not generate the summary.');
-    }
-}
-
-async function handleCot(msg, args) {
-    const symbol = args[0] ? args[0].toUpperCase() : 'EURUSD';
-    msg.reply(`📊 Fetching COT data for **${symbol}**...`);
-
-    try {
-        const response = await axios.post(GOOGLE_APPS_SCRIPT_URL, {
-            action: 'getAiMasterSummary',
-            data: { symbol: symbol, apiKey: BOT_API_KEY }
-        });
-
-        let data = response.data.data;
-        if (typeof data === 'string') {
-            data = JSON.parse(data);
-        }
-
-        const cot = data.positional_thesis;
-        msg.reply(`*📊 COT Intelligence for ${symbol}:*\n\n${cot}`);
-    } catch (error) {
-        msg.reply('❌ Could not fetch COT data.');
-    }
-}
-
-async function handleForecast(msg, args) {
-    const symbol = args[0] ? args[0].toUpperCase() : 'EURUSD';
-    msg.reply(`🔮 Generating 7-day forecast for **${symbol}**...`);
-
-    try {
-        const response = await axios.post(GOOGLE_APPS_SCRIPT_URL, {
-            action: 'getForecast',
-            data: { pair: symbol, timeframe: 'H4', days: 7, apiKey: BOT_API_KEY }
-        });
-
-        let forecast = response.data.data;
-        if (typeof forecast === 'string') {
-            forecast = JSON.parse(forecast);
-        }
-
-        const formattedReply = `
-*🔮 AI Forecast for ${symbol}*
-*Bias:* ${forecast.bias}
-*Probability:* ${forecast.probability}%
-*Entry Zone:* ${forecast.entry_zone}
-*SL:* ${forecast.stop_loss} | *TP:* ${forecast.take_profit}
-        `;
-        msg.reply(formattedReply);
-    } catch (error) {
-        msg.reply('❌ Could not generate forecast.');
-    }
-}
-
-// --- API ENDPOINT FOR SENDING MESSAGES ---
-app.post('/send', async (req, res) => {
+app.post('/notify', async (req, res) => {
     const { to, message, apiKey } = req.body;
 
     if (apiKey !== BOT_API_KEY) {
-        return res.status(401).json({ status: 'error', message: 'Unauthorized' });
-    }
-
-    if (!clientReady) {
-        return res.status(503).json({ status: 'error', message: 'WhatsApp client not ready' });
+        return res.status(401).send("Unauthorized");
     }
 
     try {
         const chatId = to.includes('@c.us') ? to : `${to}@c.us`;
         await client.sendMessage(chatId, message);
-        res.json({ status: 'success' });
-    } catch (error) {
-        res.status(500).json({ status: 'error', message: error.message });
+        res.status(200).send("Notification sent.");
+    } catch (e) {
+        console.error(e);
+        res.status(500).send("Failed to send notification.");
     }
 });
 
-app.listen(port, () => {
-    console.log(`WhatsApp Bot server listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Notification server listening on port ${PORT}`);
 });
+
+client.initialize();

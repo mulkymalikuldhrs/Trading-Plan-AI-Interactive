@@ -1,5 +1,14 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v11.1.4 - Production Hardening (2025-03-04)
+
+### 🔥 Major Changes
+- **HARDENING:** Replaced all COT data fetching with direct CFTC scraping logic in the Google Apps Script backend.
+- **CONSOLIDATION:** Refactored Flutter `IntelTab` to use a single consolidated API call for market intelligence (News, COT, AI Analysis).
+- **UPGRADE:** Synchronized all system versioning to v11.1.4.
+- **MODERNIZATION:** Replaced remaining deprecated `.withOpacity()` calls with `.withValues()` and ensured Material 3 compliance in components.
+- **CLEANUP:** Removed redundant `NewsFetcher` and `CotService` Flutter services.
+
 ## v11.0.0 - Production Release & Branch Consolidation (2025-03-04)
 
 ### 🔥 Major Changes
@@ -73,6 +82,6 @@
 
 ---
 
-> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikudhr@mail.com](mailto:mulkymalikudhr@mail.com)
 >
 > **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)

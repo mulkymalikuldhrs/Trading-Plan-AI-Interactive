@@ -1,371 +1,236 @@
 import 'package:flutter/material.dart';
-import './animated_button.dart';
-import './trading_view_embed.dart';
-import './mood_selector.dart';
 import '../services/sheet_api.dart';
-import '../services/gpt_service.dart';
+import '../services/gpt_summarizer.dart';
+import '../services/emotional_lockout_service.dart';
+import 'package:provider/provider.dart';
+import 'mood_selector.dart';
+import 'trading_view_embed.dart';
 
 class EntryForm extends StatefulWidget {
+  const EntryForm({super.key});
+
   @override
   _EntryFormState createState() => _EntryFormState();
 }
 
 class _EntryFormState extends State<EntryForm> {
   final _formKey = GlobalKey<FormState>();
-  final _assetController = TextEditingController(text: "EURUSD");
-  final _directionController = TextEditingController();
-  final _entryPriceController = TextEditingController();
-  final _stopLossController = TextEditingController();
-  final _takeProfitController = TextEditingController();
-  final _setupController = TextEditingController();
+  final _pairController = TextEditingController(text: "EURUSD");
+  final _entryController = TextEditingController();
+  final _slController = TextEditingController();
+  final _tpController = TextEditingController();
   final _notesController = TextEditingController();
-
-  String _selectedMood = 'Focused';
-  String _selectedDirection = 'BUY';
+  String _direction = "BUY";
+  String _setup = "Breakout";
+  String _mood = "Neutral";
+  bool _isValidating = false;
+  String _aiFeedback = "";
   bool _showChart = false;
-  bool _isSubmitting = false;
-  bool _showAiFeedback = false;
-  Map<String, dynamic>? _aiFeedback;
 
-  final List<String> _directions = ['BUY', 'SELL'];
-
-  void _onMoodSelected(String mood) {
-    setState(() => _selectedMood = mood);
-  }
-
-  Future<void> _submitForm() async {
+  Future<void> _validateWithAI() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() => _isSubmitting = true);
+    setState(() {
+      _isValidating = true;
+      _aiFeedback = "AI is analyzing your setup...";
+    });
 
     try {
-      final tradeData = {
-        'pair': _assetController.text.toUpperCase(),
-        'direction': _selectedDirection,
-        'entry': double.tryParse(_entryPriceController.text) ?? 0.0,
-        'sl': double.tryParse(_stopLossController.text) ?? 0.0,
-        'tp': double.tryParse(_takeProfitController.text) ?? 0.0,
-        'setup': _setupController.text,
-        'mood': _selectedMood,
-        'ai_status': 'PENDING',
+      final feedback = await GptSummarizer.validateTrade(
+        pair: _pairController.text,
+        direction: _direction,
+        entry: _entryController.text,
+        sl: _slController.text,
+        tp: _tpController.text,
+        setup: _setup,
+        mood: _mood,
+      );
+
+      setState(() {
+        _aiFeedback = feedback['analysis'] ?? "No analysis provided.";
+      });
+    } catch (e) {
+      setState(() {
+        _aiFeedback = "AI Validation failed. Check connection.";
+      });
+    } finally {
+      setState(() => _isValidating = false);
+    }
+  }
+
+  Future<void> _submitTrade() async {
+    final lockout = Provider.of<EmotionalLockoutService>(context, listen: false);
+    if (lockout.isLocked) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("🚨 LOCKOUT ACTIVE: You cannot trade right now."), backgroundColor: Colors.red),
+      );
+      return;
+    }
+
+    if (!_formKey.currentState!.validate()) return;
+
+    try {
+      await SheetApi.logTradeFromMap({
+        'pair': _pairController.text,
+        'direction': _direction,
+        'entry': _entryController.text,
+        'sl': _slController.text,
+        'tp': _tpController.text,
+        'setup': _setup,
+        'mood': _mood,
+        'ai_status': _aiFeedback.isNotEmpty ? "Validated" : "Self-Entry",
+        'gpt_comment': _aiFeedback,
         'notes': _notesController.text,
-      };
-
-      // Calculate RRR
-      final entry = double.tryParse(_entryPriceController.text) ?? 0.0;
-      final sl = double.tryParse(_stopLossController.text) ?? 0.0;
-      final tp = double.tryParse(_takeProfitController.text) ?? 0.0;
-      final risk = (entry - sl).abs();
-      final reward = (tp - entry).abs();
-      final rrr = risk > 0 ? (reward / risk).toStringAsFixed(1) : '0.0';
-      tradeData['rrr'] = rrr;
-
-      await SheetApi.logTradeFromMap(tradeData);
+      });
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Trade logged successfully! RRR: $rrr'),
-            backgroundColor: Colors.green,
-          ),
+          const SnackBar(content: Text("✅ Trade logged successfully!"), backgroundColor: Colors.green),
         );
-        _formKey.currentState!.reset();
-        setState(() {
-          _showAiFeedback = false;
-          _aiFeedback = null;
-        });
       }
+      _formKey.currentState!.reset();
+      setState(() {
+        _aiFeedback = "";
+        _pairController.text = "EURUSD";
+        _direction = "BUY";
+        _setup = "Breakout";
+        _mood = "Neutral";
+      });
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error logging trade: $e'),
-            backgroundColor: Colors.red,
-          ),
+          const SnackBar(content: Text("❌ Failed to log trade."), backgroundColor: Colors.red),
         );
       }
-    } finally {
-      setState(() => _isSubmitting = false);
     }
-  }
-
-  Future<void> _getAiValidation() async {
-    setState(() => _isSubmitting = true);
-    try {
-      final data = {
-        'Pair': _assetController.text,
-        'Direction': _selectedDirection,
-        'Entry': _entryPriceController.text,
-        'SL': _stopLossController.text,
-        'TP': _takeProfitController.text,
-        'Mood': _selectedMood,
-        'Setup': _setupController.text,
-      };
-      final response = await GptService.getValidation(data);
-      setState(() {
-        _aiFeedback = response is Map<String, dynamic> ? response : {'feedback': response.toString()};
-        _showAiFeedback = true;
-      });
-    } catch (e) {
-      setState(() {
-        _aiFeedback = {'error': 'Could not get AI validation. Check your connection.'};
-        _showAiFeedback = true;
-      });
-    } finally {
-      setState(() => _isSubmitting = false);
-    }
-  }
-
-  @override
-  void dispose() {
-    _assetController.dispose();
-    _directionController.dispose();
-    _entryPriceController.dispose();
-    _stopLossController.dispose();
-    _takeProfitController.dispose();
-    _setupController.dispose();
-    _notesController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(20),
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            // Asset/Pair
-            TextFormField(
-              controller: _assetController,
-              decoration: const InputDecoration(
-                labelText: 'Asset/Pair (e.g., FX:EURUSD)',
-                prefixIcon: Icon(Icons.show_chart),
-              ),
-              validator: (value) => value == null || value.isEmpty ? 'Enter asset pair' : null,
-              onChanged: (value) => setState(() {}),
-            ),
-            const SizedBox(height: 16),
-
-            // Direction
-            DropdownButtonFormField<String>(
-              value: _selectedDirection,
-              decoration: const InputDecoration(
-                labelText: 'Direction',
-                prefixIcon: Icon(Icons.swap_vert),
-              ),
-              items: _directions.map((dir) => DropdownMenuItem(
-                value: dir,
-                child: Text(dir),
-              )).toList(),
-              onChanged: (value) => setState(() => _selectedDirection = value!),
-            ),
-            const SizedBox(height: 16),
-
-            // Entry Price
-            TextFormField(
-              controller: _entryPriceController,
-              decoration: const InputDecoration(
-                labelText: 'Entry Price',
-                prefixIcon: Icon(Icons.trending_flat),
-              ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              validator: (value) => value == null || value.isEmpty ? 'Enter entry price' : null,
-            ),
-            const SizedBox(height: 16),
-
-            // SL and TP in a row
+          children: [
+            Text("Validate New Trade Setup", style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: TextFormField(
-                    controller: _stopLossController,
-                    decoration: const InputDecoration(
-                      labelText: 'Stop Loss',
-                      prefixIcon: Icon(Icons.arrow_downward, color: Colors.red),
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    validator: (value) => value == null || value.isEmpty ? 'Enter SL' : null,
+                    controller: _pairController,
+                    decoration: const InputDecoration(labelText: "Asset Pair", border: OutlineInputBorder()),
+                    validator: (v) => v!.isEmpty ? "Required" : null,
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: TextFormField(
-                    controller: _takeProfitController,
-                    decoration: const InputDecoration(
-                      labelText: 'Take Profit',
-                      prefixIcon: Icon(Icons.arrow_upward, color: Colors.green),
-                    ),
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    validator: (value) => value == null || value.isEmpty ? 'Enter TP' : null,
+                  child: DropdownButtonFormField<String>(
+                    value: _direction,
+                    items: ["BUY", "SELL"].map((d) => DropdownMenuItem(value: d, child: Text(d))).toList(),
+                    onChanged: (v) => setState(() => _direction = v!),
+                    decoration: const InputDecoration(labelText: "Direction", border: OutlineInputBorder()),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-
-            // RRR Display
-            if (_entryPriceController.text.isNotEmpty &&
-                _stopLossController.text.isNotEmpty &&
-                _takeProfitController.text.isNotEmpty)
-              _buildRrrCard(),
-            const SizedBox(height: 16),
-
-            // Setup Type
-            TextFormField(
-              controller: _setupController,
-              decoration: const InputDecoration(
-                labelText: 'Setup Type (e.g., Breakout, Pullback)',
-                prefixIcon: Icon(Icons.category),
-              ),
+            const SizedBox(height: 15),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _entryController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: "Entry Price", border: OutlineInputBorder()),
+                    validator: (v) => v!.isEmpty ? "Required" : null,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextFormField(
+                    controller: _slController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: "Stop Loss", border: OutlineInputBorder()),
+                    validator: (v) => v!.isEmpty ? "Required" : null,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextFormField(
+                    controller: _tpController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: "Take Profit", border: OutlineInputBorder()),
+                    validator: (v) => v!.isEmpty ? "Required" : null,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-
-            // Mood Selector
-            MoodSelector(onMoodSelected: _onMoodSelected),
-            const SizedBox(height: 16),
-
-            // Notes
+            const SizedBox(height: 15),
+            DropdownButtonFormField<String>(
+              value: _setup,
+              items: ["Breakout", "Retest", "Trendline", "Scalp", "News"]
+                  .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                  .toList(),
+              onChanged: (v) => setState(() => _setup = v!),
+              decoration: const InputDecoration(labelText: "Setup Type", border: OutlineInputBorder()),
+            ),
+            const SizedBox(height: 15),
+            MoodSelector(
+              currentMood: _mood,
+              onMoodChanged: (m) => setState(() => _mood = m),
+            ),
+            const SizedBox(height: 15),
             TextFormField(
               controller: _notesController,
-              decoration: const InputDecoration(
-                labelText: 'Notes / Rationale',
-                prefixIcon: Icon(Icons.note),
-              ),
+              decoration: const InputDecoration(labelText: "Trade Notes", border: OutlineInputBorder()),
               maxLines: 3,
             ),
-            const SizedBox(height: 16),
-
-            // Show Chart Button
-            AnimatedButton(
-              text: _showChart ? 'Hide Chart' : '📊 Show Live Chart',
-              onPressed: () => setState(() => _showChart = !_showChart),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: _isValidating ? null : _validateWithAI,
+              icon: _isValidating ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.psychology),
+              label: const Text("GET AI VALIDATION"),
+              style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 15), backgroundColor: Colors.deepPurple),
             ),
-
-            if (_showChart)
+            if (_aiFeedback.isNotEmpty) ...[
+              const SizedBox(height: 20),
               Container(
-                height: 450,
-                margin: const EdgeInsets.only(top: 16),
-                child: TradingViewEmbed(symbol: _assetController.text),
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(color: Colors.deepPurple.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.deepPurple)),
+                child: Text(_aiFeedback, style: const TextStyle(fontStyle: FontStyle.italic)),
               ),
-
-            const SizedBox(height: 24),
-
-            // Action Buttons
+            ],
+            const SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _isSubmitting ? null : _getAiValidation,
-                    icon: Icon(Icons.psychology),
-                    label: Text('AI Validate'),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                    ),
+                  child: OutlinedButton(
+                    onPressed: () => setState(() => _showChart = !_showChart),
+                    child: Text(_showChart ? "HIDE CHART" : "SHOW CHART"),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _isSubmitting ? null : _submitForm,
-                    icon: Icon(Icons.save),
-                    label: Text('Log Trade'),
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                    ),
+                  child: ElevatedButton(
+                    onPressed: _submitTrade,
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                    child: const Text("LOG TRADE"),
                   ),
                 ),
               ],
             ),
-
-            if (_isSubmitting)
-              const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Center(child: CircularProgressIndicator()),
+            if (_showChart) ...[
+              const SizedBox(height: 20),
+              SizedBox(
+                height: 400,
+                child: TradingViewEmbed(symbol: _pairController.text),
               ),
-
-            if (_showAiFeedback && _aiFeedback != null)
-              _buildGptFeedbackCard(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRrrCard() {
-    final entry = double.tryParse(_entryPriceController.text) ?? 0.0;
-    final sl = double.tryParse(_stopLossController.text) ?? 0.0;
-    final tp = double.tryParse(_takeProfitController.text) ?? 0.0;
-    final risk = (entry - sl).abs();
-    final reward = (tp - entry).abs();
-    final rrr = risk > 0 ? reward / risk : 0.0;
-
-    return Card(
-      color: rrr >= 2.0 ? Colors.green.shade900.withOpacity(0.3) : Colors.red.shade900.withOpacity(0.3),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Risk: ${risk.toStringAsFixed(2)}', style: TextStyle(color: Colors.redAccent)),
-            Text('Reward: ${reward.toStringAsFixed(2)}', style: TextStyle(color: Colors.greenAccent)),
-            Text('RRR: ${rrr.toStringAsFixed(1)}', style: TextStyle(
-              color: rrr >= 2.0 ? Colors.greenAccent : Colors.redAccent,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            )),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildGptFeedbackCard() {
-    return Card(
-      margin: const EdgeInsets.only(top: 24),
-      elevation: 4,
-      color: Colors.blueGrey[800],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.psychology, color: Colors.amber),
-                SizedBox(width: 8),
-                Text(
-                  'AI Validation Feedback',
-                  style: TextStyle(
-                    color: Colors.amber,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12),
-            if (_aiFeedback!['error'] != null)
-              Text(
-                _aiFeedback!['error'],
-                style: TextStyle(color: Colors.redAccent),
-              )
-            else
-              ..._aiFeedback!.entries.map((entry) => Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Text(
-                  '${entry.key}: ${entry.value}',
-                  style: TextStyle(color: Colors.white70),
-                ),
-              )),
+            ]
           ],
         ),
       ),
     );
   }
 }
-
-

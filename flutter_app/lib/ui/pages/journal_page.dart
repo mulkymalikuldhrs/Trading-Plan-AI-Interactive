@@ -3,6 +3,8 @@ import '../../services/api_service.dart';
 import '../../models/trade.dart';
 
 class JournalPage extends StatefulWidget {
+  const JournalPage({super.key});
+
   @override
   _JournalPageState createState() => _JournalPageState();
 }
@@ -25,7 +27,7 @@ class _JournalPageState extends State<JournalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("📚 Trade Journal"),
+        title: const Text("📚 Trade Journal"),
         centerTitle: true,
         backgroundColor: Colors.blueGrey[900],
       ),
@@ -33,11 +35,11 @@ class _JournalPageState extends State<JournalPage> {
         future: _trades,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("No trades found."));
+            return const Center(child: Text("No trades found."));
           } else {
             return ListView.builder(
               itemCount: snapshot.data!.length,
