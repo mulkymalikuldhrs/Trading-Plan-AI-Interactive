@@ -1,4 +1,6 @@
-<!-- BANNER -->
+<img src="docs/banner.png" width="100%">
+
+<!-- CAPSULE-RENDER HEADER -->
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a1a2e,50:0d2b4a,100:143d5e&fontColor=38bdf8&descColor=22d3ee&height=220&section=header&text=Trading%20Plan%20AI&fontSize=60&desc=AI%20Market%20Intelligence&animation=fadeIn" />
 
 <!-- TYPING SVG -->
@@ -26,6 +28,8 @@
 
 **Trading Plan AI Interactive** is an AI-powered market intelligence platform that combines a Flutter mobile app, a Python analysis backend, and WhatsApp integration for real-time trading signal delivery. Designed as a personal decision-support tool, it provides market analysis, trade plan generation, and instant notifications via WhatsApp — keeping you informed without requiring you to stare at charts all day.
 
+---
+
 ## Features
 
 ### AI Market Analysis
@@ -47,7 +51,7 @@
 - Customizable alert thresholds
 
 ### Flutter Mobile App
-- Cross-platform (iOS & Android)
+- Cross-platform (iOS and Android)
 - Real-time charts and market data
 - Trade plan tracking and journaling
 - Performance analytics dashboard
@@ -58,6 +62,8 @@
 - WhatsApp Business API integration
 - RESTful API for Flutter client
 
+---
+
 ## Visual Architecture
 
 > Interactive diagrams showing multi-platform architecture, AI plan generation, signal delivery, and emotional lockout system.
@@ -67,7 +73,7 @@
 ```mermaid
 graph TB
     subgraph MOBILE["📱 Flutter Mobile App"]
-        UI["Cross-Platform UI<br/>iOS & Android"]
+        UI["Cross-Platform UI<br/>iOS and Android"]
         CHARTS2["Real-Time<br/>Charts"]
         JOURNAL["Trade Journal<br/>& Tracking"]
         LOCKOUT_UI["Emotional Lockout<br/>Interface"]
@@ -96,7 +102,7 @@ graph TB
 
     subgraph DATA_SRC["🌐 Data Sources"]
         MARKET["Market Data<br/>Providers"]
-        NEWS3["News &<br/>Sentiment"]
+        NEWS3["News and<br/>Sentiment"]
     end
 
     DATA_SRC --> BACKEND2
@@ -119,7 +125,7 @@ flowchart LR
     subgraph INPUT2["📊 Market Data Input"]
         PRICE["Price<br/>Action"]
         IND["Technical<br/>Indicators"]
-        NEWS4["News &<br/>Events"]
+        NEWS4["News and<br/>Events"]
         VOL["Volatility<br/>Metrics"]
     end
 
@@ -144,10 +150,25 @@ flowchart LR
     end
 
     INPUT2 --> ANALYZE --> GENERATE --> DELIVER
-
-    PRICE & IND & NEWS4 & VOL --> TREND & S_R & MOM & PATTERN
-    TREND & S_R & MOM & PATTERN --> ENTRY & EXIT & RR & SIZE
-    ENTRY & EXIT & RR & SIZE --> APP & WA2 & SHEET
+    PRICE --> TREND
+    PRICE --> S_R
+    IND --> MOM
+    IND --> PATTERN
+    NEWS4 --> TREND
+    NEWS4 --> MOM
+    VOL --> S_R
+    VOL --> PATTERN
+    TREND --> ENTRY
+    TREND --> EXIT
+    S_R --> RR
+    MOM --> SIZE
+    PATTERN --> ENTRY
+    PATTERN --> EXIT
+    ENTRY --> APP
+    ENTRY --> WA2
+    EXIT --> SHEET
+    RR --> APP
+    SIZE --> WA2
 
     style INPUT2 fill:#0d2137,stroke:#22d3ee,color:#fff
     style ANALYZE fill:#1a0f3d,stroke:#a78bfa,color:#fff
@@ -252,6 +273,8 @@ flowchart TD
 - **WhatsApp Rate Limits** — WhatsApp Business API has message rate limits and requires approval. Personal WhatsApp integration may have restrictions.
 - **API Dependencies** — Relies on market data providers which may have rate limits, downtime, or changed pricing.
 
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -284,13 +307,19 @@ cd backend && python main.py
 cd app && flutter run
 ```
 
+---
+
 ## Disclaimer
 
 This is a personal decision-support tool, not a guaranteed trading system. All trading involves risk of loss. AI-generated insights are for informational purposes only and do not constitute financial advice. Always consult a qualified financial advisor.
 
+---
+
 ## License
 
 **MIT License** — see [LICENSE](./LICENSE) for details.
+
+---
 
 ## Author
 
