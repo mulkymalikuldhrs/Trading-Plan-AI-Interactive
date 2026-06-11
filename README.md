@@ -1,4 +1,3 @@
-<img src="docs/banner.png" width="100%">
 
 <!-- CAPSULE-RENDER HEADER -->
 <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a1a2e,50:0d2b4a,100:143d5e&fontColor=38bdf8&descColor=22d3ee&height=220&section=header&text=Trading%20Plan%20AI&fontSize=60&desc=AI%20Market%20Intelligence&animation=fadeIn" />
