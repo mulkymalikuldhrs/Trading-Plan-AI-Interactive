@@ -4,6 +4,8 @@ import '../services/forecast_service.dart';
 import '../ui/widgets/chat_bubble.dart';
 
 class AiChatBox extends StatefulWidget {
+  const AiChatBox({super.key});
+
   @override
   _AiChatBoxState createState() => _AiChatBoxState();
 }
@@ -73,7 +75,7 @@ SL: ${forecast['stop_loss']} | TP: ${forecast['take_profit']}
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
       }
@@ -101,7 +103,7 @@ SL: ${forecast['stop_loss']} | TP: ${forecast['take_profit']}
 
   Widget _buildTextComposer() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         border: Border(top: BorderSide(color: Theme.of(context).dividerColor)),
@@ -111,7 +113,7 @@ SL: ${forecast['stop_loss']} | TP: ${forecast['take_profit']}
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: InputDecoration.collapsed(hintText: "e.g., /forecast GOLD"),
+              decoration: const InputDecoration.collapsed(hintText: "e.g., /forecast GOLD"),
               onSubmitted: (_) => _handleSend(),
             ),
           ),
