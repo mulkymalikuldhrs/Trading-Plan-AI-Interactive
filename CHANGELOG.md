@@ -1,5 +1,24 @@
 # 🚀 CHANGELOG - Dhaher Trading Plan AI™
 
+## v11.1.5 - Unified Consolidation (2025-03-04)
+
+### 🔥 Major Changes
+- **CONSOLIDATION:** Unified all remaining development branches into a single hardened v11.1.5 production baseline.
+- **IMPROVEMENT:** Refined `IntelTab` and WhatsApp Bot data consumption to handle the consolidated `market_data` object from GAS.
+- **SECURITY:** Hardened Google Apps Script `doPost` and Python Client with `BOT_API_KEY` authorization.
+- **PYTHON:** Upgraded `DhaherAiClient` with robust JSON response handling and mandatory API key support.
+- **STABILITY:** Standardized versioning across all modules (Flutter, Node.js, GAS) and verified system-wide integrity.
+- **UI:** Enforced Material 3 compliance across all Flutter components and resolved deprecation warnings.
+
+## v11.1.4 - Production Hardening (2025-03-04)
+
+### 🔥 Major Changes
+- **HARDENING:** Replaced all COT data fetching with direct CFTC scraping logic in the Google Apps Script backend.
+- **CONSOLIDATION:** Refactored Flutter `IntelTab` to use a single consolidated API call for market intelligence (News, COT, AI Analysis).
+- **UPGRADE:** Synchronized all system versioning to v11.1.4.
+- **MODERNIZATION:** Replaced remaining deprecated `.withOpacity()` calls with `.withValues()` and ensured Material 3 compliance in components.
+- **CLEANUP:** Removed redundant `NewsFetcher` and `CotService` Flutter services.
+
 ## v11.0.0 - Production Release & Branch Consolidation (2025-03-04)
 
 ### 🔥 Major Changes
