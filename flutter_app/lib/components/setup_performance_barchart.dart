@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 
 class SetupPerformanceBarChart extends StatefulWidget {
+  const SetupPerformanceBarChart({super.key});
+
   @override
   _SetupPerformanceBarChartState createState() => _SetupPerformanceBarChartState();
 }
@@ -37,7 +39,7 @@ class _SetupPerformanceBarChartState extends State<SetupPerformanceBarChart> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) return Center(child: CircularProgressIndicator());
+    if (isLoading) return const Center(child: CircularProgressIndicator());
 
     final List<String> setups = setupCounts.keys.toList();
     final List<BarChartGroupData> barGroups = List.generate(setups.length, (i) {
@@ -93,10 +95,10 @@ class _SetupPerformanceBarChartState extends State<SetupPerformanceBarChart> {
                     getTitlesWidget: (value, meta) => Text(value.toInt().toString(), style: const TextStyle(color: Colors.white70, fontSize: 10)),
                   ),
                 ),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
               ),
-              gridData: FlGridData(show: false),
+              gridData: const FlGridData(show: false),
               borderData: FlBorderData(show: false),
               barGroups: barGroups,
             ),

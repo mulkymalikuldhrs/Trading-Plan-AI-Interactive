@@ -73,18 +73,29 @@ async function handleSummary(msg, args) {
         // Defensive handling for stringified JSON responses from GAS
         let summary = response.data.data;
         if (typeof summary === 'string') {
-            summary = JSON.parse(summary);
+            try {
+                summary = JSON.parse(summary);
+            } catch (e) {
+                console.error("Failed to parse GAS summary:", response.data.data);
+                return msg.reply('❌ Received invalid data format from backend.');
+            }
+        }
+
+        if (!summary || typeof summary !== 'object') {
+            return msg.reply('❌ Could not retrieve a valid summary.');
         }
 
         const formattedReply = `
 *🧠 AI Master Summary for ${symbol}*
-*Bias:* ${summary.final_bias} (Confidence: ${summary.confidence_score}/10)
-*Signal:* ${summary.signal.active ? 'ACTIVE' : 'INACTIVE'}
-*Entry:* ${summary.signal.entry || 'N/A'}
-*Stop Loss:* ${summary.signal.stop_loss || 'N/A'}
-*Take Profit:* ${summary.signal.take_profit || 'N/A'}
+*Bias:* ${summary.final_bias || 'N/A'} (Confidence: ${summary.confidence_score || '?'}/10)
+*Signal:* ${summary.signal && summary.signal.active ? 'ACTIVE' : 'INACTIVE'}
+*Entry:* ${summary.signal ? summary.signal.entry || 'N/A' : 'N/A'}
+*Stop Loss:* ${summary.signal ? summary.signal.stop_loss || 'N/A' : 'N/A'}
+*Take Profit:* ${summary.signal ? summary.signal.take_profit || 'N/A' : 'N/A'}
 
-*Technical Thesis:* ${summary.technical_thesis}
+*Technical Thesis:* ${summary.technical_thesis || 'N/A'}
+*Fundamental Thesis:* ${summary.fundamental_thesis || 'N/A'}
+*COT Bias:* ${summary.cot_raw ? summary.cot_raw.bias || 'N/A' : 'N/A'}
         `;
         msg.reply(formattedReply);
     } catch (error) {
@@ -104,11 +115,27 @@ async function handleCot(msg, args) {
 
         let data = response.data.data;
         if (typeof data === 'string') {
-            data = JSON.parse(data);
+            try {
+                data = JSON.parse(data);
+            } catch (e) {
+                return msg.reply('❌ Received invalid COT data format.');
+            }
         }
 
-        const cot = data.positional_thesis;
-        msg.reply(`*📊 COT Intelligence for ${symbol}:*\n\n${cot}`);
+        const cot = data.positional_thesis || 'No positional thesis available.';
+        const cot_raw = data.cot_raw || {};
+
+        const formattedReply = `
+*📊 COT Intelligence for ${symbol}*
+
+*Positional Thesis:* ${cot}
+
+*Institutional Data:*
+- Longs: ${cot_raw.nonCommercialLong || 0}
+- Shorts: ${cot_raw.nonCommercialShort || 0}
+- Net Position: ${cot_raw.nonCommercialLong - cot_raw.nonCommercialShort || 0}
+        `;
+        msg.reply(formattedReply);
     } catch (error) {
         msg.reply('❌ Could not fetch COT data.');
     }
@@ -126,15 +153,20 @@ async function handleForecast(msg, args) {
 
         let forecast = response.data.data;
         if (typeof forecast === 'string') {
-            forecast = JSON.parse(forecast);
+            try {
+                forecast = JSON.parse(forecast);
+            } catch (e) {
+                return msg.reply('❌ Received invalid forecast format.');
+            }
         }
 
         const formattedReply = `
 *🔮 AI Forecast for ${symbol}*
-*Bias:* ${forecast.bias}
-*Probability:* ${forecast.probability}%
-*Entry Zone:* ${forecast.entry_zone}
-*SL:* ${forecast.stop_loss} | *TP:* ${forecast.take_profit}
+*Bias:* ${forecast.bias || 'N/A'}
+*Probability:* ${forecast.probability || '0'}%
+*Entry Zone:* ${forecast.entry_zone || 'N/A'}
+*SL:* ${forecast.stop_loss || 'N/A'} | *TP:* ${forecast.take_profit || 'N/A'}
+*Confidence:* ${forecast.probability > 70 ? 'High' : 'Medium'}
         `;
         msg.reply(formattedReply);
     } catch (error) {
