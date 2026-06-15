@@ -4,8 +4,10 @@ import '../../components/forecast_chart.dart';
 import '../../services/forecast_service.dart';
 
 class ForecastTab extends StatefulWidget {
+  const ForecastTab({super.key});
+
   @override
-  _ForecastTabState createState() => _ForecastTabState();
+  State<ForecastTab> createState() => _ForecastTabState();
 }
 
 class _ForecastTabState extends State<ForecastTab> {
@@ -75,17 +77,17 @@ class _ForecastTabState extends State<ForecastTab> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("🔮 AI Probabilistic Forecast", style: Theme.of(context).textTheme.headlineSmall),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Pair selector
           DropdownButtonFormField<String>(
             value: _selectedPair,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Select Pair',
               border: OutlineInputBorder(),
             ),
@@ -96,21 +98,21 @@ class _ForecastTabState extends State<ForecastTab> {
               }
             },
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
 
           // Load forecast button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: _isLoading ? null : _loadForecast,
-              icon: Icon(Icons.refresh),
-              label: Text('Load Forecast'),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Load Forecast'),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
 
           if (_isLoading)
-            Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator())
           else if (_error != null)
             _buildErrorState()
           else if (_forecastSpots.isNotEmpty)
@@ -119,7 +121,7 @@ class _ForecastTabState extends State<ForecastTab> {
             _buildEmptyState(),
 
           if (_forecastData != null) ...[
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildForecastDetails(),
           ],
         ],
@@ -131,8 +133,8 @@ class _ForecastTabState extends State<ForecastTab> {
     return Card(
       color: Colors.blueGrey[900]?.withValues(alpha: 0.5),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(32.0),
+      child: const Padding(
+        padding: EdgeInsets.all(32.0),
         child: Column(
           children: [
             Icon(Icons.query_stats, size: 48, color: Colors.white38),
@@ -156,9 +158,9 @@ class _ForecastTabState extends State<ForecastTab> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
-            SizedBox(height: 16),
-            Text(_error ?? 'An error occurred', textAlign: TextAlign.center, style: TextStyle(color: Colors.redAccent)),
+            const Icon(Icons.error_outline, size: 48, color: Colors.redAccent),
+            const SizedBox(height: 16),
+            Text(_error ?? 'An error occurred', textAlign: TextAlign.center, style: const TextStyle(color: Colors.redAccent)),
           ],
         ),
       ),
@@ -171,9 +173,9 @@ class _ForecastTabState extends State<ForecastTab> {
       children: [
         Text(
           '$_selectedPair H4 Forecast',
-          style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+          style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         ForecastChart(
           spots: _forecastSpots,
           label: '$_selectedPair H4',
@@ -192,8 +194,8 @@ class _ForecastTabState extends State<ForecastTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Forecast Details', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 16)),
-            SizedBox(height: 12),
+            const Text('Forecast Details', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber, fontSize: 16)),
+            const SizedBox(height: 12),
             _buildDetailRow('Bias', data['bias']?.toString() ?? 'N/A'),
             _buildDetailRow('Probability', '${data['probability'] ?? 'N/A'}%'),
             _buildDetailRow('Entry Zone', data['entry_zone']?.toString() ?? 'N/A'),
@@ -212,8 +214,8 @@ class _ForecastTabState extends State<ForecastTab> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Colors.white54)),
-          Text(value, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          Text(label, style: const TextStyle(color: Colors.white54)),
+          Text(value, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
         ],
       ),
     );
