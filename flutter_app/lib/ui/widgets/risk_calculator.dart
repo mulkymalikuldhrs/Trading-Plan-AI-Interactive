@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class RiskCalculator extends StatelessWidget {
+  const RiskCalculator({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -9,8 +11,8 @@ class RiskCalculator extends StatelessWidget {
         child: Column(
           children: [
             Text("Risk Calculator", style: Theme.of(context).textTheme.titleLarge),
-            SizedBox(height: 10),
-            Text("Coming Soon!"),
+            const SizedBox(height: 10),
+            const Text("Coming Soon!"),
           ],
         ),
       ),
