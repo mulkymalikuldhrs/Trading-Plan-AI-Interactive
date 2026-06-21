@@ -4,10 +4,10 @@ class AnimatedButton extends StatefulWidget {
   final String text;
   final VoidCallback onPressed;
 
-  AnimatedButton({required this.text, required this.onPressed});
+  const AnimatedButton({super.key, required this.text, required this.onPressed});
 
   @override
-  _AnimatedButtonState createState() => _AnimatedButtonState();
+  State<AnimatedButton> createState() => _AnimatedButtonState();
 }
 
 class _AnimatedButtonState extends State<AnimatedButton> {
@@ -30,13 +30,13 @@ class _AnimatedButtonState extends State<AnimatedButton> {
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
         child: Text(
           widget.text,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
