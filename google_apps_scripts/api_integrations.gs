@@ -96,11 +96,15 @@ function getEconomicCalendar() {
 
 /**
  * Fetches Commitment of Traders (COT) data.
- * Uses the Barchart API or a direct CFTC parser for real data.
- * For this production baseline, we implement a direct fetch from a verified financial data provider.
+ * Directly scrapes the CFTC website for institutional positioning.
  */
 function getCotData(symbol) {
-  // Mapping symbols to CFTC names
+  // Normalize symbol (e.g., EURUSD -> EUR/USD)
+  let normalizedSymbol = symbol.toUpperCase();
+  if (normalizedSymbol.length === 6 && !normalizedSymbol.includes('/')) {
+    normalizedSymbol = normalizedSymbol.substring(0, 3) + '/' + normalizedSymbol.substring(3);
+  }
+
   const cftcMap = {
     'EUR/USD': 'EURO CURRENCY',
     'GBP/USD': 'BRITISH POUND STERLING',
@@ -109,39 +113,69 @@ function getCotData(symbol) {
     'NZD/USD': 'NEW ZEALAND DOLLAR',
     'USD/CAD': 'CANADIAN DOLLAR',
     'USD/CHF': 'SWISS FRANC',
+    'XAU/USD': 'GOLD - COMMODITY EXCHANGE INC.',
     'GOLD': 'GOLD - COMMODITY EXCHANGE INC.'
   };
 
-  const asset = cftcMap[symbol] || symbol;
+  const asset = cftcMap[normalizedSymbol] || normalizedSymbol;
 
-  // Using a production-grade financial data aggregator for COT
-  const apiKey = PropertiesService.getScriptProperties().getProperty('FINANCIAL_DATA_API_KEY');
-  const url = `https://api.financialdata.com/v1/cot/latest?symbol=${encodeURIComponent(asset)}&apikey=${apiKey}`;
+  // Select URL based on asset (CME for Forex, COMEX for Gold)
+  const isGold = asset.includes('GOLD');
+  const url = isGold
+    ? 'https://www.cftc.gov/dea/futures/deacmxl.txt' // COMEX
+    : 'https://www.cftc.gov/dea/futures/deacmcl.txt'; // CME
 
   try {
-    const response = UrlFetchApp.fetch(url, {'muteHttpExceptions': true});
-    if (response.getResponseCode() === 200) {
-      const data = JSON.parse(response.getContentText());
-      // Real data processing from institutional source
-      return {
-        symbol: symbol,
-        reportDate: data.report_date,
-        nonCommercialLong: data.non_comm_long,
-        nonCommercialShort: data.non_comm_short,
-        netPosition: data.non_comm_long - data.non_comm_short,
-        bias: (data.non_comm_long > data.non_comm_short * 2) ? 'BULLISH' : (data.non_comm_short > data.non_comm_long * 2) ? 'BEARISH' : 'NEUTRAL',
-        oi: data.open_interest
-      };
-    } else {
-       throw new Error("Source responded with status: " + response.getResponseCode());
+    const response = UrlFetchApp.fetch(url);
+    const text = response.getContentText();
+
+    // Split into individual asset reports
+    const reports = text.split('\n\n\n');
+    const assetReport = reports.find(r => r.toUpperCase().includes(asset.toUpperCase()));
+
+    if (assetReport) {
+      const lines = assetReport.split('\n');
+
+      // Extract Report Date
+      let reportDate = "Unknown";
+      const dateMatch = text.match(/COMMITMENTS AS OF\s+(.+)/i);
+      if (dateMatch) reportDate = dateMatch[1].trim();
+
+      // Find the "Non-Commercial" row (usually contains large numeric values)
+      // Heuristic: The row with >= 5 numeric columns following the 'Non-Commercial' or similar header
+      const dataLine = lines.find(l => l.match(/\d+/) && (l.includes('Non-Commercial') || l.match(/^\s+\d+\s+\d+\s+\d+/)));
+
+      if (dataLine) {
+        // Handle commas in numbers and ensure we get the correct columns
+        // Standard Legacy Report row for Non-Commercial:
+        // Column 0: (header)
+        // Column 1: Non-Commercial Long
+        // Column 2: Non-Commercial Short
+        const numbers = dataLine.replace(/,/g, '').match(/\d+/g);
+        if (!numbers || numbers.length < 3) throw new Error("Could not parse numeric columns from COT data line.");
+
+        const long = Number(numbers[1]);
+        const short = Number(numbers[2]);
+        const net = long - short;
+
+        return {
+          symbol: normalizedSymbol,
+          reportDate: reportDate,
+          nonCommercialLong: long,
+          nonCommercialShort: short,
+          netPosition: net,
+          bias: (long > short * 1.5) ? 'BULLISH' : (short > long * 1.5) ? 'BEARISH' : 'NEUTRAL',
+          source: "CFTC Official Scraping"
+        };
+      }
     }
+    throw new Error("Asset data not found in CFTC report.");
   } catch (e) {
-    Logger.log("COT Data Fetch Failed: " + e.message);
-    // Return structured data indicating service status rather than mocks
+    Logger.log("COT Scraping Failed: " + e.message);
     return {
-      symbol: symbol,
+      symbol: normalizedSymbol,
       status: "error",
-      message: "Real-time COT stream offline: " + e.message,
+      message: "Direct CFTC stream offline: " + e.message,
       timestamp: new Date().toISOString()
     };
   }
