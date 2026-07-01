@@ -1,337 +1,168 @@
-
-<!-- CAPSULE-RENDER HEADER -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a1a2e,50:0d2b4a,100:143d5e&fontColor=38bdf8&descColor=22d3ee&height=220&section=header&text=Trading%20Plan%20AI&fontSize=60&desc=AI%20Market%20Intelligence&animation=fadeIn" />
-
-<!-- TYPING SVG -->
 <div align="center">
-  <a href="https://git.io/typing-svg">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=38BDF8&center=true&vCenter=true&width=600&lines=Flutter+%2B+Python+%2B+WhatsApp;AI-Powered+Market+Analysis;Personal+Decision+Support;Not+a+Guaranteed+Trading+System" alt="Typing SVG" />
-  </a>
-</div>
-
-<br/>
-
-<!-- BADGES -->
-<div align="center">
-
-[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
-[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
-[![WhatsApp](https://img.shields.io/badge/WhatsApp-API-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://www.whatsapp.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
-
+  <img src="https://i.imgur.com/8J5gO6R.png" alt="Dhaher Trading Plan AI Header">
+  <h1>🔮 Dhaher Trading Plan AI™ <small>v11.2.7</small></h1>
+  <p>
+    <b>Your personal AI-powered market intelligence agency.</b>
+    <br />
+    This is not just a trading journal; it's a proactive, predictive, and psychologically-aware co-pilot designed to help you master the market by mastering yourself.
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/Status-In%20Development-yellow" alt="In Development">
+    <img src="https://img.shields.io/badge/Platform-Flutter%20%7C%20Web%20%7C%20Android-blue" alt="Platform">
+    <img src="https://img.shields.io/badge/AI-GPT--4o%20%7C%20Finnhub-orange" alt="AI">
+  </p>
 </div>
 
 ---
 
-## Overview
+<details>
+<summary>🇮🇩 <strong>Baca dalam Bahasa Indonesia</strong></summary>
 
-**Trading Plan AI Interactive** is an AI-powered market intelligence platform that combines a Flutter mobile app, a Python analysis backend, and WhatsApp integration for real-time trading signal delivery. Designed as a personal decision-support tool, it provides market analysis, trade plan generation, and instant notifications via WhatsApp — keeping you informed without requiring you to stare at charts all day.
+## 🇮🇩 Panduan Lengkap: Dhaher Trading Plan AI™
 
----
+Selamat datang di agensi intelijen pasar pribadi Anda. Ini bukan sekadar jurnal trading; ini adalah co-pilot yang **proaktif, prediktif, dan sadar secara psikologis** yang dirancang untuk membantu Anda menguasai pasar dengan menguasai diri sendiri.
 
-## Features
+### 🚀 **Pemasangan & Penyiapan**
 
-### AI Market Analysis
-- Multi-timeframe technical analysis
-- Trend detection and momentum scoring
-- Support/resistance level identification
-- Pattern recognition across markets
+-   **Web & Desktop:** Untuk instruksi pemasangan otomatis, lihat [Panduan Pemasang & Peluncur](docs/installer_guide.md).
+-   **Android:** Untuk instruksi membangun dan memasang `.apk`, lihat [Panduan Deployment Android](docs/android_deployment.md).
+-   **Akses Terprogram (Python):** Untuk berinteraksi dengan AI menggunakan kode, lihat [Panduan Klien Python & Colab](docs/python_client_guide.md).
 
-### Trade Plan Generation
-- AI-generated trade plans with entry/exit points
-- Risk-reward ratio calculations
-- Position sizing based on account size and risk tolerance
-- Plan templates for different trading styles
+### ✨ **Fitur Inti**
 
-### WhatsApp Integration
-- Real-time signal alerts via WhatsApp
-- Daily market briefings delivered to your phone
-- Interactive commands (check prices, request analysis)
-- Customizable alert thresholds
+-   **🔮 AI Forecast Engine™:** Dapatkan prakiraan pasar beberapa hari yang mensintesis data teknis, fundamental, berita, dan sentimen institusional (COT).
+-   **🧠 Analis AI Otonom:** AI 24/7 yang memindai pasar dan mengidentifikasi penyiapan keyakinan tinggi.
+-   **📲 Bot WhatsApp Interaktif:** Dapatkan prakiraan dan sinyal saat bepergian dengan perintah sederhana.
+-   **🐍 Klien Python & Colab:** Berinteraksi dengan AI Anda secara terprogram untuk analisis data dan backtesting tingkat lanjut.
+-   **📈 Visualisasi Langsung:** "Dasbor Disiplin" dengan bagan animasi canggih.
+-   **👁️ Grafik TradingView Tersemat:** Analisis grafik langsung di dalam aplikasi.
+-   **🧘‍♂️ Kecerdasan Emosional:** Lacak suasana hati Anda dan dapatkan umpan balik gamified untuk menegakkan disiplin.
+-   **🎤 Obrolan Berkemampuan Suara:** Berinteraksi dengan pelatih AI Anda secara hands-free.
 
-### Flutter Mobile App
-- Cross-platform (iOS and Android)
-- Real-time charts and market data
-- Trade plan tracking and journaling
-- Performance analytics dashboard
+### 👥 **Kredit**
 
-### Python Backend
-- Market data collection and processing
-- AI analysis engine
-- WhatsApp Business API integration
-- RESTful API for Flutter client
-
----
-
-## Visual Architecture
-
-> Interactive diagrams showing multi-platform architecture, AI plan generation, signal delivery, and emotional lockout system.
-
-### Multi-Platform Architecture
-
-```mermaid
-graph TB
-    subgraph MOBILE["📱 Flutter Mobile App"]
-        UI["Cross-Platform UI<br/>iOS and Android"]
-        CHARTS2["Real-Time<br/>Charts"]
-        JOURNAL["Trade Journal<br/>& Tracking"]
-        LOCKOUT_UI["Emotional Lockout<br/>Interface"]
-    end
-
-    subgraph BACKEND2["🐍 Python Backend"]
-        ANALYSIS["AI Analysis<br/>Engine"]
-        PLANNER["Trade Plan<br/>Generator"]
-        SIGNAL_GEN2["Signal<br/>Detector"]
-        EMOTION["Emotional<br/>Lockout Engine"]
-        REST["RESTful API<br/>FastAPI/Flask"]
-    end
-
-    subgraph WHATSAPP["💬 WhatsApp Integration"]
-        WA_BOT["WhatsApp<br/>Bot"]
-        WA_ALERTS["Signal<br/>Alerts"]
-        WA_BRIEF["Daily<br/>Briefings"]
-        WA_CMD["Interactive<br/>Commands"]
-    end
-
-    subgraph SHEETS["📊 Google Sheets"]
-        GAS["Google Apps<br/>Script"]
-        PLAN_LOG["Trade Plan<br/>Logger"]
-        PERF["Performance<br/>Tracker"]
-    end
-
-    subgraph DATA_SRC["🌐 Data Sources"]
-        MARKET["Market Data<br/>Providers"]
-        NEWS3["News and<br/>Sentiment"]
-    end
-
-    DATA_SRC --> BACKEND2
-    BACKEND2 --> REST
-    REST --> MOBILE
-    REST --> WHATSAPP
-    BACKEND2 --> SHEETS
-
-    style MOBILE fill:#02569B20,stroke:#02569B,color:#fff
-    style BACKEND2 fill:#3776AB20,stroke:#3776AB,color:#fff
-    style WHATSAPP fill:#25D36620,stroke:#25D366,color:#fff
-    style SHEETS fill:#34A85320,stroke:#34A853,color:#fff
-    style DATA_SRC fill:#0d2137,stroke:#22d3ee,color:#fff
-```
-
-### AI Trading Plan Flow
-
-```mermaid
-flowchart LR
-    subgraph INPUT2["📊 Market Data Input"]
-        PRICE["Price<br/>Action"]
-        IND["Technical<br/>Indicators"]
-        NEWS4["News and<br/>Events"]
-        VOL["Volatility<br/>Metrics"]
-    end
-
-    subgraph ANALYZE["🧠 AI Analysis"]
-        TREND["Trend<br/>Detection"]
-        S_R["Support/<br/>Resistance"]
-        MOM["Momentum<br/>Scoring"]
-        PATTERN["Pattern<br/>Recognition"]
-    end
-
-    subgraph GENERATE["📝 Plan Generation"]
-        ENTRY["Entry Point<br/>Calculation"]
-        EXIT["Exit Point<br/>Calculation"]
-        RR["Risk-Reward<br/>Ratio"]
-        SIZE["Position<br/>Sizing"]
-    end
-
-    subgraph DELIVER["📤 Delivery"]
-        APP["📱 App<br/>Notification"]
-        WA2["💬 WhatsApp<br/>Message"]
-        SHEET["📊 Google<br/>Sheet"]
-    end
-
-    INPUT2 --> ANALYZE --> GENERATE --> DELIVER
-    PRICE --> TREND
-    PRICE --> S_R
-    IND --> MOM
-    IND --> PATTERN
-    NEWS4 --> TREND
-    NEWS4 --> MOM
-    VOL --> S_R
-    VOL --> PATTERN
-    TREND --> ENTRY
-    TREND --> EXIT
-    S_R --> RR
-    MOM --> SIZE
-    PATTERN --> ENTRY
-    PATTERN --> EXIT
-    ENTRY --> APP
-    ENTRY --> WA2
-    EXIT --> SHEET
-    RR --> APP
-    SIZE --> WA2
-
-    style INPUT2 fill:#0d2137,stroke:#22d3ee,color:#fff
-    style ANALYZE fill:#1a0f3d,stroke:#a78bfa,color:#fff
-    style GENERATE fill:#1a3d0f,stroke:#4ade80,color:#fff
-    style DELIVER fill:#3d1a0f,stroke:#f97316,color:#fff
-```
-
-### Signal Alert Pipeline
-
-```mermaid
-flowchart TD
-    subgraph DETECT["🔍 Signal Detection"]
-        SIG_SCAN["Market<br/>Scanner"]
-        SIG_CRIT["Criteria<br/>Matching"]
-        SIG_CONF2["Signal<br/>Confirmation"]
-    end
-
-    subgraph PROCESS["⚙️ Alert Processing"]
-        PRIOR["Priority<br/>Classification"]
-        FORMAT["Message<br/>Formatting"]
-        QUEUE["Alert<br/>Queue"]
-    end
-
-    subgraph ROUTE["🚀 Delivery Routes"]
-        direction LR
-        WA3["💬 WhatsApp<br/>Instant"]
-        PUSH["📱 Push<br/>Notification"]
-        SHEET2["📊 Sheet<br/>Logging"]
-    end
-
-    subgraph FEEDBACK["🔄 Feedback Loop"]
-        TRACK2["Delivery<br/>Confirmation"]
-        READ["Read<br/>Receipt"]
-        ACTION["User<br/>Action Log"]
-    end
-
-    DETECT --> PROCESS --> ROUTE --> FEEDBACK
-    FEEDBACK -->|"Optimize"| PROCESS
-
-    style DETECT fill:#0d2137,stroke:#22d3ee,color:#fff
-    style PROCESS fill:#1a0f3d,stroke:#a78bfa,color:#fff
-    style ROUTE fill:#1a3d0f,stroke:#4ade80,color:#fff
-    style FEEDBACK fill:#3d1a0f,stroke:#f97316,color:#fff
-```
-
-### Emotional Lockout System
-
-```mermaid
-flowchart TD
-    subgraph TRIGGERS["🧠 Lockout Triggers"]
-        DD_TRIG["Drawdown<br/>Exceeds Limit"]
-        LOSS_STREAK["Consecutive<br/>Loss Streak"]
-        OVERTRADE["Trade Frequency<br/>Exceeds Limit"]
-        EMOTION_VOL["Emotional<br/>Volatility High"]
-        AFTER_HOURS["Outside<br/>Trading Hours"]
-    end
-
-    subgraph ENGINE["⚙️ Lockout Engine"]
-        EVAL["Evaluate<br/>Trigger Score"]
-        DECIDE{"Lockout<br/>Required?"}
-        COOLDOWN["Set Cooldown<br/>Period"]
-        NOTIFY["Notify User<br/>via All Channels"]
-    end
-
-    subgraph LOCKED["🔒 Lockout State"]
-        BLOCK["Block All<br/>New Trades"]
-        VIEW_ONLY["View-Only<br/>Mode"]
-        JOURNAL2["Mandatory<br/>Journal Entry"]
-        CALM["Cool-Down<br/>Timer"]
-    end
-
-    subgraph RECOVER["🔓 Recovery"]
-        REFLECT["Reflection<br/>Period"]
-        RESET["Manual<br/>Unlocked"]
-        RESUME["Resume<br/>Trading"]
-    end
-
-    TRIGGERS --> ENGINE
-    EVAL --> DECIDE
-    DECIDE -->|"Yes"| COOLDOWN --> LOCKED
-    DECIDE -->|"No"| CONTINUE["✅ Continue<br/>Trading"]
-    LOCKED --> RECOVER
-    CALM --> REFLECT --> RESET --> RESUME
-
-    style TRIGGERS fill:#3a0a0a,stroke:#f87171,color:#fff
-    style ENGINE fill:#2a2a0a,stroke:#facc15,color:#fff
-    style LOCKED fill:#3a1a0f,stroke:#f97316,color:#fff
-    style RECOVER fill:#0a2a0a,stroke:#4ade80,color:#fff
-    style CONTINUE fill:#0a2a0a,stroke:#4ade80,color:#fff
-```
-
-> **The Emotional Lockout System** is designed to prevent impulsive trading decisions during high-stress or high-loss periods. It enforces mandatory cool-down periods and journaling before trading can resume.
-
----
-
-## Honest Notes
-
-> **Important:**
-
-- **Personal Decision-Support Tool** — This is designed to support your decision-making, not replace it. The final trade decision is always yours.
-- **Not a Guaranteed Trading System** — No AI system can guarantee trading profits. Markets are inherently unpredictable and losses are possible.
-- **WhatsApp Rate Limits** — WhatsApp Business API has message rate limits and requires approval. Personal WhatsApp integration may have restrictions.
-- **API Dependencies** — Relies on market data providers which may have rate limits, downtime, or changed pricing.
-
----
-
-## Quick Start
-
-### Prerequisites
-- Flutter 3.x SDK
-- Python 3.11+
-- WhatsApp Business API account (or Twilio)
-
-### Installation
-
-```bash
-git clone https://github.com/mulkymalikuldhrs/Trading-Plan-AI-Interactive.git
-cd Trading-Plan-AI-Interactive
-
-# Python backend
-cd backend
-pip install -r requirements.txt
-
-# Flutter app
-cd ../app
-flutter pub get
-```
-
-### Running
-
-```bash
-# Backend
-cd backend && python main.py
-
-# Flutter
-cd app && flutter run
-```
-
----
-
-## Disclaimer
-
-This is a personal decision-support tool, not a guaranteed trading system. All trading involves risk of loss. AI-generated insights are for informational purposes only and do not constitute financial advice. Always consult a qualified financial advisor.
-
----
-
-## License
-
-**MIT License** — see [LICENSE](./LICENSE) for details.
-
----
-
-## Author
-
-<div align="center">
-
+Proyek ini dikonsep dan disutradarai oleh:
 **Mulky Malikul Dhaher**
+-   **Kontak:** mulkymalikudhr@mail.com
 
-[![GitHub](https://img.shields.io/badge/GitHub-mulkymalikuldhrs-181717?style=flat-square&logo=github)](https://github.com/mulkymalikuldhrs)
-[![Email](https://img.shields.io/badge/Email-mulkymalikudhr@mail.com-EA4335?style=flat-square&logo=gmail&logoColor=white)](mailto:mulkymalikudhr@mail.com)
+</details>
 
-</div>
+<details>
+<summary>🇨🇳 <strong>阅读中文版</strong></summary>
+
+## 🇨🇳 完整指南：Dhaher Trading Plan AI™
+
+欢迎来到您的个人AI驱动的市场情报机构。这不仅是一个交易日志；它是一个**主动、预测性和心理感知**的副驾驶，旨在帮助您通过掌握自己来掌握市场。
+
+### 🚀 **安装与设置**
+
+-   **网页和桌面版：** 有关自动安装说明，请参阅[安装和启动指南](docs/installer_guide.md)。
+-   **Android：** 有关构建和安装 `.apk` 的说明，请参阅[Android部署指南](docs/android_deployment.md)。
+-   **编程访问（Python）：** 要使用代码与AI交互，请参阅[Python客户端和Colab指南](docs/python_client_guide.md)。
+
+### ✨ **核心功能**
+
+-   **🔮 AI预测引擎™：** 获取综合技术面、基本面、新闻和机构情绪（COT）的多日市场预测。
+-   **🧠 自主AI分析师：** 24/7 AI扫描市场并识别高确信度设置。
+-   **📲 交互式WhatsApp机器人：** 通过简单命令获取预测和信号。
+-   **🐍 Python客户端和Colab：** 以编程方式与AI交互，进行高级数据分析和回测。
+-   **📈 实时可视化：** 带有高级动画图表的"纪律仪表板"。
+-   **👁️ 嵌入式TradingView图表：** 直接在应用内分析实时图表。
+-   **🧘‍♂️ 情绪智能：** 追踪您的情绪并获得游戏化反馈以加强纪律。
+-   **🎤 语音聊天：** 免提与AI教练互动。
+
+### 👥 **致谢**
+
+本项目由以下人员构思和指导：
+**Mulky Malikul Dhaher**
+-   **联系方式：** mulkymalikudhr@mail.com
+
+</details>
+
+<details open>
+<summary>🇬🇧 <strong>Read in English</strong></summary>
+
+## 🇬🇧 The Complete Guide: Dhaher Trading Plan AI™
+
+Welcome to your personal AI-powered market intelligence agency. This is not just a trading journal; it's a **proactive, predictive, and psychologically-aware** co-pilot designed to help you master the market by mastering yourself.
+
+### 🚀 **Installation & Setup**
+
+-   **Web & Desktop:** For automated setup instructions, see the [Installer & Launcher Guide](docs/installer_guide.md).
+-   **Android:** For instructions on building and installing the `.apk`, see the [Android Deployment Guide](docs/android_deployment.md).
+-   **Programmatic Access (Python):** To interact with the AI using code, see the [Python Client & Colab Guide](docs/python_client_guide.md).
+
+### 🏗️ **Architecture**
+
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **Flutter App** | Flutter 3.x + Dart | Cross-platform UI (Web, Android, iOS) |
+| **Google Apps Script** | GAS + GPT-4o API | Backend API, AI analysis, Sheet CRUD |
+| **WhatsApp Bot** | Node.js + whatsapp-web.js | Mobile notifications & commands |
+| **Python Client** | Python 3 | Programmatic access & Colab integration |
+| **Data Store** | Google Sheets | Trade journal, AI feedback, forecasts |
+
+### ✨ **Core Features**
+
+-   **🔮 AI Forecast Engine™:** Get multi-day market forecasts that synthesize technicals, fundamentals, news, and institutional sentiment (COT).
+-   **🧠 Autonomous AI Analyst:** A 24/7 AI that scans the markets and identifies high-conviction setups.
+-   **📲 Interactive WhatsApp Bot:** Get forecasts and signals on the go with simple commands.
+-   **🐍 Python Client & Colab:** Interact with your AI programmatically for advanced data analysis and backtesting.
+-   **📈 Live Visualizations:** A "Dashboard of Discipline" with advanced, animated charts.
+-   **👁️ Embedded TradingView Charts:** Analyze live charts directly within the app.
+-   **🧘‍♂️ Emotional Intelligence:** Track your mood and get gamified feedback to enforce discipline.
+-   **🎤 Voice-Enabled Chat:** Interact with your AI coach hands-free.
+
+### 🔐 **Security**
+
+- All API keys are loaded from environment variables (`--dart-define` for Flutter, `ScriptProperties` for GAS)
+- Backend endpoints enforce API key authentication (`BOT_API_KEY`)
+- No hardcoded secrets in source code
+- `response_format: json_object` for structured GPT responses
+
+### 👥 **Credits**
+
+This project was conceptualized and directed by:
+**Mulky Malikul Dhaher**
+-   **Contact:** mulkymalikudhr@mail.com
+
+</details>
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! We encourage the community to help improve this project.
+
+1. **Fork** the repository
+2. Create a **feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. Open a **Pull Request**
+
+Please make sure to update tests as appropriate and follow the existing code style.
 
 ---
 
-<!-- FOOTER BANNER -->
-<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:0a1a2e,50:0d2b4a,100:143d5e&fontColor=38bdf8&descColor=22d3ee&height=120&section=footer&text=&fontSize=0" />
+## 📬 Contact
+
+**Mulky Malikul Dhaher** — [mulkymalikudhr@mail.com](mailto:mulkymalikudhr@mail.com)
+
+GitHub: [https://github.com/mulkymalikuldhrs](https://github.com/mulkymalikuldhrs)
+
+---
+
+## ⚠️ Disclaimer
+
+**🇬🇧 English:** This project is for **Education Purpose** only. All content, code, and documentation provided in this repository are intended solely for educational and research purposes. Nothing in this repository constitutes financial, investment, legal, or professional advice. Use at your own risk. The authors and contributors assume no liability for any losses, damages, or consequences arising from the use of this software or information provided herein.
+
+**🇮🇩 Bahasa Indonesia:** Proyek ini hanya untuk **Tujuan Pendidikan**. Semua konten, kode, dan dokumentasi yang disediakan dalam repositori ini dimaksudkan semata-mata untuk tujuan pendidikan dan penelitian. Tidak ada dalam repositori ini yang merupakan saran keuangan, investasi, hukum, atau profesional. **Risiko apapun tidak kita tanggung.** Gunakan dengan risiko Anda sendiri. Penulis dan kontributor tidak bertanggung jawab atas kerugian, kerusakan, atau konsekuensi yang timbul dari penggunaan perangkat lunak ini atau informasi yang diberikan di sini.
+
+**🇨🇳 中文:** 本项目**仅供教育目的**。本仓库中提供的所有内容、代码和文档仅用于教育和研究目的。本仓库中的任何内容均不构成财务、投资、法律或专业建议。使用风险自负。作者和贡献者对因使用本软件或此处提供的信息而产生的任何损失、损害或后果不承担任何责任。
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+Copyright © Mulky Malikul Dhaher. All rights reserved.

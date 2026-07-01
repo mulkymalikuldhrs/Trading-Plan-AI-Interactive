@@ -1,6 +1,6 @@
 name: flutter_app
 description: Dhaher Trading Plan AI - Production Hardened
-version: 11.0.0+1
+version: 11.2.7+1
 publish_to: 'none'
 
 environment:
