@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'api_service.dart';
 
 class NewsFetcher {
@@ -11,7 +12,7 @@ class NewsFetcher {
         'source': h.toString().contains('[') ? h.toString().split(']')[0].replaceAll('[', '') : 'News',
       }).toList();
     } catch (e) {
-      print('NewsFetcher Error: $e');
+      debugPrint('NewsFetcher Error: $e');
       return [{'title': 'Error: Could not fetch news.', 'source': ''}];
     }
   }
