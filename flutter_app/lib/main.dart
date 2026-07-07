@@ -12,12 +12,14 @@ void main() {
   runApp(
     ChangeNotifierProvider(
       create: (context) => EmotionalLockoutService(),
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,24 +29,26 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorSchemeSeed: Colors.blueGrey,
       ),
-      home: MainPage(),
+      home: const MainPage(),
     );
   }
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
-  _MainPageState createState() => _MainPageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    EntryPage(),
-    JournalPage(),
-    DashboardPage(),
-    IntelTab(),
-    ChatPage(),
+  static final List<Widget> _widgetOptions = <Widget>[
+    const EntryPage(),
+    const JournalPage(),
+    const DashboardPage(),
+    const IntelTab(),
+    const ChatPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -72,24 +76,24 @@ class _MainPageState extends State<MainPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.lock, size: 80, color: Colors.redAccent),
-                      SizedBox(height: 20),
+                      const Icon(Icons.lock, size: 80, color: Colors.redAccent),
+                      const SizedBox(height: 20),
                       Text(
                         "Emotional Lockout Activated",
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white),
                       ),
-                      Text(
+                      const Text(
                         "You've had 3 consecutive negative events. It's time for a break.",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white70),
                       ),
-                       SizedBox(height: 20),
+                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
                           lockoutService.resetOverrides();
                           lockoutService.recordWin(); // Reset loss counter
                         },
-                        child: Text("I Understand, Reset"),
+                        child: const Text("I Understand, Reset"),
                       )
                     ],
                   ),
