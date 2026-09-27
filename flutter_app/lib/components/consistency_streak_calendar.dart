@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 
 class ConsistencyStreakCalendar extends StatefulWidget {
+  const ConsistencyStreakCalendar({super.key});
+
   @override
-  _ConsistencyStreakCalendarState createState() => _ConsistencyStreakCalendarState();
+  State<ConsistencyStreakCalendar> createState() => _ConsistencyStreakCalendarState();
 }
 
 class _ConsistencyStreakCalendarState extends State<ConsistencyStreakCalendar> {
@@ -45,7 +47,7 @@ class _ConsistencyStreakCalendarState extends State<ConsistencyStreakCalendar> {
         _isLoading = false;
       });
     } catch (e) {
-      print("Error loading consistency data: $e");
+      debugPrint("Error loading consistency data: $e");
       setState(() => _isLoading = false);
     }
   }
@@ -66,9 +68,9 @@ class _ConsistencyStreakCalendarState extends State<ConsistencyStreakCalendar> {
                 _buildLegend(),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _isLoading
-                ? Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)))
+                ? const Center(child: SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2)))
                 : _dataset.isEmpty
                     ? _buildEmptyState()
                     : Wrap(
@@ -96,8 +98,8 @@ class _ConsistencyStreakCalendarState extends State<ConsistencyStreakCalendar> {
   }
 
   Widget _buildEmptyState() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0),
       child: Center(
         child: Column(
           children: [
@@ -119,9 +121,9 @@ class _ConsistencyStreakCalendarState extends State<ConsistencyStreakCalendar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         _buildLegendItem(Colors.grey.shade800, 'None'),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         _buildLegendItem(Colors.green.shade500, 'Win'),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
         _buildLegendItem(Colors.red.shade700, 'Loss'),
       ],
     );
@@ -132,8 +134,8 @@ class _ConsistencyStreakCalendarState extends State<ConsistencyStreakCalendar> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(width: 10, height: 10, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(2))),
-        SizedBox(width: 2),
-        Text(label, style: TextStyle(color: Colors.white38, fontSize: 10)),
+        const SizedBox(width: 2),
+        Text(label, style: const TextStyle(color: Colors.white38, fontSize: 10)),
       ],
     );
   }
