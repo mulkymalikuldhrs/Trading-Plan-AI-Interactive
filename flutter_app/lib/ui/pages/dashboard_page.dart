@@ -6,16 +6,18 @@ import '../../components/setup_performance_barchart.dart';
 import '../../components/consistency_streak_calendar.dart';
 
 class DashboardPage extends StatelessWidget {
+  const DashboardPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("📈 Dashboard of Discipline™"),
+        title: const Text("📈 Dashboard of Discipline™"),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       backgroundColor: Colors.black,
-      body: Responsive(
+      body: const Responsive(
         mobile: DashboardMobileLayout(),
         tablet: DashboardTabletLayout(),
         desktop: DashboardDesktopLayout(),
@@ -27,24 +29,26 @@ class DashboardPage extends StatelessWidget {
 // --- Layouts ---
 
 class DashboardMobileLayout extends StatelessWidget {
+  const DashboardMobileLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text("Equity Curve", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
-          SizedBox(height: 16),
-          EquityCurveChart(),
-          SizedBox(height: 24),
-          WinRatePieChart(),
-          SizedBox(height: 24),
+          const SizedBox(height: 16),
+          const EquityCurveChart(),
+          const SizedBox(height: 24),
+          const WinRatePieChart(),
+          const SizedBox(height: 24),
           Text("Setup Performance", style: Theme.of(context).textTheme.titleLarge?.copyWith(color: Colors.white)),
-          SizedBox(height: 16),
-          SetupPerformanceBarChart(),
-          SizedBox(height: 24),
-          ConsistencyStreakCalendar(),
+          const SizedBox(height: 16),
+          const SetupPerformanceBarChart(),
+          const SizedBox(height: 24),
+          const ConsistencyStreakCalendar(),
         ],
       ),
     );
@@ -52,17 +56,19 @@ class DashboardMobileLayout extends StatelessWidget {
 }
 
 class DashboardTabletLayout extends StatelessWidget {
+  const DashboardTabletLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       child: Column(
         children: [
           Text("Equity Curve", style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
-          SizedBox(height: 16),
-          EquityCurveChart(),
-          SizedBox(height: 24),
-          Row(
+          const SizedBox(height: 16),
+          const EquityCurveChart(),
+          const SizedBox(height: 24),
+          const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(child: WinRatePieChart()),
@@ -70,8 +76,8 @@ class DashboardTabletLayout extends StatelessWidget {
               Expanded(child: SetupPerformanceBarChart()),
             ],
           ),
-          SizedBox(height: 24),
-          ConsistencyStreakCalendar(),
+          const SizedBox(height: 24),
+          const ConsistencyStreakCalendar(),
         ],
       ),
     );
@@ -79,6 +85,8 @@ class DashboardTabletLayout extends StatelessWidget {
 }
 
 class DashboardDesktopLayout extends StatelessWidget {
+  const DashboardDesktopLayout({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -91,13 +99,13 @@ class DashboardDesktopLayout extends StatelessWidget {
             child: Column(
               children: [
                 Text("Equity Curve", style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white)),
-                SizedBox(height: 16),
-                Expanded(child: EquityCurveChart()),
+                const SizedBox(height: 16),
+                const Expanded(child: EquityCurveChart()),
               ],
             ),
           ),
-          SizedBox(width: 24),
-          Expanded(
+          const SizedBox(width: 24),
+          const Expanded(
             flex: 2,
             child: SingleChildScrollView(
               child: Column(
