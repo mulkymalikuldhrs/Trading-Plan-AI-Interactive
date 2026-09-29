@@ -240,4 +240,4 @@ Instalasi klien Python untuk akses terprogram. Lihat [Panduan Python](docs/pytho
 
 Untuk pertanyaan arsitektur atau kontribusi teknis, hubungi:
 
-**Mulky Malikul Dhaher** — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+**Mulky Malikul Dhaher** — [mulkymalikudhr@mail.com](mailto:mulkymalikudhr@mail.com)
