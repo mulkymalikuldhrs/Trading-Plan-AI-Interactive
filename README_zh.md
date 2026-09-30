@@ -83,5 +83,5 @@ Dhaher Trading Plan AI采用多平台架构，核心组件包括：
 
 本项目由以下人员构思和指导：
 **Mulky Malikul Dhaher**
-- **联系**：[mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+- **联系**：[mulkymalikudhr@mail.com](mailto:mulkymalikudhr@mail.com)
 - **GitHub**：[@mulkymalikuldhrs](https://github.com/mulkymalikuldhrs)

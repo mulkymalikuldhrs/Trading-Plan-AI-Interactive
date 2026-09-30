@@ -1,4 +1,4 @@
-# ✅ TODO - MULKY AI TRADING OS™ [v10.5.5-hardened]
+# ✅ TODO - MULKY AI TRADING OS™ [v11.2.1-hardened]
 
 ## Phase 1: Foundation (Complete)
 - [x] Design Google Sheet Schema
@@ -35,6 +35,6 @@
 
 ---
 
-> **Contact:** Mulky Malikul Dhaher — [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+> **Contact:** Mulky Malikul Dhaher — [mulkymalikudhr@mail.com](mailto:mulkymalikudhr@mail.com)
 >
 > **Disclaimer:** This project is for Education Purpose only. Risiko apapun tidak kita tanggung. (We are not responsible for any risks or damages.)
