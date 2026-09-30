@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 
 class WinRatePieChart extends StatefulWidget {
+  const WinRatePieChart({super.key});
+
   @override
-  _WinRatePieChartState createState() => _WinRatePieChartState();
+  @override
+  State<WinRatePieChart> createState() => _WinRatePieChartState();
 }
 
 class _WinRatePieChartState extends State<WinRatePieChart> {
@@ -33,14 +36,14 @@ class _WinRatePieChartState extends State<WinRatePieChart> {
         isLoading = false;
       });
     } catch (e) {
-      print("Error loading winrate data: $e");
+      debugPrint("Error loading winrate data: $e");
       setState(() => isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) return SizedBox(height: 200, child: Center(child: CircularProgressIndicator()));
+    if (isLoading) return const SizedBox(height: 200, child: Center(child: CircularProgressIndicator()));
 
     return AspectRatio(
       aspectRatio: 1.3,
@@ -49,8 +52,8 @@ class _WinRatePieChartState extends State<WinRatePieChart> {
         child: PieChart(
           PieChartData(
             sections: [
-              PieChartSectionData(color: Colors.greenAccent, value: wins.toDouble(), title: 'Wins', radius: 50, titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-              PieChartSectionData(color: Colors.redAccent, value: losses.toDouble(), title: 'Losses', radius: 50, titleStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              PieChartSectionData(color: Colors.greenAccent, value: wins.toDouble(), title: 'Wins', radius: 50, titleStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              PieChartSectionData(color: Colors.redAccent, value: losses.toDouble(), title: 'Losses', radius: 50, titleStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             ],
           ),
         ),
