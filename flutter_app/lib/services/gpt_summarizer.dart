@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import './api_service.dart';
 // import './technical_analysis_service.dart';
 
@@ -12,7 +13,7 @@ class GptSummarizer {
       });
       return response as Map<String, dynamic>;
     } catch (e) {
-      print('GptSummarizer Error: $e');
+      debugPrint('GptSummarizer Error: $e');
       return {'error': 'Could not generate AI Master Summary.'};
     }
   }
