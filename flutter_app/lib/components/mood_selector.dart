@@ -24,7 +24,7 @@ class _MoodSelectorState extends State<MoodSelector> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
-      value: _selectedMood,
+      initialValue: _selectedMood,
       onChanged: (String? newValue) {
         setState(() {
           _selectedMood = newValue!;

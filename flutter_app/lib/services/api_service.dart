@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -37,7 +38,7 @@ class ApiService {
         throw Exception('Server Error: ${response.statusCode}');
       }
     } catch (e) {
-      print('ApiService Error: $e');
+      debugPrint('ApiService Error: $e');
       rethrow;
     }
   }
