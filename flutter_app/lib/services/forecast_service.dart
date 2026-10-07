@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import './api_service.dart';
 
 class ForecastService {
@@ -19,7 +20,7 @@ class ForecastService {
       return response as Map<String, dynamic>;
 
     } catch (e) {
-      print('ForecastService Error: $e');
+      debugPrint('ForecastService Error: $e');
       return {'error': 'Could not generate forecast.'};
     }
   }
