@@ -7,11 +7,11 @@ class ForecastChart extends StatelessWidget {
   final Color color;
 
   const ForecastChart({
-    Key? key,
+    super.key,
     required this.spots,
     this.label = 'Forecast',
     this.color = Colors.orange,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +21,11 @@ class ForecastChart extends StatelessWidget {
         LineChartData(
           lineBarsData: [
             LineChartBarData(
-              spots: spots.isNotEmpty ? spots : [FlSpot(0, 0)],
+              spots: spots.isNotEmpty ? spots : [const FlSpot(0, 0)],
               isCurved: true,
               gradient: LinearGradient(colors: [color, color.withValues(alpha: 0.5)]),
               barWidth: 4,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
             ),
           ],
           titlesData: FlTitlesData(
@@ -35,18 +35,18 @@ class ForecastChart extends StatelessWidget {
                 reservedSize: 40,
                 getTitlesWidget: (value, meta) => Text(
                   value.toStringAsFixed(2),
-                  style: TextStyle(color: Colors.white70, fontSize: 10),
+                  style: const TextStyle(color: Colors.white70, fontSize: 10),
                 ),
               ),
             ),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
                 getTitlesWidget: (value, meta) => Text(
                   'D${value.toInt()}',
-                  style: TextStyle(color: Colors.white70, fontSize: 10),
+                  style: const TextStyle(color: Colors.white70, fontSize: 10),
                 ),
               ),
             ),
@@ -54,8 +54,8 @@ class ForecastChart extends StatelessWidget {
           gridData: FlGridData(
             show: true,
             drawVerticalLine: true,
-            getDrawingHorizontalLine: (value) => FlLine(color: Colors.white10, strokeWidth: 1),
-            getDrawingVerticalLine: (value) => FlLine(color: Colors.white10, strokeWidth: 1),
+            getDrawingHorizontalLine: (value) => const FlLine(color: Colors.white10, strokeWidth: 1),
+            getDrawingVerticalLine: (value) => const FlLine(color: Colors.white10, strokeWidth: 1),
           ),
           borderData: FlBorderData(
             show: true,

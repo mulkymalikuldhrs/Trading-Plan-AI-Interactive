@@ -29,7 +29,8 @@ function doPost(e) {
 
   // Security Check: Enforce BOT_API_KEY for ALL production actions
   if (!BOT_API_KEY || data.apiKey !== BOT_API_KEY) {
-    throw new Error("Unauthorized: Invalid or missing API Key for " + action);
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": "Unauthorized" }))
+      .setMimeType(ContentService.MimeType.JSON);
   }
 
   try {
@@ -154,7 +155,7 @@ function getAiMasterSummary(symbol) {
     CALENDAR: ${JSON.stringify(marketData.economic_calendar)}
     COT: ${JSON.stringify(marketData.cot_report)}
 
-    Return JSON with: final_bias, confidence_score (1-10), technical_thesis, fundamental_thesis, positional_thesis, signal (object with active, entry, stop_loss, take_profit), cot_raw (object with nonCommercialLong, nonCommercialShort).
+    Return JSON with: final_bias, confidence_score (1-10), technical_thesis, fundamental_thesis, positional_thesis, signal (object with active, entry, stop_loss, take_profit).
   `;
 
   const feedback = getGptFeedback({
@@ -163,13 +164,11 @@ function getAiMasterSummary(symbol) {
     referenceId: 'SUMMARY-' + symbol + '-' + new Date().getTime()
   });
 
-  // Inject raw COT data into the response for the frontend charts
-  feedback.cot_raw = {
-    nonCommercialLong: marketData.cot_report.nonCommercialLong || 0,
-    nonCommercialShort: marketData.cot_report.nonCommercialShort || 0
+  // Consolidated market data inclusion
+  return {
+    ...feedback,
+    market_data: marketData
   };
-
-  return feedback;
 }
 
 function generateForecast(pair, timeframe, days) {

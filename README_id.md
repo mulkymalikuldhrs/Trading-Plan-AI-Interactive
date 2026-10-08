@@ -83,5 +83,5 @@ Proyek ini dilisensikan di bawah MIT License — lihat file [LICENSE](LICENSE) u
 
 Proyek ini dikonsep dan disutradarai oleh:
 **Mulky Malikul Dhaher**
-- **Kontak:** [mulkymalikuldhaher@email.com](mailto:mulkymalikuldhaher@email.com)
+- **Kontak:** [mulkymalikudhr@mail.com](mailto:mulkymalikudhr@mail.com)
 - **GitHub:** [@mulkymalikuldhrs](https://github.com/mulkymalikuldhrs)
