@@ -13,3 +13,9 @@ node_modules/
 *.log
 analysis_results.txt
 analysis_results_2.txt
+verification/
+flutter_app/verification/
+flutter_web_verification.png
+node_check.txt
+python_check.txt
+test_results.txt
