@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'api_service.dart';
 
 class CotService {
@@ -16,7 +17,7 @@ class CotService {
         'divergenceDetected': (response['final_bias'] != 'NEUTRAL'),
       };
     } catch (e) {
-      print('CotService Error: $e');
+      debugPrint('CotService Error: $e');
       return {'error': 'Could not fetch COT data.'};
     }
   }
